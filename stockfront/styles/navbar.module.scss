@@ -1,0 +1,16 @@
+//Mobile first approach this section is mobile
+.nav{
+    display:flex;
+    background-color: grey;
+    MenuIcon{
+        color:black;
+    }
+    .search-bar{
+        background-color: black;
+        color:white;
+        font-size: 0.875rem;
+        border-radius: 5px;
+        width: 75%;
+        
+    }
+}
