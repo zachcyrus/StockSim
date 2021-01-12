@@ -1,16 +1,49 @@
 //Mobile first approach this section is mobile
+//component style css messes everything up
 .nav{
     display:flex;
+    align-items: center;
+    flex-wrap:wrap;
     background-color: grey;
-    MenuIcon{
-        color:black;
-    }
-    .search-bar{
+    padding: 7px 7px 7px 7px;
+    height:auto;
+    .searchBar{
+        margin-left:15px;
+        display:flex;
+        align-items: center;
         background-color: black;
-        color:white;
-        font-size: 0.875rem;
+        font-size: 1rem;
         border-radius: 5px;
         width: 75%;
+        height:56%;
+        color: white;
+        padding-left: 10px;
+        input{
+            background-color:transparent;
+            border:none;
+            color:white;
+            font-size: 0.875rem;
+        }
+        input:focus, textarea:focus, select:focus{
+            outline: none;
+        }
+    }
+    .subMenu{
+        padding: 0 0 0 0;
+        list-style-type: none;
+        display:none;
+        width:100%;
         
+    }
+    .active{
+        display: inline-block;
+        text-align: center;
+        li{
+            color:white;
+            text-align: center;
+            font-size: 2rem;
+            width:100%
+        }
+
     }
 }
