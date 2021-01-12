@@ -1,12 +1,35 @@
 //Mobile first approach this section is mobile
+
 //component style css messes everything up
+$xs: 0px;
+
+// Small tablets (portrait view)
+$sm: 600px;
+
+// Tablets and small desktops
+$md: 960px;
+
+// Large tablets and desktops
+$lg: 1280px;
+
+// Small tablets (portrait view)
+$xl: 1920px;
+
+
 .nav{
     display:flex;
     align-items: center;
     flex-wrap:wrap;
     background-color: grey;
     padding: 7px 7px 7px 7px;
-    height:auto;
+    height:5vh;
+    .logo{
+        width:156px;
+        height:80%;
+        display:none;
+        background-color: blue;
+    }
+
     .searchBar{
         margin-left:15px;
         display:flex;
@@ -15,7 +38,7 @@
         font-size: 1rem;
         border-radius: 5px;
         width: 75%;
-        height:56%;
+        height:80%;
         color: white;
         padding-left: 10px;
         input{
@@ -23,6 +46,7 @@
             border:none;
             color:white;
             font-size: 0.875rem;
+            width:100%;
         }
         input:focus, textarea:focus, select:focus{
             outline: none;
@@ -35,15 +59,47 @@
         width:100%;
         
     }
+    .menuTablet{
+        list-style-type: none;
+        display:none;
+        padding-inline-start: 0px;
+        margin: 0 0 0 0;
+        li{
+            color:white;
+            padding-right:20px;
+        }
+
+    }
     .active{
         display: inline-block;
         text-align: center;
         li{
-            color:white;
+            color:black;
             text-align: center;
             font-size: 2rem;
             width:100%
         }
 
     }
+    //media query for tablets and small laptops;
+    @media only screen and (min-width: $md) {
+        justify-content: space-between;
+        background-color: #222222;
+        .logo{
+            display:inline-block
+        }
+        .menuIcon{
+            display: none;
+        }
+        .searchBar{
+            width:50%
+        }
+        .menuTablet{
+            display: flex;
+            flex-direction: row;
+            
+        }
+    }
 }
+
+//
