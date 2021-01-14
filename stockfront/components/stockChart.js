@@ -30,7 +30,6 @@ const stockData = [
     }
 ]
 const StockChart = () => {
-    console.log(stockData)
     return (
         <div className='chartData'>
             <ResponsiveContainer width='100%' height={500}>

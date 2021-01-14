@@ -58,7 +58,7 @@ $xl: 1920px;
         list-style-type: none;
         display:none;
         width:100%;
-        background-color: red;
+        background-color: #222222;
         z-index: 9999;
         
     }
@@ -74,10 +74,10 @@ $xl: 1920px;
 
     }
     .active{
-        display: inline-block;
+        display: block;
         text-align: center;
         li{
-            color:black;
+            color:white;
             text-align: center;
             font-size: 2rem;
             width:100%
