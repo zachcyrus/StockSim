@@ -93,3 +93,36 @@ a {
 
 }
 
+//CSS for Portfolio Card
+.portfolioCard{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5px 0 5px;
+  color: white;
+  background-color: #222222;
+  align-items: center;
+  border-radius: 5px;
+  margin-top: 10px;
+  .percentage{
+    color:green;
+  }
+  .plus{
+    display: flex;
+    p{
+      margin: 0 0 0 0;
+      padding-right:3px;
+    }
+  }
+}
+
+.chartInfo{
+  background-color: red;
+  display: none;
+  padding: 2px 2px 2px 2px;
+  
+  p{
+    margin: 0 0 0 0;
+  overflow: hidden;
+  transition: all 0.5s;
+  }
+}
