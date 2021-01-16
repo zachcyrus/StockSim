@@ -108,12 +108,40 @@ a {
   }
   .plus{
     display: flex;
+    align-items: center;
     p{
       margin: 0 0 0 0;
       padding-right:3px;
     }
   }
+  //CSS to animate the toggle for plus
+  .toggleButton{
+    color:white;
+    border: none;
+    cursor: pointer;
+
+    &.active{
+      .targetIcon{
+        opacity:0;
+      }
+      .secondIcon{
+        opacity: 1;
+      }
+    }
+
+    .secondIcon{
+      opacity: 0;
+      position: absolute;
+    }
+
+    .secondIcon, .targetIcon{
+      transition: all 0.5s ease;
+
+    }
+
+  }
 }
+
 
 .chartInfo{
   background-color: red;
@@ -122,7 +150,7 @@ a {
   
   p{
     margin: 0 0 0 0;
-  overflow: hidden;
-  transition: all 0.5s;
+    overflow: hidden;
+    transition: all 0.5s ease;
   }
 }

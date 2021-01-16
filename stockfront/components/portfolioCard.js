@@ -1,10 +1,12 @@
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import RemoveIcon from '@material-ui/icons/Remove';
+import IconButton from '@material-ui/core/IconButton';
 import { useState } from 'react';
 
 
 const PortfolioCard = () => {
     //Add a recharts graph component to .chartInfo to replace lorem ipsum
+    //Need to animate the transition between content displaying;
     const [open, setDisplay] = useState(false)
 
     const toggleAccordion = () => {
@@ -26,10 +28,14 @@ const PortfolioCard = () => {
                 <p className="percentage">$3000(+8.28%)</p>
                 <div className="plus">
                     <p className="value">$25,324,000</p>
-                    {open
-                        ? <RemoveIcon onClick={toggleAccordion} fontSize="small" />
-                        : <ControlPointIcon onClick={toggleAccordion} fontSize="small" />
-                    }
+                    <div className={`toggleButton ${open ? 'active' : ''}`} onClick={toggleAccordion} >
+                        <RemoveIcon className="secondIcon" fontSize="small" />
+                        <ControlPointIcon className="targetIcon" fontSize="small" />
+                    </div>
+                    {/*open
+                        ? <RemoveIcon onClick={toggleAccordion} className="secondIcon" fontSize="small" />
+                        : <ControlPointIcon onClick={toggleAccordion} className="targetIcon" fontSize="small" />
+                    */}
                 </div>
             </div>
 
