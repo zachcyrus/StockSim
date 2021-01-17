@@ -29,6 +29,8 @@ const stockData = [
         value: 121.87
     }
 ]
+
+
 const StockChart = () => {
     return (
         <div className='chartData'>
