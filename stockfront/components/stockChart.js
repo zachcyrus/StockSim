@@ -34,7 +34,7 @@ const stockData = [
 const StockChart = () => {
     return (
         <div className='chartData'>
-            <ResponsiveContainer width='100%' height={500}>
+            <ResponsiveContainer width= {'99%'} height={500}>
                 <LineChart data={stockData}>
                     <Line type="monotone" dataKey="value" stroke="#8884d8" />
                     <XAxis dataKey="date" stroke="white" />

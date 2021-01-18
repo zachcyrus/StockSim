@@ -1,5 +1,7 @@
 import StockChart from './stockChart';
 import { useState } from 'react';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 //Might need to make a custom chart component for Portfolios
 
@@ -42,7 +44,7 @@ const StockCompany = () => {
         }
     }
 
-    //Need a function to determine which modal to open
+    //Maybe consider turning the modal into a seperate component
 
 
     return (

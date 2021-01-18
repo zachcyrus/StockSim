@@ -1,3 +1,5 @@
+@import './variables';
+
 html,
 body {
   padding: 0;
@@ -31,6 +33,10 @@ a {
     color:black;
     font-weight: bold;
   }
+}
+
+.chartData{
+  
 }
 
 //CSS For Stock Card
@@ -156,12 +162,38 @@ a {
   }
 }
 
+//CSS for Portfolio Pages
+.stockContainer{
+  background-color: none;
+  border-radius: 5px;
+  
+  
+  h1{
+    text-align: center;
+    width: 100%;
+  }
+
+  //This media query is to turn the mobile design into desk top design
+  @media screen and (min-width:$md) {
+    background-color: #222222;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 0 37px 24px 37px;
+    .chartData{
+      width: 70%;
+    }
+}
+
+}
+
 
 //CSS for Stock Company Component 
 .stockCompany{
   .value{
     margin-bottom: 40px;
   }
+
 }
 
 
