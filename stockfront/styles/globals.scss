@@ -35,70 +35,6 @@ a {
   }
 }
 
-.chartData{
-  
-}
-
-//CSS For Stock Card
-
-.stockCard{
-  display:flex;
-  color:white;
-  height:62px;
-  margin-top:20px;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.64);
-  padding-bottom: 20px;
- 
-
-  .stockImg{
-    background-color: white;
-    width:34px;
-    height: 41px;
-    margin-right:6px;
-  }
-
-  .stockName{
-    display:flex;
-    align-items: center;
-    
-  }
-
-  .stockGroup{
-    display: flex;
-    flex-direction: column;
-    align-content: flex-start;
-    text-align: left;
-
-    h3{
-      margin: 0 0 0 0;
-      padding: 0 0 0 0;
-      
-    }
-
-  }
-
-  .stockMoney{
-    display: flex;
-    flex-direction: column;
-    text-align: right;
-    h4{
-      color:green;
-      margin: 0 0 0 0;
-
-      
-    }
-    h3{
-      margin: 0 0 0 0;
-
-    }
-  }
-
-
-
-
-}
 
 //CSS for Portfolio Card
 .portfolioCard{
@@ -163,7 +99,7 @@ a {
 }
 
 //CSS for Portfolio Pages
-.stockContainer{
+.portfolioContainer{
   background-color: none;
   border-radius: 5px;
   

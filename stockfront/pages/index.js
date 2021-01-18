@@ -2,7 +2,8 @@ import Head from 'next/head';
 import Layout from '../components/layout';
 import StockChart from '../components/stockChart'
 import Container from '@material-ui/core/Container';
-import StockCard from '../components/stockCard'
+import StockCard from '../components/stockCard';
+import TopPerformers from '../components/topPerformers'
 
 export default function Home() {
   return (
@@ -13,23 +14,26 @@ export default function Home() {
       </Head>
       <Container style={{ color: 'white', textAlign: 'center', zIndex: 1, paddingTop:'29px' }} maxWidth='lg'>
 
-        <div className="stockContainer">
+        <div className="portfolioContainer">
           <h1>Portfolio Value</h1>
 
 
           <div className="topPerformers">
 
             <h3>Top Performers</h3>
-            <StockCard />
+            <TopPerformers/>
           </div>
 
           <StockChart/>
-
-
           
         </div>
 
-        <StockCard />
+        <div className="stockContainer">
+          <StockCard />
+          <StockCard />
+        </div>
+
+        
       </Container>
     </Layout>
 
