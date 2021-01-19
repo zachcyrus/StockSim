@@ -5,6 +5,8 @@ import Container from '@material-ui/core/Container';
 import StockCard from '../components/stockCard';
 import TopPerformers from '../components/topPerformers'
 
+//For the stock container, possible implementation of a horizontal scrolling option;
+
 export default function Home() {
   return (
     <Layout>

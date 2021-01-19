@@ -1,0 +1,197 @@
+@import './variables';
+
+
+
+.stockCompany{
+    margin-top:10px;
+    .value{
+      margin-top:11px;
+    
+      margin-bottom: 40px;
+    }
+
+    .stockHeader{
+        display: flex;
+        flex-direction: column;
+
+        width:100%;
+        h3{
+            margin: 0 0 0 0;
+        }
+    }
+
+    .yourStats{
+        display: none;
+    }
+    //CSS for tablet/deskTop view
+    @media screen and (min-width:$md){
+        background-color: #222222;
+        padding: 10px 10px 10px 10px;
+        margin-top: 35px;
+        border-radius: 5px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .stockHeader{
+            margin-top:10px;
+            width: 60%;
+            h3{
+                font-size: 36px;
+            }
+            .value{
+                font-size: 36px;
+            }
+        }
+
+        .yourStats{
+            display: block;
+            width: 40%;
+            text-align: center;
+            h3{
+                font-size: 36px;
+                margin-top:0px;
+                
+            }
+            .row{
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 26px;
+                font-size: 24px;
+            }
+        }
+
+
+
+
+        :global(.chartData){
+            width:50%;
+        }
+
+        .news{
+            width:40%;
+            text-align: center;
+        }
+
+        .buttonGroup{
+            width: 100%;
+            margin-top: 30px;
+            button{
+                max-width: 250px;
+                font-size: 36px;
+            }
+        }
+    }
+  
+  }
+  
+  
+  .buttonGroup{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    button{
+      color:black;
+      border: none;
+      background-color: green;
+      text-align: center;
+      font-weight: bold;
+      padding: 13px 23px 13px 23px;
+      max-width: 80px;
+      border-radius: 5px;
+    }
+    .sellBtn{
+      background-color: red;
+    }
+  }
+  
+  .modal{
+    height: 100%;
+    width:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    bottom: 0;
+    
+    background-color: black;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 50%;
+    
+  
+    .modalContent{
+      position: fixed;
+      bottom: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin-top:50px;
+      padding: 10px 7px 10px 10px;
+      height: 600px;
+      z-index: 1;
+      animation-name:animateBottom;
+      animation-duration: 0.5s;
+      @keyframes animateBottom {
+        from {bottom: -800px; opacity: 0}
+        to {bottom: 0; opacity: 1}
+      }
+      margin: auto;
+      
+      width: 85%;
+      border-radius: 5px;
+  
+      &.sell{
+        h1{
+          color:red;
+        }
+      }
+    
+      .row{
+        display:flex;
+        justify-content: space-between;
+        font-size: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.64);
+        padding-bottom:8px;
+        margin-bottom: 20px;
+  
+        input{
+          text-align:right;
+          max-width: 150px;
+        }
+      }
+  
+      .buttonGroup{
+        justify-content: space-evenly;
+        button{
+          padding: 10px 10px 10px 10px;
+        }
+        .cancel{
+          background-color: red;
+        }
+  
+  
+      }
+    
+      background-color: #26304A;
+      color:white;
+    
+      h1{
+        color:green;
+        text-align: center;
+        margin: 0 0 0 0;
+      }
+
+
+      @media screen and (min-width:$md){
+          .buttonGroup{
+              button{
+                  max-width: 150px;
+                  font-size: 24px;
+              }
+          }
+
+      }
+    }
+  
+  
+  
+  }
