@@ -37,6 +37,18 @@ a {
 }
 
 
+//CSS for Portfolio
+
+.portfolioHeader{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  h1{
+    margin-right:10px;
+  }
+}
+
+
 //CSS for Portfolio Card
 .portfolioCard{
   display: flex;
@@ -86,6 +98,16 @@ a {
   }
 }
 
+.portfolioForm{
+  
+  label{
+    display: flex;
+    text-align: right;
+  }
+  button{
+    text-align: right;
+  }
+}
 
 .chartInfo{
   background-color: red;
@@ -99,7 +121,7 @@ a {
   }
 }
 
-//CSS for Portfolio Pages
+//CSS for specific Portfolio Pages
 .portfolioContainer{
   background-color: none;
   border-radius: 5px;
