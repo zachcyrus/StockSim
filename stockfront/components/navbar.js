@@ -32,14 +32,14 @@ const NavBar = () => {
                 <input type="text" placeholder="Browse stocks/companies"></input>
             </div>
             <ul className={`${styles.subMenu} ${display ? styles.active : ''}`}>
-                <li> <HomeRoundedIcon fontSize="small" /> Home </li>
+                <li> <Link href='/'><HomeRoundedIcon fontSize="small" /></Link>Home </li>
                 <li> <WorkRoundedIcon fontSize="small" /> Portfolios</li>
                 <li> <PersonRoundedIcon fontSize="small" /> Profile</li>
             </ul>
             <ul className={styles.menuTablet}>
-                <li> <HomeRoundedIcon fontSize="large" /> </li>
-                <li> <WorkRoundedIcon fontSize="large" /> </li>
-                <li> <PersonRoundedIcon fontSize="large" /> </li>
+                <li> <Link href='/'><HomeRoundedIcon fontSize="large" /></Link> </li>
+                <li> <Link href='/portfolios'><WorkRoundedIcon fontSize="large" /></Link> </li>
+                <li> <Link href='#'><PersonRoundedIcon fontSize="large" /></Link> </li>
             </ul>
         </div>
     )

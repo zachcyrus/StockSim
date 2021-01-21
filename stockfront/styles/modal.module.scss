@@ -29,51 +29,30 @@
         to {bottom: 50%; opacity: 1}
       }
       margin: auto;
+
+
+      .closeRow{
+        display: flex;
+        justify-content: flex-end;
+      }
       
+      .closeButton{
+        cursor: pointer;
+        padding: 0;
+        border: none;
+        outline: none;
+        font: inherit;
+        color: inherit;
+        background: none;
+      }
+
       width: fit-content;
       border-radius: 5px;
   
-      &.sell{
-        h1{
-          color:red;
-        }
-      }
-    
-      .row{
-        display:flex;
-        justify-content: space-between;
-        font-size: 24px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.64);
-        padding-bottom:8px;
-        margin-bottom: 20px;
-  
-        input{
-          text-align:right;
-          max-width: 150px;
-        }
-      }
-  
-      .buttonGroup{
-        justify-content: space-evenly;
-        button{
-          padding: 10px 10px 10px 10px;
-        }
-        .cancel{
-          background-color: red;
-        }
-  
-  
-      }
     
       background-color: #26304A;
       color:white;
     
-      h1{
-        color:green;
-        text-align: center;
-        margin: 0 0 0 0;
-      }
-
 
       @media screen and (min-width:$md){
           .buttonGroup{

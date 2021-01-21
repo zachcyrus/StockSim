@@ -1,5 +1,5 @@
 import styles from '../styles/modal.module.scss'
-
+import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 
 const Modal = (props) => {
 
@@ -7,15 +7,26 @@ const Modal = (props) => {
         props.onClose();
     }
 
-    if(!props.show){
+    if (!props.show) {
         return null;
     }
 
     return (
         <div className={styles.modal}>
             <div className={styles.modalContent}>
+
+                <div className={styles.closeRow}>
+                    <button className={styles.closeButton} onClick={onClose}>
+                        <ClearRoundedIcon fontSize="small" />
+                    </button>
+                </div>
+
+
+
+
+
                 {props.children}
-                <button onClick={onClose}>Cancel</button>
+
             </div>
         </div>
     )

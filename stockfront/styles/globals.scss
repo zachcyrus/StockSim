@@ -103,9 +103,12 @@ a {
   label{
     display: flex;
     text-align: right;
+    
   }
+  
   button{
-    text-align: right;
+    margin-top: 10px;
+    float:right;
   }
 }
 

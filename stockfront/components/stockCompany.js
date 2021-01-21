@@ -110,6 +110,13 @@ const StockCompany = () => {
                     </div>
 
                     <div className={styles.row}>
+                        <a>Select Portfolio</a> <select name="portfolios">
+                            <option value="tech">Tech</option>
+                            <option value="tech">Tech</option>
+                        </select>
+                    </div>
+
+                    <div className={styles.row}>
                         <a>Total Cost:</a> <a>$635.48</a>
                     </div>
 
