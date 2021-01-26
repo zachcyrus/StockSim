@@ -5,7 +5,10 @@ const Strategy = require('passport-facebook').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
-
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET
+}
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -39,14 +42,14 @@ passport.use(
         WHERE("fbId" = $1)
       `
       const userToFindId = [profile.id]
-      let foundUser = await pool.query(findUserQuery,userToFindId)
+      let foundUser = await pool.query(findUserQuery, userToFindId)
 
 
       //if no one was found we have to register them to to fb table and user table
       if (foundUser.rows.length === 0) {
 
         const regUserQuery = `
-          INSERT INTO stock_users("Username") VALUES($1) RETURNING "Id"
+          INSERT INTO stock_users("Username") VALUES($1) RETURNING "Username", "Id"
         `
         const usernameValue = [profile.displayName]
         let newUser
@@ -76,15 +79,15 @@ passport.use(
         } catch (err) {
           console.error(err)
         }
-        
+
         //If all goes well user has been successfully registered now to return the user
-        cb(null, newUser.rows[0])
+        return cb(null, newUser.rows[0])
 
 
-        
+
       }
       //user is found
-      else{
+      else {
         console.log('User was found and is being returned')
         return cb(null, foundUser.rows[0])
       }
@@ -92,4 +95,30 @@ passport.use(
     }
   )
 );
+
+//Implementing JWT strategy
+
+passport.use(new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
+  const findUserQuery = `
+        SELECT "Username", "Id"
+        FROM stock_users
+        WHERE("Username" = $1)
+      `
+  const {user} = jwt_payload;
+  const userToFind = [user.Username]
+  console.log(jwt_payload)
+  console.log(user)
+
+  let foundUser = await pool.query(findUserQuery, userToFind)
+
+  //If user not found return false
+  if (foundUser.rows.length === 0) {
+    return done(null, false)
+  }
+  //else return user
+  else {
+    return done(null, foundUser.rows[0])
+  }
+
+}));
 
