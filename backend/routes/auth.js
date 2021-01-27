@@ -5,6 +5,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
+//Route for authentication with fb login, will add more login strategies in the future;
 
 router.get('/facebook', passport.authenticate('facebook'))
 

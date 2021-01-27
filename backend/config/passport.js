@@ -106,8 +106,6 @@ passport.use(new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
       `
   const {user} = jwt_payload;
   const userToFind = [user.Username]
-  console.log(jwt_payload)
-  console.log(user)
 
   let foundUser = await pool.query(findUserQuery, userToFind)
 
