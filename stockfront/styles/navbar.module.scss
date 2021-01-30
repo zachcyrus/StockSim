@@ -92,6 +92,7 @@ $xl: 1920px;
         }
 
     }
+    
     //media query for tablets and small laptops;
     @media only screen and (min-width: $md) {
         justify-content: space-between;
@@ -110,6 +111,8 @@ $xl: 1920px;
             flex-direction: row;
             
         }
+        
+        
     }
 }
 
