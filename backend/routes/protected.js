@@ -10,4 +10,10 @@ router.get('/test', passport.authenticate('jwt', {session:false}), (req,res)=> {
     res.send(`Congrats you are authenticated ${req.user.Username}`)
 })
 
+router.get('/user', passport.authenticate('jwt', {session:false}), (req,res)=> {
+    res.json({
+        user:req.user.Username
+    })
+})
+
 module.exports = router

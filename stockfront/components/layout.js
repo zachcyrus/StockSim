@@ -1,9 +1,10 @@
 import NavBar from '../components/navbar'
 
-export default function Layout({ children }) {
+export default function Layout({ children, username }) {
     return (
         <div>
-            <NavBar />
+            <NavBar username={username} />
+            
             {children}
         </div>
 

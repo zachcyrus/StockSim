@@ -5,8 +5,16 @@ const Strategy = require('passport-facebook').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
+let findJwtFromCookie = (req) =>{
+  if(req && req.cookies){
+    let token = req.cookies['jwt']
+    return token
+  }
+}
+
 const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), this was used for when we weren't using cookies
+  jwtFromRequest: findJwtFromCookie,
   secretOrKey: process.env.JWT_SECRET
 }
 
@@ -97,7 +105,7 @@ passport.use(
 );
 
 //Implementing JWT strategy
-
+//Testing the use of cookies so we have to parse cookie to find jwt
 passport.use(new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
   const findUserQuery = `
         SELECT "Username", "Id"

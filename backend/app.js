@@ -11,12 +11,18 @@ const protectedRouter = require('./routes/protected')
 const portfolioRouter = require('./routes/portfolios')
 const stockRouter = require('./routes/stocks')
 
+const corsConfig ={
+  origin: true,
+  credentials: true
+}
+
 var cors = require('cors')
 app.use(cookieParser())
+app.use(express.json()); 
+app.use(cors(corsConfig))
+app.options('*', cors(corsConfig))
 app.use(passport.initialize())
 
-app.use(express.json()); 
-app.use(cors())
 
 
 //Routes 

@@ -4,16 +4,17 @@ import WorkRoundedIcon from '@material-ui/icons/WorkRounded';
 import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import Popper from '@material-ui/core/Popper';
-
-import Link from 'next/link'
+import axios from 'axios';
+import Link from 'next/link';
 
 import styles from '../styles/navbar.module.scss'
 import { useState } from 'react'
 
-const NavBar = () => {
+const NavBar = ({ username }) => {
     const [display, setDisplay] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null);
     const [signedIn, setSignIn] = useState(false);
+    
 
     const toggleDisplay = () => {
         if (display) {
@@ -32,6 +33,8 @@ const NavBar = () => {
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popper' : undefined;
+
+    
 
 
     return (
@@ -55,11 +58,12 @@ const NavBar = () => {
 
             <Popper id={id} open={open} anchorEl={anchorEl}>
                 <div style={{ marginTop: '10px', padding: '10px', textAlign: 'center', backgroundColor: 'red' }}>
-                    {signedIn ? 'You are signed in' : 'Plz sign in'}
+                    {username ? username : 'Plz sign in'}
                 </div>
             </Popper>
         </div>
     )
 }
+
 
 export default NavBar

@@ -15,9 +15,18 @@ router.get("/facebook/callback", passport.authenticate("facebook", {session:fals
     //Generate JWT after successful callback
     //const token = jwt.sign({})
     let currUser = req.user;
+    // 8 minutes from now
+    const expiration = 60 * 60000;
 
     const token = jwt.sign({user:currUser}, process.env.JWT_SECRET)
-    return res.json({token})
+    res.cookie('jwt', token, {
+        expires: new Date(Date.now() + expiration),
+        secure: false,
+        
+        httpOnly: false
+    })
+    res.redirect('http://localhost:3000')
+    //res.json({token})
 
 })
 
