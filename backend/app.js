@@ -29,7 +29,7 @@ app.use(passport.initialize())
 
 app.use('/auth', authRouter)
 app.use('/protected', protectedRouter)
-app.use('/portfolio', portfolioRouter)
+app.use('/portfolios', portfolioRouter)
 //Need to include route to add stocks to a selected portfolio
 app.use('/stocks', stockRouter)
 

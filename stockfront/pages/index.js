@@ -5,8 +5,7 @@ import Container from '@material-ui/core/Container';
 import StockCard from '../components/stockCard';
 import TopPerformers from '../components/topPerformers';
 import axios from 'axios';
-import Cookies from 'universal-cookie';
-const cookies = new Cookies();
+
 
 
 
@@ -15,9 +14,7 @@ axios.defaults.withCredentials = true;
 
 
 function Home({username}) {
-  console.log(username)
   
-
   return (
     <Layout username={username}>
       <Head>
@@ -57,6 +54,7 @@ function Home({username}) {
 }
 
 export async function getServerSideProps(context) {
+  //Add a util function to check for authentication, to keep everything concise
   const cookies = context.req.headers.cookie;
   if(cookies == undefined){
     return{
@@ -66,7 +64,6 @@ export async function getServerSideProps(context) {
     }
 
   }
-  console.log(cookies)
   let userData = await axios.get('http://localhost:8000/protected/user', {
     headers: {
       Cookie: cookies

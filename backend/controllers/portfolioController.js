@@ -29,6 +29,7 @@ exports.addPortfolio = async (req, res) => {
 
         try {
             let addNewPortfolio = await pool.query(addPortQuery, addPortVals)
+            console.log('adding portfolio')
             return res.json(addNewPortfolio.rows[0])
 
         } catch (err) {
@@ -45,5 +46,52 @@ exports.addPortfolio = async (req, res) => {
             message: `${portfolioName} was already found in the database`
         })
     }
+
+}
+
+exports.getPortfolios = async (req, res) => {
+    let currUserId = req.user.Id;
+
+    let findAllPortfolios = `
+    SELECT portfolio_name
+    FROM  portfolios
+    WHERE (user_id = $1)
+    `
+    try {
+        let foundPortfolios = await pool.query(findAllPortfolios, [currUserId])
+        console.log('finding portfolios')
+        return res.json(foundPortfolios.rows)
+
+    } catch (err) {
+        console.log(err)
+        alert(err)
+        return res.json(err)
+    }
+}
+
+exports.getPortfoliosVal = async (req, res) => {
+    let currUserId = req.user.Id;
+
+    //this is a query to the total price paid for individual stocks in portfolio
+    let findIndvStockVals = `
+    SELECT Portfolios.portfolio_name, SUM(transactions.quantity * transactions.price) 
+    AS totalPrice, transactions.stock_name
+    FROM  portfolios
+    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
+    WHERE (user_id = $1)
+    GROUP BY transactions.stock_name, Portfolios.portfolio_name
+    `
+
+    let totalPriceOfPort = `
+    SELECT Portfolios.portfolio_name, SUM(transactions.quantity * transactions.price) 
+    AS totalPrice
+    FROM  portfolios
+    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
+    WHERE (user_id = $1)
+    GROUP BY portfolios.portfolio_name
+    `
+
+    let foundPortAndVal = await pool.query(findIndvStockVals, [currUserId])
+
 
 }

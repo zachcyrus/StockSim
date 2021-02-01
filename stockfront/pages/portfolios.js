@@ -4,46 +4,124 @@ import Container from '@material-ui/core/Container';
 import PortfolioCard from '../components/portfolioCard';
 import Modal from '../components/modal'
 import { useState } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
+import Router from "next/router"
+//Need a delete button for portfolios
+//need an alert component for errors
+//Add keys to portfolio cards
 
-
-export default function Portfolios() {
+function Portfolios({ username, allPortfolios }) {
   const [open, setOpen] = useState(false)
+  const [portfolioName, setPortfolioName] = useState('')
 
   const onClose = () => {
-    console.log('Clicked')
-    if(open){
+    if (open) {
+      setPortfolioName('')
       setOpen(false)
     }
-    else{
+    else {
       setOpen(true)
     }
   }
 
+  const handleChange = (e) => {
+    setPortfolioName(e.target.value)
+  }
+
+  const submitPortfolio = async (e) => {
+    e.preventDefault();
+    try {
+      let response = await axios.post(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/add`, { portfolioName }, { withCredentials: true })
+      console.log(response.data)
+      Router.reload();
+
+    } catch (error) {
+      console.log(error);
+
+    }
+    
+    setOpen(false)
+  }
+
   return (
-    <Layout>
+    <Layout username={username}>
       <Head>
         <title>Portfolios</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container style={{ color: 'white', zIndex:1 }} maxWidth='lg'>
+      <Container style={{ color: 'white', zIndex: 1 }} maxWidth='lg'>
         <div className="portfolioHeader">
           <h1>All Portfolios:  </h1>
           <button onClick={onClose} className="addPortfolio">Create Portfolio</button>
         </div>
-        
-        <PortfolioCard/>
-        <PortfolioCard/>
+
+
+
+        {username ? (
+          <div>
+            {allPortfolios.map((row, index) => {
+              return (
+                <PortfolioCard key={index} name={row.portfolio_name}/>
+              )
+            })}
+          </div>
+
+        ) :
+          <h1><Link href='/login'>Please sign in to create a portfolio</Link></h1>
+        }
+
+
 
         <Modal show={open} onClose={onClose}>
-            <form className="portfolioForm">
-              <label for="portfolioName">Enter name for new Portfolio: <input type="text" name="portfolioName"></input> </label>
-              <button type="submit">Submit Portfolio</button>
-            </form>
+          <form className="portfolioForm">
+            <label htmlFor="portfolioName">Enter name for new Portfolio: <input type="text" onChange={handleChange} name="portfolioName"></input> </label>
+            <button onClick={submitPortfolio} type="submit">Submit Portfolio</button>
+          </form>
         </Modal>
-        
+
 
       </Container>
     </Layout>
 
   )
 }
+
+export async function getServerSideProps(context) {
+  //Add a util function to check for authentication, to keep everything concise
+  const cookies = context.req.headers.cookie;
+  if (cookies == undefined) {
+    return {
+      props: {
+        'username': null
+      }
+    }
+
+  }
+
+
+  let userData = await axios.get('http://localhost:8000/protected/user', {
+    headers: {
+      Cookie: cookies
+    }
+  })
+  
+  //retrieve list of portfolios
+  let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios`,{
+    headers: {
+      Cookie: cookies
+    }
+  })
+
+
+  let username = userData.data.user
+  let allPortfolios = portfolioData.data;
+  return {
+    props: {
+      username,
+      allPortfolios
+    }, // will be passed to the page component as props
+  }
+}
+
+export default Portfolios

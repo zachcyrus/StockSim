@@ -9,4 +9,7 @@ router.post('/add', passport.authenticate('jwt', {session:false}), portfolioCont
 
 //Need a route to delete a portfolio
 
+//route to retrieve all portfolios
+router.get('/', passport.authenticate('jwt', {session:false}), portfolioController.getPortfolios)
+
 module.exports = router
