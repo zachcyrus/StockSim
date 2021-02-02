@@ -1,4 +1,4 @@
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 const stockData = [
     {
         date: '10-10-12',
@@ -31,14 +31,17 @@ const stockData = [
 ]
 
 
+
+
 const StockChart = () => {
     return (
         <div className='chartData'>
             <ResponsiveContainer width= {'99%'} height={500}>
                 <LineChart data={stockData}>
                     <Line type="monotone" dataKey="value" stroke="#8884d8" />
-                    <XAxis dataKey="date" stroke="white" />
-                    <YAxis width={40} stroke="white" dataKey="value" />
+                    <XAxis label="date" dataKey="date" tick={false} stroke="white"/>
+                    <YAxis label="value" width={40} stroke="white" dataKey="value" />
+                    <Tooltip />
                 </LineChart>
 
             </ResponsiveContainer>
@@ -46,10 +49,10 @@ const StockChart = () => {
             {/**Buttons to adjust length of time for data */}
 
             <div className='chartButtons'>
-                <button>1D</button>
-                <button>1W</button>
-                <button>1M</button>
-                <button>1Y</button>
+                <button>D</button>
+                <button>W</button>
+                <button>M</button>
+                <button>Y</button>
             </div>
         </div>
     )

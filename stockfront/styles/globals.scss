@@ -23,16 +23,28 @@ a {
 .chartButtons{
   margin-left:30px;
   display: flex;
-  justify-content: space-between;
-  
+  justify-content: center;
+  margin-top: 20px;
   button{
-    height:28px;
+    height:fit-content;
     cursor: pointer;
-    width:42px;
-    background-color: white;
-    padding: 4px 10px 3px 10px;
-    color:black;
+    width:fit-content;
+    padding: 10px 20px 10px 20px;
+    background-color: black;
+    color:white;
     font-weight: bold;
+    border:solid;
+    border-radius: 15px;
+    border-width: 1px;
+    border-color: white;
+    outline: none;
+    margin-right:20px;
+    font-size:18px;
+    font-weight: lighter;
+
+  }
+  button:focus{
+    background-color: #8738AC;
   }
 }
 

@@ -91,7 +91,24 @@ exports.getPortfoliosVal = async (req, res) => {
     GROUP BY portfolios.portfolio_name
     `
 
-    let foundPortAndVal = await pool.query(findIndvStockVals, [currUserId])
+    //the following query is to obtain the weighted avg of each stock, we can compare this value
+    //on the frontend api call to determine percent increase or decrease
+    //only problem is that as portfolio grows the number of api calls will increase
+    let stockWeightedAvgQuery = `
+    SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
+    AS weightedAvg, transactions.stock_name
+    FROM  portfolios
+    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
+    WHERE (user_id = 14)
+    GROUP BY transactions.stock_name, Portfolios.portfolio_name
+    `
+
+    let stockWeightedAvgQuery = await pool.query(findIndvStockVals, [currUserId])
 
 
 }
+
+//840 / 6 = 140 
+//445.8 + 260.9 = 706.7 avg price is 117.783
+//avg % increase is 18.846
+//weighted share price = ( (first prise * shares) + (second price * shares) )/total number of shares
