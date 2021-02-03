@@ -1,4 +1,5 @@
 import StockChart from './stockChart';
+import StockChart_Data from './stockChart&Data'
 import { useState } from 'react';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -7,7 +8,7 @@ import styles from '../styles/stockCompany.module.scss'
 
 //Might need to make a custom chart component for Portfolios
 
-const StockCompany = () => {
+const StockCompany = ({companyInfo}) => {
     const [open, setDisplay] = useState(false);
     const [buy, setBuy] = useState(false);
     const [sell, setSell] = useState(false);
@@ -53,10 +54,10 @@ const StockCompany = () => {
     return (
         <div className={styles.stockCompany}>
             <div className={styles.stockHeader}>
-                <h3 style={{ textAlign: 'left' }}>AAPL</h3>
-                <h3>Apple Inc</h3>
+                <h3 style={{ textAlign: 'left' }}>{companyInfo.ticker}</h3>
+                <h3>{companyInfo.name}</h3>
                 <div className={styles.value}>
-                    <a>158.87</a>
+                    <a>{companyInfo.todaysPrice}</a>
                     <a> <ArrowDropUpIcon fontSize='large' /> 10.14 (+8.56%)</a>
                 </div>
 
@@ -77,8 +78,8 @@ const StockCompany = () => {
                 </div>
             </div>
 
-
-            <StockChart />
+            
+            <StockChart_Data/>
 
             
 

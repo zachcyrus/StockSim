@@ -5,6 +5,11 @@ import StockCompany from '../../components/stockCompany';
 import { useRouter } from 'next/router'
 import axios from 'axios';
 
+let companyInfo = {
+  'ticker': 'AAPL',
+  'name': 'Apple Inc',
+  'todaysPrice': 158.87
+}
 
 function Stocks({username}) {
     const router = useRouter()
@@ -16,8 +21,8 @@ function Stocks({username}) {
                 <title>{stock.toUpperCase()} Stock</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Container style={{ color: 'white' }} maxWidth='lg'>
-                <StockCompany />
+            <Container maxWidth='lg'>
+                <StockCompany companyInfo={companyInfo} />
             </Container>
         </Layout>
 
@@ -75,4 +80,6 @@ export async function getServerSideProps(context) {
       }
     }
   } 
+
+export default Stocks;
   

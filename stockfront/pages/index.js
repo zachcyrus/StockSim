@@ -6,6 +6,22 @@ import StockCard from '../components/stockCard';
 import TopPerformers from '../components/topPerformers';
 import axios from 'axios';
 
+//testing autocomplete
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchIcon from '@material-ui/icons/Search';
+
+
+const top100Films = [
+  { title: 'The Shawshank Redemption', year: 1994 },
+  { title: 'The Godfather', year: 1972 },
+  { title: 'The Godfather: Part II', year: 1974 },
+  { title: 'The Dark Knight', year: 2008 },
+  { title: '12 Angry Men', year: 1957 },
+  { title: "Schindler's List", year: 1993 },
+  { title: 'Pulp Fiction', year: 1994 }
+]
 
 
 
@@ -13,8 +29,8 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 
-function Home({username}) {
-  
+function Home({ username }) {
+
   return (
     <Layout username={username}>
       <Head>
@@ -40,12 +56,30 @@ function Home({username}) {
         <div className="stockContainer">
           <StockCard />
           <StockCard />
-          <h1 style={{color:'white'}}>
-          </h1>
+          <Autocomplete 
+                    style={{width: '100%'}}
+                    freeSolo
+                    options={top100Films.map((option) => option.title)}
+                    renderInput={(params) => (
+
+                        <TextField
+                            {...params}
+                            color='secondary'
+                            fullWidth label='Type below to browse stocks'
+                            InputProps={{
+                                ...params.InputProps,
+                                type:'search',
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon style={{ color: 'white' }} />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+
+                    )}
+                />
         </div>
-
-
-
 
       </Container>
     </Layout>
@@ -56,8 +90,8 @@ function Home({username}) {
 export async function getServerSideProps(context) {
   //Add a util function to check for authentication, to keep everything concise
   const cookies = context.req.headers.cookie;
-  if(cookies == undefined){
-    return{
+  if (cookies == undefined) {
+    return {
       props: {
         'username': null
       }
@@ -75,6 +109,6 @@ export async function getServerSideProps(context) {
       username
     }, // will be passed to the page component as props
   }
-} 
+}
 
 export default Home

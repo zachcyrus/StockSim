@@ -12,9 +12,8 @@ export default function Stocks() {
         <title>AAPL Stock</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container style={{ color: 'white'}} maxWidth='lg'>
+      <Container style={{ color: 'black'}} maxWidth='lg'>
         <StockChart_Data/>
-        <StockChart/>
       </Container>
     </Layout>
 
