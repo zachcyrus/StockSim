@@ -6,14 +6,21 @@ import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Popper from '@material-ui/core/Popper';
 import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import Paper from "@material-ui/core/Paper";
 
 import axios from 'axios';
 import Link from 'next/link';
 import { makeStyles } from '@material-ui/core/styles';
 
+
+//for tomorrow work on navigating to a different page with search;
+
 import styles from '../styles/navbar.module.scss'
 import { useState } from 'react'
+
+let tickerData = require('../assets/allTickers/nasdaq-listed-symbols_json.json')
+
+tickerData = tickerData.slice(0, 10);
 
 const useStyles = makeStyles((theme) => ({
     textField: {
@@ -24,12 +31,12 @@ const useStyles = makeStyles((theme) => ({
         height: '80%'
     },
 
-    label:{
-        color:'white'
+    label: {
+        color: 'white'
 
     },
-    focused:{
-        color:'white'
+    focused: {
+        color: 'white'
     }
 }));
 
@@ -41,7 +48,7 @@ const NavBar = ({ username }) => {
     const [display, setDisplay] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null);
     const [signedIn, setSignIn] = useState(false);
-
+    const [search, setSearch] = useState('');
 
     const toggleDisplay = () => {
         if (display) {
@@ -58,6 +65,18 @@ const NavBar = ({ username }) => {
         setAnchorEl(anchorEl ? null : e.currentTarget);
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if (!search) {
+            console.log('Search is empty')
+        }
+        else {
+            console.log(`Fired submit: ${search.split(' ')[0]}`)
+
+        }
+
+    }
+
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popper' : undefined;
 
@@ -71,36 +90,46 @@ const NavBar = ({ username }) => {
 
 
             <div className={styles.searchBar}>
+                <SearchIcon style={{ color: 'white' }} />
+                <form style={{ width: '100%' }} onSubmit={handleSubmit}>
+                    <Autocomplete
+                        className={classes.textField}
+                        style={{ width: '100%' }}
 
-            <Autocomplete 
-                    className={classes.textField}
-                    style={{width: '100%'}}
-                    freeSolo
-                    options={top100Films.map((option) => option.title)}
-                    renderInput={(params) => (
+                        options={tickerData.map((ticker) => {
+                            return ticker.Symbol + ' ' + ticker['Company Name']
+                        })
+                        }
+                        onChange={(event, value) => setSearch(value)}
+                        renderInput={(params) => (
 
-                        <TextField
-                            {...params}
-                            fullWidth label='Type below to browse stocks'
-                            InputProps={{
-                                ...params.InputProps,
-                                type:'search',
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon style={{ color: 'white' }} />
-                                    </InputAdornment>
-                                ),
-                            }}
-                            InputLabelProps ={{
-                                classes: {
-                                    root: classes.label,
-                                    focused: classes.focused
+                            <TextField
+                                {...params}
+                                fullWidth label='Type below to browse stocks'
+                                InputProps={{
+                                    ...params.InputProps,
+                                    type: 'search',
+
+                                }}
+                                InputLabelProps={{
+                                    classes: {
+                                        root: classes.label,
+                                        focused: classes.focused
+                                    }
+                                }}
+                                onInput={
+                                    e => {
+                                        setSearch(e.target.value)
+                                    }
                                 }
-                            }}
-                        />
+                            />
 
-                    )}
-                />
+                        )}
+                    />
+
+                </form>
+
+
 
             </div>
 

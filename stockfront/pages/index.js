@@ -56,29 +56,7 @@ function Home({ username }) {
         <div className="stockContainer">
           <StockCard />
           <StockCard />
-          <Autocomplete 
-                    style={{width: '100%'}}
-                    freeSolo
-                    options={top100Films.map((option) => option.title)}
-                    renderInput={(params) => (
-
-                        <TextField
-                            {...params}
-                            color='secondary'
-                            fullWidth label='Type below to browse stocks'
-                            InputProps={{
-                                ...params.InputProps,
-                                type:'search',
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon style={{ color: 'white' }} />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-
-                    )}
-                />
+          
         </div>
 
       </Container>
