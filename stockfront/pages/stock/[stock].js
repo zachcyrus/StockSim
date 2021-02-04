@@ -111,11 +111,8 @@ export async function getServerSideProps(context) {
 
 
   let getPurchaseDate = await axios({
-    method: 'post',
-    url: `${process.env.NEXT_PUBLIC_APIURL}/stocks/purchasedate`,
-    data:{
-      stockTicker: stockToFindSymbol
-    },
+    method: 'get',
+    url: `${process.env.NEXT_PUBLIC_APIURL}/stocks/purchasedate/${stockToFindSymbol}`,
     headers:{
       Cookie: cookies
     }

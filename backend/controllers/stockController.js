@@ -113,7 +113,7 @@ exports.sellStock = async (req, res) => {
 
 exports.getFirstPurchaseDate = async (req, res) => {
     let userId = req.user.Id
-    let { stockTicker } = req.body
+    let { stockTicker } = req.params
 
     let firstPurchaseDateQuery =
         `
@@ -137,7 +137,6 @@ exports.getFirstPurchaseDate = async (req, res) => {
         //possible error because it shows first purchase date regardless of portfolio
         else {
             console.log(`stock was found`)
-            console.log(foundPurchaseDate.rows[0])
             return res.json(foundPurchaseDate.rows[0].date_of_sale)
         }
 

@@ -15,7 +15,7 @@ router.post('/sell', passport.authenticate('jwt', {session:false}), stockControl
 
 //Route to obtain first purchaseDate of a particular stock
 
-router.post('/purchasedate', passport.authenticate('jwt', {session:false}), stockController.getFirstPurchaseDate)
+router.get('/purchasedate/:stockTicker', passport.authenticate('jwt', {session:false}), stockController.getFirstPurchaseDate)
 
 
 module.exports = router
