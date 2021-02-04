@@ -99,13 +99,11 @@ exports.getPortfoliosVal = async (req, res) => {
     AS weightedAvg, transactions.stock_name
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
-    WHERE (user_id = 14)
+    WHERE (user_id = $1)
     GROUP BY transactions.stock_name, Portfolios.portfolio_name
     `
 
-    let stockWeightedAvgQuery = await pool.query(findIndvStockVals, [currUserId])
-
-
+    let foo = await pool.query(findIndvStockVals, [currUserId])
 }
 
 //840 / 6 = 140 

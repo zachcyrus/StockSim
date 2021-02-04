@@ -2,6 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+
 const app = express();
 const port = 8000;
 const pool = require('./db/index');
@@ -17,6 +19,7 @@ const corsConfig ={
 }
 
 var cors = require('cors')
+app.use(bodyParser.json()); 
 app.use(cookieParser())
 app.use(express.json()); 
 app.use(cors(corsConfig))

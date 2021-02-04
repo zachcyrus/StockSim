@@ -4,20 +4,34 @@ import { useState } from 'react';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import styles from '../styles/stockCompany.module.scss'
+import axios from 'axios';
 
 
 //Might need to make a custom chart component for Portfolios
 
-const StockCompany = ({companyInfo}) => {
+const StockCompany = ({ companyInfo, allPortfolios }) => {
     const [open, setDisplay] = useState(false);
     const [buy, setBuy] = useState(false);
     const [sell, setSell] = useState(false);
     const [timeTravel, setTimeTrav] = useState(false);
+    const [portfolioName, setportfolioName] = useState(allPortfolios ? allPortfolios[0].portfolio_name : 'Tech')
+    const [shareAmount, setShareAmount] = useState(0)
+
+    const stockTicker = companyInfo.ticker;
+    const todaysPrice = companyInfo.todaysPrice;
+
+
+    const handleSelect = (e) => {
+        setportfolioName(e.target.value)
+        console.log(e.target.value)
+
+    }
 
     const toggleBuy = () => {
         if (open) {
             setBuy(false)
             setDisplay(false)
+            setShareAmount(0)
         }
         else {
             setBuy(true)
@@ -25,25 +39,11 @@ const StockCompany = ({companyInfo}) => {
         }
     }
 
-    const handleBuy = (e) => {
-        e.preventDefault()
-        console.log('Just bought a share')
-    }
-
-    const handleSell = (e) => {
-        e.preventDefault()
-        console.log('Just bought a share')
-    }
-
-    const handleTimeTravel = (e) => {
-        e.preventDefault()
-        console.log('Just bought a share')
-    }
-
     const toggleSell = () => {
         if (open) {
             setSell(false)
             setDisplay(false)
+            setShareAmount(0)
         }
         else {
             setSell(true)
@@ -55,11 +55,43 @@ const StockCompany = ({companyInfo}) => {
         if (open) {
             setTimeTrav(false)
             setDisplay(false)
+            setShareAmount(0)
         }
         else {
             setTimeTrav(true)
             setDisplay(true)
         }
+    }
+
+    const handleShareChange = (e) => {
+        setShareAmount(e.target.value)
+    }
+
+    const handleBuy = async (e) => {
+        e.preventDefault()
+        console.log(`Just bought a share: ${shareAmount}`)
+
+        let addStockToPortfolio = await axios
+            .post(`${process.env.NEXT_PUBLIC_APIURL}/stocks/buy`,
+                {
+                    portfolioName: portfolioName,
+                    quantity: shareAmount,
+                    price: (Math.round(todaysPrice * 100) / 100),
+                    stockName: stockTicker
+                }, { withCredentials: true })
+
+        console.log(addStockToPortfolio.data)
+
+    }
+
+    const handleSell = (e) => {
+        e.preventDefault()
+        console.log('Just bought a share')
+    }
+
+    const handleTimeTravel = (e) => {
+        e.preventDefault()
+        console.log('Just bought a share')
     }
 
     //Maybe consider turning the modal into a seperate component
@@ -81,7 +113,7 @@ const StockCompany = ({companyInfo}) => {
             <div className={styles.yourStats}>
                 <h3>Your Stats</h3>
                 <div className={styles.row}>
-                    <a>Bought On:</a> <a>MM-DD-YYYY</a>
+                    <a>Bought On:</a> <a>{companyInfo.purchaseDate ? companyInfo.purchaseDate : 'MM-DD-YYYY'}Y</a>
                 </div>
 
                 <div className={styles.row}>
@@ -93,10 +125,10 @@ const StockCompany = ({companyInfo}) => {
                 </div>
             </div>
 
-            
-            <StockChart_Data data={companyInfo.YearData}/>
 
-            
+            <StockChart_Data data={companyInfo.YearData} />
+
+
 
 
             <div style={{ textAlign: 'center' }} className={styles.news}>
@@ -118,22 +150,30 @@ const StockCompany = ({companyInfo}) => {
                 <div style={{ display: buy ? 'block' : 'none' }} className={styles.modalContent}>
                     <h1>BUY</h1>
                     <div className={styles.row}>
-                        <a>Current Price:</a> <a>$158.87</a>
+                        <a>Current Price:</a> <a>{todaysPrice}</a>
                     </div>
 
                     <div className={styles.row}>
-                        <a>Amount:</a> <a>x <input type='number'></input></a>
+                        <a>Amount:</a> <a>x <input onChange={handleShareChange} type='number' value={shareAmount}></input></a>
                     </div>
 
                     <div className={styles.row}>
-                        <a>Select Portfolio</a> <select name="portfolios">
-                            <option value="tech">Tech</option>
-                            <option value="tech">Tech</option>
+                        <a>Select Portfolio</a> <select onChange={handleSelect} name="portfolios">
+                            {allPortfolios ?
+                                allPortfolios.map((row) => {
+                                    return (
+                                        <option key={row.portfolio_name} value={row.portfolio_name}> {row.portfolio_name} </option>
+                                    )
+                                })
+                                : <option value="tech">Tech</option>
+
+                            }
+
                         </select>
                     </div>
 
                     <div className={styles.row}>
-                        <a>Total Cost:</a> <a>$635.48</a>
+                        <a>Total Cost:</a> <a>{shareAmount * todaysPrice}</a>
                     </div>
 
                     <div className={styles.buttonGroup}>
@@ -145,22 +185,29 @@ const StockCompany = ({companyInfo}) => {
                 <div style={{ display: sell ? 'block' : 'none' }} className={styles.modalContent}>
                     <h1>SELL</h1>
                     <div className={styles.row}>
-                        <a>Current Price:</a> <a>$158.87</a>
+                        <a>Current Price:</a> <a>{todaysPrice}</a>
                     </div>
 
                     <div className={styles.row}>
-                        <a>Amount:</a> <a>x <input type='number'></input></a>
+                        <a>Amount:</a> <a>x <input onChange={handleShareChange} type='number'></input></a>
                     </div>
 
                     <div className={styles.row}>
                         <a>Select Portfolio</a> <select name="portfolios">
-                            <option value="tech">Tech</option>
-                            <option value="tech">Tech</option>
+                            {allPortfolios ?
+                                allPortfolios.map((row) => {
+                                    return (
+                                        <option key={row.portfolio_name} value={row.portfolio_name}> {row.portfolio_name} </option>
+                                    )
+                                })
+                                : <option value="tech">Tech</option>
+
+                            }
                         </select>
                     </div>
 
                     <div className={styles.row}>
-                        <a>Total Cost:</a> <a>$635.48</a>
+                        <a>Total Cost:</a> <a>{shareAmount * todaysPrice}</a>
                     </div>
 
                     <div className={styles.buttonGroup}>
@@ -179,18 +226,26 @@ const StockCompany = ({companyInfo}) => {
                     </div>
 
                     <div className={styles.row}>
-                        <a>Amount:</a> <a>x <input type='number'></input></a>
+                        <a>Amount:</a> <a>x <input onChange={handleShareChange} type='number'></input></a>
                     </div>
 
                     <div className={styles.row}>
-                        <a>Select Portfolio</a> <select name="portfolios">
-                            <option value="tech">Tech</option>
-                            <option value="tech">Tech</option>
+                        <a>Select Portfolio</a>
+                        <select name="portfolios">
+                            {allPortfolios ?
+                                allPortfolios.map((row) => {
+                                    return (
+                                        <option key={row.portfolio_name} value={row.portfolio_name}> {row.portfolio_name} </option>
+                                    )
+                                })
+                                : <option value="tech">Tech</option>
+
+                            }
                         </select>
                     </div>
 
                     <div className={styles.row}>
-                        <a>Total Cost:</a> <a>$635.48</a>
+                        <a>Total Cost:</a> <a>{shareAmount * todaysPrice}</a>
                     </div>
 
                     <div className={styles.buttonGroup}>

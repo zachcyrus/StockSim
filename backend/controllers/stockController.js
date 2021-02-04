@@ -7,7 +7,6 @@ exports.buyStock = async (req, res) => {
 
     let { portfolioName, quantity, price, stockName } = req.body
 
-
     let findPortIdQuery = `
     SELECT portfolio_id
     FROM  portfolios
@@ -107,6 +106,46 @@ exports.sellStock = async (req, res) => {
     } catch (err) {
         console.log(err)
 
+    }
+
+
+}
+
+exports.getFirstPurchaseDate = async (req, res) => {
+    let userId = req.user.Id
+    let { stockTicker } = req.body
+
+    let firstPurchaseDateQuery =
+        `
+    SELECT portfolios.portfolio_name, transactions.stock_name, transactions.quantity, transactions.price, transactions.date_of_sale
+    FROM  portfolios
+    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
+    WHERE (user_id = $1 AND stock_name = $2 )
+
+    `
+    console.log(stockTicker)
+    try {
+        console.log(stockTicker)
+        let foundPurchaseDate = await pool.query(firstPurchaseDateQuery, [userId, stockTicker])
+        if (foundPurchaseDate.rows.length === 0) {
+            console.log(`Stock not found`)
+            return res.json(false)
+
+        }
+        //stock with that name was found for that user
+        //return first row with date 
+        //possible error because it shows first purchase date regardless of portfolio
+        else {
+            console.log(`stock was found`)
+            console.log(foundPurchaseDate.rows[0])
+            return res.json(foundPurchaseDate.rows[0].date_of_sale)
+        }
+
+    } catch (err) {
+        console.log(err)
+        res.json({
+            message: err
+        })
     }
 
 

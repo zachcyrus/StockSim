@@ -13,4 +13,9 @@ router.post('/sell', passport.authenticate('jwt', {session:false}), stockControl
 
 //Need a route to delete a portfolio
 
+//Route to obtain first purchaseDate of a particular stock
+
+router.post('/purchasedate', passport.authenticate('jwt', {session:false}), stockController.getFirstPurchaseDate)
+
+
 module.exports = router
