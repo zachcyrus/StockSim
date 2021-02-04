@@ -25,6 +25,21 @@ const StockCompany = ({companyInfo}) => {
         }
     }
 
+    const handleBuy = (e) => {
+        e.preventDefault()
+        console.log('Just bought a share')
+    }
+
+    const handleSell = (e) => {
+        e.preventDefault()
+        console.log('Just bought a share')
+    }
+
+    const handleTimeTravel = (e) => {
+        e.preventDefault()
+        console.log('Just bought a share')
+    }
+
     const toggleSell = () => {
         if (open) {
             setSell(false)
@@ -79,7 +94,7 @@ const StockCompany = ({companyInfo}) => {
             </div>
 
             
-            <StockChart_Data/>
+            <StockChart_Data data={companyInfo.YearData}/>
 
             
 
@@ -122,7 +137,7 @@ const StockCompany = ({companyInfo}) => {
                     </div>
 
                     <div className={styles.buttonGroup}>
-                        <button>ORDER</button>
+                        <button onClick={handleBuy}>ORDER</button>
                         <button onClick={toggleBuy} className={styles.cancel}>CANCEL</button>
                     </div>
                 </div>
@@ -149,7 +164,7 @@ const StockCompany = ({companyInfo}) => {
                     </div>
 
                     <div className={styles.buttonGroup}>
-                        <button>SELL</button>
+                        <button onClick={handleSell}>SELL</button>
                         <button onClick={toggleSell} className={styles.cancel}>CANCEL</button>
                     </div>
                 </div>
@@ -179,7 +194,7 @@ const StockCompany = ({companyInfo}) => {
                     </div>
 
                     <div className={styles.buttonGroup}>
-                        <button>BUY</button>
+                        <button onClick={handleTimeTravel}>BUY</button>
                         <button onClick={toggleTimeTrav} className={styles.cancel}>CANCEL</button>
                     </div>
                 </div>

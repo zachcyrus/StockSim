@@ -1,30 +1,29 @@
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid } from 'recharts';
 import { useState } from 'react';
-import { formatData } from '../util/helper'
 const appleData = require('../public/sampleAAPL52.json')
 
 
-let allValues = formatData(appleData.prices)
+//let allValues = formatData(appleData.prices)
 
 
-const StockChart_Data = () => {
-    const [Data, setData] = useState(allValues.lastDay)
+const StockChart_Data = ({data}) => {
+    const [Data, setData] = useState(data.lastDay)
 
     const handleDataChange = (e) => {
         e.preventDefault();
         let val = e.target.innerHTML;
         switch (val) {
             case 'Day':
-                setData(allValues.lastDay)
+                setData(data.lastDay)
                 break;
             case 'Week':
-                setData(allValues.last7Days)
+                setData(data.last7Days)
                 break;
             case 'Month':
-                setData(allValues.lastMonth)
+                setData(data.lastMonth)
                 break;
             case 'Year':
-                setData(allValues.lastYear)
+                setData(data.lastYear)
                 break;
             default:
                 break;

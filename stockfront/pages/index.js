@@ -6,28 +6,8 @@ import StockCard from '../components/stockCard';
 import TopPerformers from '../components/topPerformers';
 import axios from 'axios';
 
-//testing autocomplete
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchIcon from '@material-ui/icons/Search';
-
-
-const top100Films = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-  { title: 'The Dark Knight', year: 2008 },
-  { title: '12 Angry Men', year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: 'Pulp Fiction', year: 1994 }
-]
-
-
-
 //For the stock container, possible implementation of a horizontal scrolling option;
 axios.defaults.withCredentials = true;
-
 
 function Home({ username }) {
 

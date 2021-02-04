@@ -6,9 +6,7 @@ import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Popper from '@material-ui/core/Popper';
 import TextField from '@material-ui/core/TextField';
-import Paper from "@material-ui/core/Paper";
 
-import axios from 'axios';
 import Link from 'next/link';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -22,8 +20,8 @@ let tickerData = require('../assets/allTickers/nasdaq-listed-symbols_json.json')
 
 tickerData = tickerData.slice(0, 10);
 
-const useStyles = makeStyles((theme) => ({
-    textField: {
+const useStyles = makeStyles({
+    textInput: {
         color: 'white',
         backgroundColor: 'black',
         borderRadius: '5px',
@@ -38,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     focused: {
         color: 'white'
     }
-}));
+});
 
 
 
@@ -67,6 +65,7 @@ const NavBar = ({ username }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        location.href=`/stock/${search.split(' ')[0]}`
         if (!search) {
             console.log('Search is empty')
         }
@@ -93,7 +92,7 @@ const NavBar = ({ username }) => {
                 <SearchIcon style={{ color: 'white' }} />
                 <form style={{ width: '100%' }} onSubmit={handleSubmit}>
                     <Autocomplete
-                        className={classes.textField}
+                        className={classes.textInput}
                         style={{ width: '100%' }}
 
                         options={tickerData.map((ticker) => {
@@ -105,7 +104,8 @@ const NavBar = ({ username }) => {
 
                             <TextField
                                 {...params}
-                                fullWidth label='Type below to browse stocks'
+                                fullWidth 
+                                label='Type below to browse stocks'
                                 InputProps={{
                                     ...params.InputProps,
                                     type: 'search',
@@ -128,9 +128,6 @@ const NavBar = ({ username }) => {
                     />
 
                 </form>
-
-
-
             </div>
 
 
@@ -154,15 +151,5 @@ const NavBar = ({ username }) => {
     )
 }
 
-
-const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-    { title: 'The Dark Knight', year: 2008 },
-    { title: '12 Angry Men', year: 1957 },
-    { title: "Schindler's List", year: 1993 },
-    { title: 'Pulp Fiction', year: 1994 }
-]
 
 export default NavBar
