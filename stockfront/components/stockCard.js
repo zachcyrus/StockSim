@@ -21,7 +21,7 @@ const StockCard = () => {
 
             <div className={styles.purchaseInfo}>
                 <a>Bought on: 01-22-2010</a> <br/>
-                <a>For $300 x 3 = $900</a>
+                <a>Total shares: 9</a>
             </div>
 
         </div>

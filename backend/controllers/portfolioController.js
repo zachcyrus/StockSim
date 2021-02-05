@@ -106,6 +106,48 @@ exports.getPortfoliosVal = async (req, res) => {
     let foo = await pool.query(findIndvStockVals, [currUserId])
 }
 
+//function to retrieve allStocks and their amounts from a specific portfolio
+exports.getPortfolioStocks = async (req, res) => {
+    let userId = req.user.Id;
+    console.log('running')
+    let { portfolioName } = req.params
+    console.log(portfolioName)
+    let getPortAndStocksQuery =
+    `
+    SELECT Portfolios.portfolio_name, transactions.stock_name, SUM(transactions.quantity) AS totalAmount, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
+    AS weightedAvg, MIN(transactions.date_of_sale) AS firstPurchase
+    FROM  portfolios
+    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
+    WHERE (user_id = $1 AND portfolio_name = $2)
+	GROUP BY Portfolios.portfolio_name, transactions.stock_name
+
+    `
+
+    let values = [userId, portfolioName]
+
+    try {
+        let findPortfolioStocks = await pool.query(getPortAndStocksQuery, values)
+        if (findPortfolioStocks.rows.length === 0) {
+            console.log('portfolio not found or no stocks in portfolio')
+            return res.json({
+                error: "No stock in portfolio or portfolio doesn't exist"
+            })
+        }
+        else {
+            console.log('Portfolio found and is being returned')
+            return res.json(findPortfolioStocks.rows)
+        }
+
+    } catch (err) {
+        console.log(err)
+        return res.json(err)
+
+    }
+
+
+
+}
+
 //840 / 6 = 140 
 //445.8 + 260.9 = 706.7 avg price is 117.783
 //avg % increase is 18.846

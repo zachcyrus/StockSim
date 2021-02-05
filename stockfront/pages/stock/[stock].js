@@ -113,14 +113,14 @@ export async function getServerSideProps(context) {
   let getPurchaseDate = await axios({
     method: 'get',
     url: `${process.env.NEXT_PUBLIC_APIURL}/stocks/purchasedate/${stockToFindSymbol}`,
-    headers:{
+    headers: {
       Cookie: cookies
     }
   })
 
 
   let purchaseDate = getPurchaseDate.data;
-  if(purchaseDate){
+  if (purchaseDate) {
     companyInfo.purchaseDate = new Date(purchaseDate).toLocaleString()
   }
 
