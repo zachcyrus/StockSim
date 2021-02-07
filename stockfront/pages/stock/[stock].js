@@ -71,8 +71,8 @@ export async function getServerSideProps(context) {
   let finalData = formatData(queryStockPrices)
 
   let companyInfo = {
-    'ticker': company.Symbol,
-    'name': company['Company Name'],
+    'ticker': company.ticker,
+    'name': company.name,
     //we will find todays price from API
     'todaysPrice': finalData.today.value,
     //now to retrieve all price ranges

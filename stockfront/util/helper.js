@@ -1,4 +1,4 @@
-let tickerData = require('../assets/allTickers/nasdaq-listed-symbols_json.json')
+let tickerData = require('../assets/allTickers/allTickers.json')
 let batchData = require('../public/fakeBatchData.json')
 
 export const formatData = (data) => {
@@ -40,7 +40,7 @@ export const formatData = (data) => {
 
 export const findCompany = (ticker) => {
     return tickerData.find((company) => {
-        if (company.Symbol === `${ticker.toUpperCase()}`) {
+        if (company.ticker === `${ticker.toUpperCase()}`) {
             return true
         }
     })

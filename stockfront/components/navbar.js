@@ -14,11 +14,13 @@ import { makeStyles } from '@material-ui/core/styles';
 //for tomorrow work on navigating to a different page with search;
 
 import styles from '../styles/navbar.module.scss'
+import React from "react";
+import { List } from "react-virtualized";
 import { useState } from 'react'
 
 let tickerData = require('../assets/allTickers/allTickers.json')
 
-tickerData = tickerData.slice(0, 10);
+
 
 const useStyles = makeStyles({
     textInput: {
@@ -39,6 +41,41 @@ const useStyles = makeStyles({
 });
 
 
+const ListboxComponent = React.forwardRef(function ListboxComponent(
+    props,
+    ref
+) {
+    const { children, role, ...other } = props;
+    const itemCount = Array.isArray(children) ? children.length : 0;
+    const itemSize = 36;
+
+    return (
+        <div ref={ref}>
+            <div {...other}>
+                <List
+                    height={250}
+                    width={1}
+                    rowHeight={itemSize}
+                    overscanCount={5}
+                    rowCount={itemCount}
+                    rowRenderer={props => {
+                        return React.cloneElement(children[props.index], {
+                            style: props.style
+                        });
+                    }}
+                    containerStyle={{
+                        width: "100%",
+                        maxWidth: "100%"
+                      }}
+                    style={{
+                        width: "100%"
+                      }}
+                    role={role}
+                />
+            </div>
+        </div>
+    );
+});
 
 
 const NavBar = ({ username }) => {
@@ -65,7 +102,7 @@ const NavBar = ({ username }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        location.href=`/stock/${search.split(' ')[0]}`
+        location.href = `/stock/${search.split(' ')[0]}`
         if (!search) {
             console.log('Search is empty')
         }
@@ -94,7 +131,7 @@ const NavBar = ({ username }) => {
                     <Autocomplete
                         className={classes.textInput}
                         style={{ width: '100%' }}
-
+                        ListboxComponent={ListboxComponent}
                         options={tickerData.map((ticker) => {
                             return ticker.ticker + ' ' + ticker.name
                         })
@@ -104,7 +141,7 @@ const NavBar = ({ username }) => {
 
                             <TextField
                                 {...params}
-                                fullWidth 
+                                fullWidth
                                 label='Type below to browse stocks'
                                 InputProps={{
                                     ...params.InputProps,
