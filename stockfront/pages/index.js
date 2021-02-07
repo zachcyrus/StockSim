@@ -4,10 +4,28 @@ import StockChart from '../components/stockChart'
 import Container from '@material-ui/core/Container';
 import StockCard from '../components/stockCard';
 import TopPerformers from '../components/topPerformers';
+import PortfolioPieChart from '../components/portfolioPieChart'
 import axios from 'axios';
 
 //For the stock container, possible implementation of a horizontal scrolling option;
 axios.defaults.withCredentials = true;
+
+let exampleData = [
+  {
+      "portfolio_name": "Second Port",
+      "weightedavg": "109.870",
+      "stock_name": "AAPL",
+      "quantity": "10"
+  },
+  {
+      "portfolio_name": "Second Port",
+      "weightedavg": "40.200",
+      "stock_name": "DOGE\n",
+      "quantity": "3"
+  }
+]
+
+
 
 function Home({ username }) {
 
@@ -29,7 +47,7 @@ function Home({ username }) {
             <TopPerformers />
           </div>
 
-          <StockChart />
+          <PortfolioPieChart pieData={exampleData}/>
 
         </div>
 

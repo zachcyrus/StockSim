@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import styles from '../styles/navbar.module.scss'
 import { useState } from 'react'
 
-let tickerData = require('../assets/allTickers/nasdaq-listed-symbols_json.json')
+let tickerData = require('../assets/allTickers/allTickers.json')
 
 tickerData = tickerData.slice(0, 10);
 
@@ -96,7 +96,7 @@ const NavBar = ({ username }) => {
                         style={{ width: '100%' }}
 
                         options={tickerData.map((ticker) => {
-                            return ticker.Symbol + ' ' + ticker['Company Name']
+                            return ticker.ticker + ' ' + ticker.name
                         })
                         }
                         onChange={(event, value) => setSearch(value)}

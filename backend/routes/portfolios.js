@@ -13,10 +13,10 @@ router.post('/add', passport.authenticate('jwt', {session:false}), portfolioCont
 
 router.get('/userportfolio/:portfolioName', passport.authenticate('jwt', {session:false}), portfolioController.getPortfolioStocks)
 
-router.get('/foo/:bleh', passport.authenticate('jwt', {session:false}), (req, res) => {
-    res.send(req.params.bleh)
-})
+//router.get('/userportfolio/:portfolioName/graph', passport.authenticate('jwt', {session:false}), portfolioController.graphPortfolioStocks)
 
+//route to receive weighted avg for stocks in certain portfolio used primarily to generate pie chart
+router.get('/:portfolioName/piechart', passport.authenticate('jwt', {session:false}), portfolioController.getPortfoliosWeightedVal)
 
 
 //route to retrieve all portfolios

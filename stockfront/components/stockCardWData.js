@@ -1,5 +1,5 @@
 import styles from '../styles/stockCard.module.scss'
-let tickerData = require('../assets/allTickers/nasdaq-listed-symbols_json.json')
+let tickerData = require('../assets/allTickers/allTickers.json')
 
 let abbreviateName = (name) => {
     let abbrev = name.substring(0, 11)
@@ -12,15 +12,15 @@ const StockCardData = ({ stockInfo }) => {
     //This if function is mainly here for testing with company names that aren't real which exist
     //in the sql table
     
-    if (tickerData.find(x => x.Symbol === stockInfo.stock_name)) {
+    if (tickerData.find(x => x.ticker === stockInfo.stock_name)) {
         
         companyName = tickerData.find((company) => {
-            if (company.Symbol === `${stockInfo.stock_name.toUpperCase()}`) {
+            if (company.ticker === `${stockInfo.stock_name.toUpperCase()}`) {
                 return true
             }
         })
 
-        companyName = companyName['Company Name'].length >= 14 ? abbreviateName(companyName['Company Name']) : companyName['Company Name']
+        companyName = companyName.name.length >= 14 ? abbreviateName(companyName.name) : companyName.name
 
 
     }

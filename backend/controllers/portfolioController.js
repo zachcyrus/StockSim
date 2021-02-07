@@ -69,41 +69,32 @@ exports.getPortfolios = async (req, res) => {
     }
 }
 
-exports.getPortfoliosVal = async (req, res) => {
+exports.getPortfoliosWeightedVal = async (req, res) => {
     let currUserId = req.user.Id;
-
-    //this is a query to the total price paid for individual stocks in portfolio
-    let findIndvStockVals = `
-    SELECT Portfolios.portfolio_name, SUM(transactions.quantity * transactions.price) 
-    AS totalPrice, transactions.stock_name
-    FROM  portfolios
-    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
-    WHERE (user_id = $1)
-    GROUP BY transactions.stock_name, Portfolios.portfolio_name
-    `
-
-    let totalPriceOfPort = `
-    SELECT Portfolios.portfolio_name, SUM(transactions.quantity * transactions.price) 
-    AS totalPrice
-    FROM  portfolios
-    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
-    WHERE (user_id = $1)
-    GROUP BY portfolios.portfolio_name
-    `
+    let currPortfolioName = req.params.portfolioName
 
     //the following query is to obtain the weighted avg of each stock, we can compare this value
     //on the frontend api call to determine percent increase or decrease
     //only problem is that as portfolio grows the number of api calls will increase
     let stockWeightedAvgQuery = `
     SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
-    AS weightedAvg, transactions.stock_name
+    AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
-    WHERE (user_id = $1)
+    WHERE (user_id = $1 AND portfolio_name = $2)
     GROUP BY transactions.stock_name, Portfolios.portfolio_name
     `
 
-    let foo = await pool.query(findIndvStockVals, [currUserId])
+    try {
+        let weightedAvg = await pool.query(stockWeightedAvgQuery, [currUserId, currPortfolioName])
+        return res.json(weightedAvg.rows)
+        
+    } catch (err) {
+        console.log('err getting weighted avg')
+        return res.json(err)
+        
+    }
+    
 }
 
 //function to retrieve allStocks and their amounts from a specific portfolio
@@ -143,10 +134,51 @@ exports.getPortfolioStocks = async (req, res) => {
         return res.json(err)
 
     }
+}
+
+exports.graphPortfolioStocks = async (req, res) => {
+    let userId = req.user.Id;
+    console.log('running graph')
+    let { portfolioName } = req.params
+    console.log(portfolioName)
+    let getPortAndStocksQuery =
+    `
+    SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
+    AS weightedAvg, transactions.stock_name, 
+	CAST(transactions.date_of_sale AS DATE), transactions.quantity
+    FROM  portfolios
+    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
+    WHERE (user_id = $1 AND portfolio_name = $2)
+    GROUP BY transactions.stock_name, Portfolios.portfolio_name, transactions.date_of_sale,transactions.quantity
+
+    `
+
+    let values = [userId, portfolioName]
+
+    try {
+        let findPortfolioStocks = await pool.query(getPortAndStocksQuery, values)
+        if (findPortfolioStocks.rows.length === 0) {
+            console.log('portfolio not found or no stocks in portfolio')
+            return res.json({
+                error: "No stock in portfolio or portfolio doesn't exist"
+            })
+        }
+        else {
+            console.log('Portfolio found and is being returned')
+            return res.json(findPortfolioStocks.rows)
+        }
+
+    } catch (err) {
+        console.log(err)
+        return res.json(err)
+
+    }
 
 
 
 }
+
+
 
 //840 / 6 = 140 
 //445.8 + 260.9 = 706.7 avg price is 117.783

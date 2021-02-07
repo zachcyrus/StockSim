@@ -36,3 +36,7 @@ yarn-error.log*
 
 #fakedata
 /public/sampleAAPL52.json
+/public/fakeBatchData.json
+/public/fakeUserData.json
+
+/util/test.js
