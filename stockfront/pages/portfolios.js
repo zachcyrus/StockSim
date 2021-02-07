@@ -55,6 +55,9 @@ function Portfolios({ username, allPortfolios }) {
           <h1>All Portfolios:  </h1>
           <button onClick={onClose} className="addPortfolio">Create Portfolio</button>
         </div>
+        <p>If you don't see a portfolio you created please search for and buy a stock and choose your newly created portfolio. It 
+          will then appear on this page.
+        </p>
 
 
 
@@ -62,7 +65,7 @@ function Portfolios({ username, allPortfolios }) {
           <div>
             {allPortfolios.map((row, index) => {
               return (
-                <PortfolioCard key={index} name={row.portfolio_name}/>
+                <PortfolioCard key={index} data={row}/>
               )
             })}
           </div>
@@ -107,7 +110,7 @@ export async function getServerSideProps(context) {
   })
   
   //retrieve list of portfolios and their values
-  let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios`,{
+  let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/allportfoliovalues`,{
     headers: {
       Cookie: cookies
     }
@@ -116,6 +119,7 @@ export async function getServerSideProps(context) {
 
   let username = userData.data.user
   let allPortfolios = portfolioData.data;
+  console.log(allPortfolios)
   return {
     props: {
       username,

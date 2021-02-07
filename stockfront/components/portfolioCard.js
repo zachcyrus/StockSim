@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { useState } from 'react';
 import Link from 'next/link'
 
-const PortfolioCard = ({ name }) => {
+const PortfolioCard = ({ data }) => {
     //Add a recharts graph component to .chartInfo to replace lorem ipsum
     //Need to animate the transition between content displaying;
     const [open, setDisplay] = useState(false)
@@ -22,13 +22,13 @@ const PortfolioCard = ({ name }) => {
     return (
         <div>
             <div className="portfolioCard">
-                <Link href={`/portfolios/${name}`}>
-                    <h3>{name}</h3>
+                <Link href={`/portfolios/${data.portfolio_name}`}>
+                    <h3>{data.portfolio_name}</h3>
                 </Link>
 
                 <p className="percentage">$3000(+8.28%)</p>
                 <div className="plus">
-                    <p className="value">$25,324,000</p>
+                    <p className="value">{data.latestValue.toFixed(2)}</p>
                     <div className={`toggleButton ${open ? 'active' : ''}`} onClick={toggleAccordion} >
                         <RemoveIcon className="secondIcon" fontSize="small" />
                         <ControlPointIcon className="targetIcon" fontSize="small" />

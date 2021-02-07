@@ -219,7 +219,7 @@ exports.allPortfolioValues = async (req, res) => {
         previosDayStockPrices = previosDayStockPrices.data;
 
         let newPortfolioArr = foundPortfolios.map(row => {
-            
+
             let latestPrice = previosDayStockPrices[row.stock_name].previous.close;
             let updatedRow = {
                 portfolio_name: row.portfolio_name,
@@ -228,14 +228,20 @@ exports.allPortfolioValues = async (req, res) => {
             }
             return updatedRow;
         })
-        
-        let ans = newPortfolioArr.reduce((c, v) => {
-            c[v.portfolio_name] = (c[v.portfolio_name] || 0) + v.latestValue;
-            return c;
-          }, {});
 
-        
-        return res.json(ans);
+
+        let finalArr = newPortfolioArr.reduce((acc, obj) => {
+            var existItem = acc.find(item => item.portfolio_name === obj.portfolio_name);
+            if (existItem) {
+                existItem.latestValue += obj.latestValue;
+                return acc;
+            }
+            acc.push(obj);
+            return acc;
+        }, []);
+
+
+        return res.json(finalArr);
 
 
 
