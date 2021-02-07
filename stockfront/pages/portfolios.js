@@ -106,7 +106,7 @@ export async function getServerSideProps(context) {
     }
   })
   
-  //retrieve list of portfolios
+  //retrieve list of portfolios and their values
   let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios`,{
     headers: {
       Cookie: cookies

@@ -1,4 +1,5 @@
 const pool = require('../db/index')
+const axios = require('axios');
 
 //Goals: Functions to add portfolios to authenticated users
 
@@ -88,13 +89,13 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
     try {
         let weightedAvg = await pool.query(stockWeightedAvgQuery, [currUserId, currPortfolioName])
         return res.json(weightedAvg.rows)
-        
+
     } catch (err) {
         console.log('err getting weighted avg')
         return res.json(err)
-        
+
     }
-    
+
 }
 
 //function to retrieve allStocks and their amounts from a specific portfolio
@@ -104,7 +105,7 @@ exports.getPortfolioStocks = async (req, res) => {
     let { portfolioName } = req.params
     console.log(portfolioName)
     let getPortAndStocksQuery =
-    `
+        `
     SELECT Portfolios.portfolio_name, transactions.stock_name, SUM(transactions.quantity) AS totalAmount, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
     AS weightedAvg, MIN(transactions.date_of_sale) AS firstPurchase
     FROM  portfolios
@@ -142,7 +143,7 @@ exports.graphPortfolioStocks = async (req, res) => {
     let { portfolioName } = req.params
     console.log(portfolioName)
     let getPortAndStocksQuery =
-    `
+        `
     SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
     AS weightedAvg, transactions.stock_name, 
 	CAST(transactions.date_of_sale AS DATE), transactions.quantity
@@ -178,7 +179,72 @@ exports.graphPortfolioStocks = async (req, res) => {
 
 }
 
+exports.allPortfolioValues = async (req, res) => {
+    let userId = req.user.Id;
 
+    let allPortfolioValuesQuery =
+        `
+    SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
+    AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity
+    FROM  portfolios
+    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
+    WHERE (user_id = $1)
+    GROUP BY portfolios.portfolio_name, transactions.stock_name, Portfolios.portfolio_name
+    `
+    try {
+        let foundPortfolios = await pool.query(allPortfolioValuesQuery, [userId])
+        foundPortfolios = foundPortfolios.rows;
+
+        //find the params we need for GET request
+        let paramsHolder = [];
+        foundPortfolios.forEach(row => {
+            if (!paramsHolder.includes(row.stock_name)) {
+                paramsHolder.push(row.stock_name)
+            }
+        })
+
+
+        //this api currently returning the previous day value of selected stocks
+        let previosDayStockPrices = await axios.get(`${process.env.IEX_TEST_URL}/stable/stock/market/batch`, {
+            params: {
+                symbols: paramsHolder.toString(),
+                types: 'previous',
+                chartCloseOnly: true,
+                token: process.env.IEX_TOKEN
+
+
+            }
+        })
+
+        previosDayStockPrices = previosDayStockPrices.data;
+
+        let newPortfolioArr = foundPortfolios.map(row => {
+            
+            let latestPrice = previosDayStockPrices[row.stock_name].previous.close;
+            let updatedRow = {
+                portfolio_name: row.portfolio_name,
+                latestValue: row.quantity * latestPrice,
+                quantity: row.quantity
+            }
+            return updatedRow;
+        })
+        
+        let ans = newPortfolioArr.reduce((c, v) => {
+            c[v.portfolio_name] = (c[v.portfolio_name] || 0) + v.latestValue;
+            return c;
+          }, {});
+
+        
+        return res.json(ans);
+
+
+
+
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+}
 
 //840 / 6 = 140 
 //445.8 + 260.9 = 706.7 avg price is 117.783
