@@ -1,0 +1,41 @@
+@import './variables';
+
+.loginForm{
+    display: flex;
+    .drawing{
+        display: none;
+    }
+    background-color: #222222;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 20px;
+    margin: 20px auto;
+    border-radius: 25px;
+    display: flex;
+    height: 75%;
+    width: 75%;
+    color:white;
+    padding: 5px 10px 10px 20px;
+    .loginChoices{
+        height: 80%;
+    }
+    .loginOptions{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    //media query for tablets and small laptops;
+    @media only screen and (min-width: $md) {
+        width: 80%;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        .drawing{
+            display: block;
+        }
+        flex-direction: row;
+        justify-content: space-between;
+        .loginChoices{
+            margin: 0 auto;
+        }
+    }
+}

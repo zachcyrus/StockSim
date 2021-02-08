@@ -37,7 +37,6 @@ const StockCardData = ({ stockInfo }) => {
             return true;
         }
     }
-    
     return (
         <div className={styles.stockCard}>
 
