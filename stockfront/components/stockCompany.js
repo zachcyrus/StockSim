@@ -92,7 +92,6 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
             console.log(err)
         }
         
-
     }
 
     const handleSell = (e) => {

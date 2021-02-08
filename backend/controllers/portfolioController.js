@@ -114,9 +114,14 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
        let currWeightedAvgValues = weightedAvg.rows.map(row => {
             let latestValue = previousDayStockPrices[row.stock_name].previous.close * row.quantity;
             latestValue = latestValue.toFixed(2);
+            let weightedCost = (row.weightedavg*row.quantity);
+            let percentIncOrDec = ((latestValue-weightedCost)/weightedCost)*100
+            //console.log(percentIncOrDec)
             return {
                 ...row,
-                latestValue
+                latestValue,
+                percentIncOrDec,
+                weightedCost
             }
         })
 

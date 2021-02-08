@@ -11,6 +11,9 @@ import Router from "next/router"
 //need an alert component for errors
 //Add keys to portfolio cards
 
+
+
+
 function Portfolios({ username, allPortfolios }) {
   const [open, setOpen] = useState(false)
   const [portfolioName, setPortfolioName] = useState('')
@@ -40,7 +43,7 @@ function Portfolios({ username, allPortfolios }) {
       console.log(error);
 
     }
-    
+
     setOpen(false)
   }
 
@@ -55,9 +58,7 @@ function Portfolios({ username, allPortfolios }) {
           <h1>All Portfolios:  </h1>
           <button onClick={onClose} className="addPortfolio">Create Portfolio</button>
         </div>
-        <p>If you don't see a portfolio you created please search for and buy a stock and choose your newly created portfolio. It 
-          will then appear on this page.
-        </p>
+
 
 
 
@@ -65,14 +66,18 @@ function Portfolios({ username, allPortfolios }) {
           <div>
             {allPortfolios.map((row, index) => {
               return (
-                <PortfolioCard key={index} data={row}/>
+                <PortfolioCard key={index} data={row} />
               )
             })}
           </div>
 
         ) :
-          <h1><Link href='/login'>Please sign in to create a portfolio</Link></h1>
+          <h1 id='loginLink'><Link href='/login'>Click here to sign in and to create a portfolio</Link></h1>
         }
+
+        <p>If you don't see a portfolio you created please search for and buy a stock and choose your newly created portfolio. It
+        will then appear on this page.
+        </p>
 
 
 
@@ -108,9 +113,9 @@ export async function getServerSideProps(context) {
       Cookie: cookies
     }
   })
-  
+
   //retrieve list of portfolios and their values
-  let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/allportfoliovalues`,{
+  let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/allportfoliovalues`, {
     headers: {
       Cookie: cookies
     }

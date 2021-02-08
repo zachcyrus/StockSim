@@ -181,7 +181,8 @@ const NavBar = ({ username }) => {
 
             <Popper id={id} open={open} anchorEl={anchorEl}>
                 <div style={{ marginTop: '10px', padding: '10px', textAlign: 'center', backgroundColor: 'red' }}>
-                    {username ? username : <Link href='/login'>Click to signin</Link>}
+                    {username ? username : <Link href='/login'>Click to signin</Link>} 
+                    {username ? <p style={{marginBottom: '0'}}>Click to logout</p> : ''}
                 </div>
             </Popper>
         </div>

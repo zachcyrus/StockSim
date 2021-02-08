@@ -21,13 +21,12 @@ const PortfolioPieChart = ({pieData}) => {
             value
         }
     })
-    console.log(data)
 
     return (
         <div className='chartData'>
             <ResponsiveContainer width= {'99%'} height={500}>
                 <PieChart>
-                    <Pie color='black' data ={data}>
+                    <Pie color='black' data ={data} dataKey={'value'} nameKey={'name'}>
                         {
                             pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={colorArray[index % colorArray.length]} />)
                         }

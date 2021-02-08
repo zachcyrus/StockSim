@@ -28,10 +28,9 @@ const StockCardData = ({ stockInfo }) => {
     else{
         companyName = 'No name'
     }
-    let weightedCost = (stockInfo.weightedavg * stockInfo.quantity)
-    let percentIncOrDec = ((stockInfo.latestValue-weightedCost)/weightedCost)*100
+
     let sign = () => {
-        if(Math.sign(percentIncOrDec) == -1){
+        if(Math.sign(stockInfo.percentIncOrDec) == -1){
             return false
         }
         else {
@@ -55,13 +54,13 @@ const StockCardData = ({ stockInfo }) => {
 
             <div className={styles.stockMoney}>
                 <h3> ${stockInfo.latestValue} </h3>
-                <h4 style={{color: sign() ? 'green' : 'red'}}>{ sign() ? '+' : '' }{percentIncOrDec.toFixed(2)}%</h4>
+                <h4 style={{color: sign() ? 'green' : 'red'}}>{ sign() ? '+' : '' }{stockInfo.percentIncOrDec.toFixed(2)}%</h4>
             </div>
 
 
             <div className={styles.purchaseInfo}>
                 <a>Initial Purchase: {new Date(stockInfo.firstpurchase).toLocaleString()}</a> <br />
-                <a className={styles.cost}>Weighted Cost: ${weightedCost.toFixed(2)}</a>
+                <a className={styles.cost}>Weighted Cost: ${stockInfo.weightedCost.toFixed(2)}</a>
                 <div className={styles.shareAmount}>Total shares: {stockInfo.quantity}</div>
             </div>
 
