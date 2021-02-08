@@ -14,7 +14,8 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
     const [sell, setSell] = useState(false);
     const [timeTravel, setTimeTrav] = useState(false);
     const [portfolioName, setportfolioName] = useState(allPortfolios ? allPortfolios[0].portfolio_name : 'Tech')
-    const [shareAmount, setShareAmount] = useState(0)
+    const [shareAmount, setShareAmount] = useState(0);
+    const [error, setError] = useState('')
 
     const stockTicker = companyInfo.ticker;
     const todaysPrice = companyInfo.todaysPrice;
@@ -68,9 +69,15 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
 
     const handleBuy = async (e) => {
         e.preventDefault()
-        console.log(`Just bought a share: ${shareAmount}`)
-
-        let addStockToPortfolio = await axios
+        if(!Number.isInteger(+shareAmount)){
+            setError('Please only use integers for share amount')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+        }
+        try {
+            let addStockToPortfolio = await axios
             .post(`${process.env.NEXT_PUBLIC_APIURL}/stocks/buy`,
                 {
                     portfolioName: portfolioName,
@@ -78,8 +85,13 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
                     price: (Math.round(todaysPrice * 100) / 100),
                     stockName: stockTicker
                 }, { withCredentials: true })
-
-        console.log(addStockToPortfolio.data)
+            console.log(`Just bought a share: ${shareAmount}`)
+            window.location.reload();
+            
+        } catch (err) {
+            console.log(err)
+        }
+        
 
     }
 
@@ -110,9 +122,15 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
             </div>
 
             <div className={styles.yourStats}>
-                <h3>Your Stats</h3>
-                {statData ? <StockStats portfolioData={statData}/> : <h2>Stock not found in any portfolios</h2> }
+                {statData == undefined ? <h2>Login to view stats</h2> : 
+                <div>
+                    <h3>Your Stats</h3>
+                    {statData.length > 0 ? <StockStats portfolioData={statData} /> : <h2>Stock not found in any portfolios</h2>}
+                </div>
                 
+                }
+                
+
             </div>
 
 
@@ -144,8 +162,10 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
                     </div>
 
                     <div className={styles.row}>
-                        <a>Amount:</a> <a>x <input onChange={handleShareChange} type='number' value={shareAmount}></input></a>
+                        <a>Amount(integers only):</a> <a>x <input onChange={handleShareChange} type='number' value={shareAmount}></input></a>
                     </div>
+
+                    <div style={{color:'red'}}>{error}</div>
 
                     <div className={styles.row}>
                         <a>Select Portfolio</a> <select onChange={handleSelect} name="portfolios">

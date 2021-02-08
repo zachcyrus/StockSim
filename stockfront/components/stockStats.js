@@ -31,15 +31,15 @@ const StockStats = ({ portfolioData }) => {
             </div>
 
             <div className={styles.row}>
-                <a>Bought On:</a> <a>{data.firstpurchase ? data.firstpurchase.split('T')[0] : 'MM-DD-YYYY'}</a>
+                <a>Bought On:</a> <a>{data ? data.firstpurchase.split('T')[0] : 'MM-DD-YYYY'}</a>
             </div>
 
             <div className={styles.row}>
-                <a>Current Value:</a> <a>{data.currentValue}</a>
+                <a>Current Value:</a> <a>{data ? data.currentValue: ''}</a>
             </div>
 
             <div className={styles.row}>
-                <a>Total Shares:</a> <a>{data.quantity}</a>
+                <a>Total Shares:</a> <a>{data ? data.quantity : ''}</a>
             </div>
 
         </div >

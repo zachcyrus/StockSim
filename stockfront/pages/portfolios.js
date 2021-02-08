@@ -119,7 +119,6 @@ export async function getServerSideProps(context) {
 
   let username = userData.data.user
   let allPortfolios = portfolioData.data;
-  console.log(allPortfolios)
   return {
     props: {
       username,
