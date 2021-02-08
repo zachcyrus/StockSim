@@ -92,17 +92,24 @@
     justify-content: space-between;
     margin-bottom: 40px;
     button{
-      color:black;
-      border: none;
-      background-color: green;
-      text-align: center;
+      cursor: pointer;
+      padding: 5px 20px 5px 20px;
+      background-color: black;
+      color:white;
       font-weight: bold;
-      padding: 13px 23px 13px 23px;
-      max-width: 80px;
-      border-radius: 5px;
+      border:solid;
+      border-radius: 15px;
+      border-width: 1px;
+      border-color: white;
+      outline: none;
+      margin-right:20px;
+      font-weight: lighter;
     }
-    .sellBtn{
-      background-color: red;
+    .buyBtn:hover{
+      background-color: #228B22;
+    }
+    .sellBtn:hover{
+      background-color: #8b0000 ;
     }
   }
   
@@ -166,6 +173,7 @@
         justify-content: space-evenly;
         button{
           padding: 10px 10px 10px 10px;
+          border-radius: 25px;
         }
         .cancel{
           background-color: red;

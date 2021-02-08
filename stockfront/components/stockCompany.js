@@ -1,15 +1,14 @@
-import StockChart from './stockChart';
 import StockChart_Data from './stockChart&Data'
 import { useState } from 'react';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import styles from '../styles/stockCompany.module.scss'
 import axios from 'axios';
-
+import StockStats from './stockStats'
 
 //Might need to make a custom chart component for Portfolios
 
-const StockCompany = ({ companyInfo, allPortfolios }) => {
+const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
     const [open, setDisplay] = useState(false);
     const [buy, setBuy] = useState(false);
     const [sell, setSell] = useState(false);
@@ -112,17 +111,8 @@ const StockCompany = ({ companyInfo, allPortfolios }) => {
 
             <div className={styles.yourStats}>
                 <h3>Your Stats</h3>
-                <div className={styles.row}>
-                    <a>Bought On:</a> <a>{companyInfo.purchaseDate ? companyInfo.purchaseDate : 'MM-DD-YYYY'}Y</a>
-                </div>
-
-                <div className={styles.row}>
-                    <a>Peak Value:</a> <a>$3,000 on 01/20/2019</a>
-                </div>
-
-                <div className={styles.row}>
-                    <a>Percent:</a> <a>30%</a>
-                </div>
+                {statData ? <StockStats portfolioData={statData}/> : <h2>Stock not found in any portfolios</h2> }
+                
             </div>
 
 
@@ -139,7 +129,7 @@ const StockCompany = ({ companyInfo, allPortfolios }) => {
             </div>
 
             <div className={styles.buttonGroup}>
-                <button onClick={toggleBuy}>BUY</button>
+                <button onClick={toggleBuy} className={styles.buyBtn}>BUY</button>
                 <button onClick={toggleSell} className={styles.sellBtn}>SELL</button>
                 <button onClick={toggleTimeTrav}>Time Travel</button>
             </div>

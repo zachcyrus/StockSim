@@ -45,14 +45,15 @@ const StockCardData = ({ stockInfo }) => {
 
 
             <div className={styles.stockMoney}>
-                <h3>${parseFloat((stockInfo.weightedavg * stockInfo.totalamount).toFixed(2))}</h3>
+                <h3> ${stockInfo.latestValue} </h3>
                 <h4>+14.87%</h4>
             </div>
 
 
             <div className={styles.purchaseInfo}>
                 <a>Initial Purchase: {new Date(stockInfo.firstpurchase).toLocaleString()}</a> <br />
-                <div className={styles.shareAmount}>Amount of shares: {stockInfo.totalamount}</div>
+                <a className={styles.cost}>Weighted Cost: ${(stockInfo.weightedavg * stockInfo.quantity).toFixed(2)}</a>
+                <div className={styles.shareAmount}>Total shares: {stockInfo.quantity}</div>
             </div>
 
         </div>

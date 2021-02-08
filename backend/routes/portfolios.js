@@ -25,5 +25,7 @@ router.get('/', passport.authenticate('jwt', {session:false}), portfolioControll
 //route to retieve all portfolios and their value as of the day before;
 router.get('/allportfoliovalues', passport.authenticate('jwt', {session:false}), portfolioController.allPortfolioValues)
 
+router.get('/allportfolios/:ticker', passport.authenticate('jwt', {session:false}), portfolioController.findStockInAllPortfolios)
+
 
 module.exports = router

@@ -63,9 +63,11 @@
         background-color: #222222;
         flex-direction: column;
         border-radius: 5px;
-        width: 217px;
+        width: 250px;
         height:fit-content;
         padding-top: 16px;
+        padding-left:10px;
+        padding-right:10px;
         border: none;
         margin-right:20px;
 
@@ -88,6 +90,9 @@
             margin-top: 10px;
           }
           .shareAmount{
+            margin-top: 20px;
+          }
+          .cost{
             margin-top: 20px;
           }
           

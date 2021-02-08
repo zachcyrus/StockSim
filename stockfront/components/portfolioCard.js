@@ -25,8 +25,9 @@ const PortfolioCard = ({ data }) => {
                 <Link href={`/portfolios/${data.portfolio_name}`}>
                     <h3>{data.portfolio_name}</h3>
                 </Link>
-
+                {/*
                 <p className="percentage">$3000(+8.28%)</p>
+                */}
                 <div className="plus">
                     <p className="value">{data.latestValue.toFixed(2)}</p>
                     <div className={`toggleButton ${open ? 'active' : ''}`} onClick={toggleAccordion} >

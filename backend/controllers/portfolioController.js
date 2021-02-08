@@ -79,7 +79,7 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
     //only problem is that as portfolio grows the number of api calls will increase
     let stockWeightedAvgQuery = `
     SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
-    AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity
+    AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity, MIN(transactions.date_of_sale) AS firstPurchase
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
     WHERE (user_id = $1 AND portfolio_name = $2)
@@ -88,7 +88,39 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
 
     try {
         let weightedAvg = await pool.query(stockWeightedAvgQuery, [currUserId, currPortfolioName])
-        return res.json(weightedAvg.rows)
+        let paramsHolder = [];
+        weightedAvg.rows.forEach(row => {
+            if (!paramsHolder.includes(row.stock_name)) {
+                paramsHolder.push(row.stock_name)
+            }
+        })
+
+        
+
+
+        //this api currently returning the previous day value of selected stocks
+        let previousDayStockPrices = await axios.get(`${process.env.IEX_TEST_URL}/stable/stock/market/batch`, {
+            params: {
+                symbols: paramsHolder.toString(),
+                types: 'previous',
+                chartCloseOnly: true,
+                token: process.env.IEX_TOKEN
+            }
+        })
+
+        previousDayStockPrices = previousDayStockPrices.data;
+
+
+       let currWeightedAvgValues = weightedAvg.rows.map(row => {
+            let latestValue = previousDayStockPrices[row.stock_name].previous.close * row.quantity;
+            latestValue = latestValue.toFixed(2);
+            return {
+                ...row,
+                latestValue
+            }
+        })
+
+        return res.json(currWeightedAvgValues)
 
     } catch (err) {
         console.log('err getting weighted avg')
@@ -183,7 +215,7 @@ exports.allPortfolioValues = async (req, res) => {
     let userId = req.user.Id;
 
     let allPortfolioValuesQuery =
-        `
+    `
     SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
     AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity
     FROM  portfolios
@@ -250,6 +282,47 @@ exports.allPortfolioValues = async (req, res) => {
         console.log(err)
         res.json(err)
     }
+}
+
+//function to retrieve a specific stock from all portfolios and see their values
+exports.findStockInAllPortfolios = async (req, res) => {
+    let userId = req.user.Id;
+
+    let stock_name = req.params.ticker.toUpperCase();
+
+
+    let findAllStocksQuery =
+     `
+    SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
+    AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity, MIN(CAST(transactions.date_of_sale AS DATE)) AS firstPurchase
+    FROM  portfolios
+    INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
+    WHERE (user_id = $1 AND stock_name = $2)
+    GROUP BY portfolios.portfolio_name, transactions.stock_name, Portfolios.portfolio_name
+    `
+
+    try {
+        let foundPorts = await pool.query(findAllStocksQuery, [userId, stock_name])
+        foundPorts = foundPorts.rows;
+
+        let previousDayStockPrices = await axios.get(`${process.env.IEX_TEST_URL}/stable/stock/${stock_name}/previous`, {
+            params: {
+                token: process.env.IEX_TOKEN
+            }
+        })
+        
+        //now to find the latest price of the stock using iex
+        previousDayStockPrices = previousDayStockPrices.data;
+        let portWithLatestPrices = foundPorts.map(row => {
+            return { ...row, currentValue: (row.quantity * previousDayStockPrices.close).toFixed(2) }
+        })
+        return res.json(portWithLatestPrices)
+
+    } catch (err) {
+        console.log(err)
+        res.json(err)
+    }
+
 }
 
 //840 / 6 = 140 

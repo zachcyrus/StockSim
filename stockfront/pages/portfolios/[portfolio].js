@@ -13,7 +13,7 @@ import axios from 'axios';
 //For the stock container, possible implementation of a horizontal scrolling option;
 axios.defaults.withCredentials = true;
 
-function UserPortfolio({ username, portfolioWithStocks, pieData }) {
+function UserPortfolio({ username, pieData }) {
     return (
 
         <Layout username={username}>
@@ -38,7 +38,7 @@ function UserPortfolio({ username, portfolioWithStocks, pieData }) {
                 </div>
 
                 <div className="stockContainer">
-                    {portfolioWithStocks.map(portfolio => <StockCardData stockInfo={portfolio} />)}
+                    {pieData.map(stock => <StockCardData stockInfo={stock} />)}
 
                 </div>
 
@@ -50,7 +50,6 @@ function UserPortfolio({ username, portfolioWithStocks, pieData }) {
 
 export async function getServerSideProps(context) {
     const portfolioName = context.query.portfolio;
-    console.log(portfolioName)
     const cookies = context.req.headers.cookie;
     if (!cookies) {
         return {
@@ -71,14 +70,6 @@ export async function getServerSideProps(context) {
 
     let username = userData.data.user
 
-    //now to find portfolioName 
-
-    let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/userportfolio/${portfolioName}`, {
-        headers: {
-            Cookie: cookies
-        }
-    })
-
     //find weighted avg of each stock
     let pieData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/${portfolioName}/piechart`, {
         headers: {
@@ -87,15 +78,10 @@ export async function getServerSideProps(context) {
     })
 
 
-    console.log(portfolioData.data)
-    let portfolioWithStocks = portfolioData.data;
     pieData = pieData.data;
-    console.log(pieData)
-    //portfolioWithStocks.firstPurchase = new Date(portfolioWithStocks.firstPurchase)
     return {
         props: {
             username,
-            portfolioWithStocks,
             pieData
         }, // will be passed to the page component as props
     }

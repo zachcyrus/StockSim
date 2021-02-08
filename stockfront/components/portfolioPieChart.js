@@ -15,12 +15,13 @@ const PortfolioPieChart = ({pieData}) => {
 
     const data = pieData.map(point => {
         let name = point.stock_name;
-        let value = Math.round((point.weightedavg * point.quantity)*100)/100
+        let value = parseInt(point.latestValue,10)
         return {
             name,
             value
         }
     })
+    console.log(data)
 
     return (
         <div className='chartData'>

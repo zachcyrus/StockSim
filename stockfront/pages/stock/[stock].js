@@ -9,7 +9,7 @@ const appleData = require('../../public/sampleAAPL52.json')
 
 
 
-function Stocks({ username, companyInfo, allPortfolios }) {
+function Stocks({ username, companyInfo, allPortfolios, userStockStats }) {
   const router = useRouter()
   const { stock } = router.query
   return (
@@ -19,7 +19,7 @@ function Stocks({ username, companyInfo, allPortfolios }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container maxWidth='lg'>
-        <StockCompany allPortfolios={allPortfolios} companyInfo={companyInfo} />
+        <StockCompany allPortfolios={allPortfolios} statData={userStockStats} companyInfo={companyInfo} />
       </Container>
     </Layout>
 
@@ -124,11 +124,24 @@ export async function getServerSideProps(context) {
     companyInfo.purchaseDate = new Date(purchaseDate).toLocaleString()
   }
 
+  //Now to retrieve the user stats for stocks
+
+  let getUserStockData = await axios({
+    method: 'get',
+    url: `${process.env.NEXT_PUBLIC_APIURL}/portfolios/allportfolios/${stockToFindSymbol}`,
+    headers: {
+      Cookie: cookies
+    }
+  })
+
+  let userStockStats = getUserStockData.data;
+
   return {
     props: {
       username,
       companyInfo,
-      allPortfolios
+      allPortfolios,
+      userStockStats
     }
   }
 }
