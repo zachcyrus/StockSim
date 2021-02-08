@@ -15,7 +15,7 @@ const PortfolioPieChart = ({pieData}) => {
 
     const data = pieData.map(point => {
         let name = point.stock_name;
-        let value = parseInt(point.latestValue,10)
+        let value = Math.round((point.latestValue)*100)/100
         return {
             name,
             value

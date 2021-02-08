@@ -24,7 +24,7 @@ function UserPortfolio({ username, pieData }) {
             <Container style={{ color: 'white', textAlign: 'center', zIndex: 1, paddingTop: '29px' }} maxWidth='lg'>
 
                 <div className="portfolioContainer">
-                    <h1>Portfolio Value</h1>
+                    <h1>{pieData[0].portfolio_name} Value</h1>
 
 
                     <div className="topPerformers">
