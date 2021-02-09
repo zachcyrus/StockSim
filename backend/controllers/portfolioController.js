@@ -95,6 +95,12 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
             }
         })
 
+        if(weightedAvg.rows.length === 0){
+            return res.json({
+                error: 'No portfolio with name exists for user'
+            })
+        }
+
         
 
 

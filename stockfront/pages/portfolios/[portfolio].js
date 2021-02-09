@@ -77,6 +77,15 @@ export async function getServerSideProps(context) {
         }
     })
 
+    if(pieData.data.error){
+        return {
+            redirect: {
+                destination: '/portfolios',
+                permanent: false,
+            },
+        }
+    }
+
 
     pieData = pieData.data;
     return {

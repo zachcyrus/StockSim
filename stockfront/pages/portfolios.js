@@ -9,7 +9,6 @@ import Link from 'next/link';
 import Router from "next/router"
 //Need a delete button for portfolios
 //need an alert component for errors
-//Add keys to portfolio cards
 
 
 
@@ -70,7 +69,7 @@ function Portfolios({ username, allPortfolios }) {
                   })}
                 </div>
               )
-              : <h1 id='loginLink'><Link href='/login'>Click here to sign in and to create a portfolio</Link></h1>
+            : <h1 id='loginLink'><Link href='/login'>Click here to sign in and to create a portfolio</Link></h1>
         }
 
         <p>If you don't see a portfolio you created please search for and buy a stock and choose your newly created portfolio. It
@@ -111,6 +110,14 @@ export async function getServerSideProps(context) {
       Cookie: cookies
     }
   })
+
+  if(userData.status !== 200){
+    return {
+      props: {
+        'username': null
+      }
+    }
+  }
 
   //retrieve list of portfolios and their values
   let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/allportfoliovalues`, {

@@ -6,28 +6,14 @@ import StockCard from '../components/stockCard';
 import TopPerformers from '../components/topPerformers';
 import PortfolioPieChart from '../components/portfolioPieChart'
 import axios from 'axios';
+import LoginCard from '../components/loginComponent';
+import PortfolioSummary from '../components/portfolioSummaries'
 
 //For the stock container, possible implementation of a horizontal scrolling option;
 axios.defaults.withCredentials = true;
 
-let exampleData = [
-  {
-      "portfolio_name": "Second Port",
-      "weightedavg": "109.870",
-      "stock_name": "AAPL",
-      "quantity": "10"
-  },
-  {
-      "portfolio_name": "Second Port",
-      "weightedavg": "40.200",
-      "stock_name": "DOGE\n",
-      "quantity": "3"
-  }
-]
 
-
-
-function Home({ username }) {
+function Home({ username, portfolioSummaryData }) {
 
   return (
     <Layout username={username}>
@@ -35,27 +21,18 @@ function Home({ username }) {
         <title>StockSim</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <Container style={{ color: 'white', textAlign: 'center', zIndex: 1, paddingTop: '29px' }} maxWidth='lg'>
-
-        <div className="portfolioContainer">
-          <h1>Portfolio Value</h1>
-
-
-          <div className="topPerformers">
-
-            <h3>Top Performers</h3>
-            <TopPerformers />
+        {username == null ? <LoginCard /> :
+          <div>
+            <h1>Feel free to browse stocks using the searchbar above</h1>
+            <h2>Create portfolios by pressing the briefcase in the header</h2>
+            <h2>Sign out by pressing the person icon and clicking log out</h2>
+            <h2>The home button will take you back to this page</h2>
+            {portfolioSummaryData == '' ? '' : <PortfolioSummary allPortfoliosData={portfolioSummaryData}/>}
           </div>
-
-          <PortfolioPieChart pieData={exampleData}/>
-
-        </div>
-
-        <div className="stockContainer">
-          <StockCard />
-          <StockCard />
           
-        </div>
+        }
 
       </Container>
     </Layout>
@@ -79,10 +56,28 @@ export async function getServerSideProps(context) {
       Cookie: cookies
     }
   })
+
+  if (userData.status !== 200) {
+    return {
+      props: {
+        'username': null
+      }
+    }
+  }
+
+  let portfolioSummaryData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/allportfoliovalues`, {
+    headers: {
+      Cookie: cookies
+    }
+  })
+
+
   let username = userData.data.user
+  portfolioSummaryData = portfolioSummaryData.data;
   return {
     props: {
-      username
+      username,
+      portfolioSummaryData
     }, // will be passed to the page component as props
   }
 }

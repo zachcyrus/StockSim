@@ -1,0 +1,25 @@
+@import './variables';
+
+.portfolioSummary{
+    background-color: #222222;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 0 20px 24px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-align: center;
+    h1{
+        width: 100%;
+    }
+      
+    .topPerformers{
+        display: block;
+    }
+
+    :global(.chartData){
+        width:75%;
+    }
+
+
+}
