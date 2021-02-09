@@ -231,6 +231,9 @@ exports.allPortfolioValues = async (req, res) => {
     try {
         let foundPortfolios = await pool.query(allPortfolioValuesQuery, [userId])
         foundPortfolios = foundPortfolios.rows;
+        if(foundPortfolios.length === 0){
+            return res.json(undefined)
+        }
 
         //find the params we need for GET request
         let paramsHolder = [];

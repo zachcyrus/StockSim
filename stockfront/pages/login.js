@@ -22,7 +22,7 @@ export default function login() {
                                 <FacebookLoginButton />
                             </Link>
 
-                            <Link href='#'>
+                            <Link href='http://localhost:8000/auth/google'>
                                 <GoogleLoginButton />
                             </Link>
 

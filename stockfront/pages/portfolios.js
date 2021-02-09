@@ -36,7 +36,6 @@ function Portfolios({ username, allPortfolios }) {
     e.preventDefault();
     try {
       let response = await axios.post(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/add`, { portfolioName }, { withCredentials: true })
-      console.log(response.data)
       Router.reload();
 
     } catch (error) {
@@ -59,20 +58,19 @@ function Portfolios({ username, allPortfolios }) {
           <button onClick={onClose} className="addPortfolio">Create Portfolio</button>
         </div>
 
-
-
-
-        {username ? (
-          <div>
-            {allPortfolios.map((row, index) => {
-              return (
-                <PortfolioCard key={index} data={row} />
+        {
+          username ?
+            allPortfolios == '' ? 'You currently have no portfolios, create one today!'
+              : (
+                <div>
+                  {allPortfolios.map((row, index) => {
+                    return (
+                      <PortfolioCard key={index} data={row} />
+                    )
+                  })}
+                </div>
               )
-            })}
-          </div>
-
-        ) :
-          <h1 id='loginLink'><Link href='/login'>Click here to sign in and to create a portfolio</Link></h1>
+              : <h1 id='loginLink'><Link href='/login'>Click here to sign in and to create a portfolio</Link></h1>
         }
 
         <p>If you don't see a portfolio you created please search for and buy a stock and choose your newly created portfolio. It
