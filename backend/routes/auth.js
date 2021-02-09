@@ -15,7 +15,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", {session:fals
     //Generate JWT after successful callback
     //const token = jwt.sign({})
     let currUser = req.user;
-    // 8 minutes from now
+    // 1 hour from now
     const expiration = 60 * 60000;
 
     const token = jwt.sign({user:currUser}, process.env.JWT_SECRET)
@@ -29,5 +29,29 @@ router.get("/facebook/callback", passport.authenticate("facebook", {session:fals
     //res.json({token})
 
 })
+
+//Route for authentication with google login, will add more login strategies in the future;
+
+router.get('/google', passport.authenticate('google', {scope:['profile']}))
+
+
+router.get('/google/callback', passport.authenticate('google', {session:false}), (req,res) => {
+    //Generate JWT after successful callback
+    //const token = jwt.sign({})
+    let currUser = req.user;
+    // 1 hour from now
+    const expiration = 60 * 60000;
+
+    const token = jwt.sign({user:currUser}, process.env.JWT_SECRET,{expiresIn: '7d'})
+    res.cookie('jwt', token, {
+        expires: new Date(Date.now() + expiration),
+        secure: false,
+        
+        httpOnly: false
+    })
+    res.redirect('http://localhost:3000')
+
+})
+
 
 module.exports = router
