@@ -33,12 +33,12 @@ exports.buyStock = async (req, res) => {
 
 
             let addStockQuery = `
-            INSERT INTO transactions(buy_sell, portfolio_id, quantity, price, stock_name, date_of_sale)
-            VALUES($1, $2, $3, $4, $5, $6)
+            INSERT INTO transactions(buy_sell, portfolio_id, quantity, price, stock_name, date_of_sale, sell_quantity, sell_price)
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *
             `
 
-            let addStockVal = ['buy', portId, quantity, price, stockName, new Date()]
+            let addStockVal = ['buy', portId, quantity, price, stockName, new Date(), 0, 0]
 
             try {
                 let purchasedStock = await pool.query(addStockQuery, addStockVal)
@@ -61,7 +61,7 @@ exports.sellStock = async (req, res) => {
     //first we gotta locate the portfolio we want to add
 
     let { portfolioName, quantity, price, stockName } = req.body
-
+    //price here is sell price
 
     let findPortIdQuery = `
     SELECT portfolio_id
@@ -87,12 +87,12 @@ exports.sellStock = async (req, res) => {
             let portId = foundPortfolio.rows[0].portfolio_id
 
             let addStockQuery = `
-            INSERT INTO transactions(buy_sell, portfolio_id, quantity, price, stock_name, date_of_sale, sell_price)
+            INSERT INTO transactions(buy_sell, portfolio_id, quantity, price, stock_name, date_of_sale, sell_price, sell_quantity)
             VALUES($1, $2, $3, $4, $5, $6)
             RETURNING *
             `
 
-            let addStockVal = ['sell', portId, quantity, 0, stockName, new Date(), price]
+            let addStockVal = ['sell', portId, 0, 0, stockName, new Date(), price, quantity*-1]
 
             try {
                 let purchasedStock = await pool.query(addStockQuery, addStockVal)

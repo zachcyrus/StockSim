@@ -1,4 +1,4 @@
-import styles from '../styles/stockCard.module.scss'
+import styles from '../styles/performanceCard.module.scss'
 let tickerData = require('../assets/allTickers/allTickers.json')
 
 let abbreviateName = (name) => {
@@ -6,7 +6,7 @@ let abbreviateName = (name) => {
     return abbrev.concat('...')
 }
 
-const StockCardData = ({ stockInfo }) => {
+const PerformanceCard = ({ stockInfo }) => {
     let companyName
     //This if function is mainly here for testing with company names that aren't real which exist
     //in the sql table
@@ -66,4 +66,4 @@ const StockCardData = ({ stockInfo }) => {
     )
 }
 
-export default StockCardData;
+export default PerformanceCard;

@@ -75,18 +75,17 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
     let currPortfolioName = req.params.portfolioName
 
     //the following query is to obtain the weighted avg of each stock, we can compare this value
-    //on the frontend api call to determine percent increase or decrease
+    //w/ api call to determine percent increase or decrease
     //only problem is that as portfolio grows the number of api calls will increase
     let stockWeightedAvgQuery = `
-    SELECT Portfolios.portfolio_name, 
-    ROUND((SUM(transactions.quantity) * SUM(transactions.price))/SUM(transactions.quantity),3)
+    SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
     AS weightedAvg, 
-    transactions.stock_name, 
-    SUM(transactions.quantity) 
-    AS quantity, MIN(transactions.date_of_sale) AS firstPurchase
+	transactions.stock_name, SUM(transactions.quantity) AS quantity, 
+	MIN(transactions.date_of_sale) AS firstPurchase,
+	SUM(transactions.quantity) + SUM(transactions.sell_quantity) AS totalQuantity
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
-    WHERE(user_id = $1 AND portfolio_name = $2 )
+    WHERE (user_id = $1 AND portfolio_name = $2)
     GROUP BY transactions.stock_name, Portfolios.portfolio_name
     `
 
@@ -122,11 +121,10 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
 
 
         let currWeightedAvgValues = weightedAvg.rows.map(row => {
-            let latestValue = previousDayStockPrices[row.stock_name].previous.close * row.quantity;
+            let latestValue = previousDayStockPrices[row.stock_name].previous.close * row.totalQuantity;
             latestValue = latestValue.toFixed(2);
             let weightedCost = (row.weightedavg * row.quantity);
             let percentIncOrDec = ((latestValue - weightedCost) / weightedCost) * 100
-            //console.log(percentIncOrDec)
             return {
                 ...row,
                 latestValue,
@@ -153,8 +151,10 @@ exports.getPortfolioStocks = async (req, res) => {
     console.log(portfolioName)
     let getPortAndStocksQuery =
         `
-    SELECT Portfolios.portfolio_name, transactions.stock_name, SUM(transactions.quantity) AS totalAmount, ROUND((SUM(transactions.quantity) * SUM(transactions.price))/SUM(transactions.quantity),3)
-    AS weightedAvg, MIN(transactions.date_of_sale) AS firstPurchase
+    SELECT Portfolios.portfolio_name, transactions.stock_name, 
+    SUM(transactions.quantity) + SUM(transactions.sell_quantity) AS totalAmount, 
+    ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3) AS weightedAvg, 
+    MIN(transactions.date_of_sale) AS firstPurchase
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
     WHERE (user_id = $1 AND portfolio_name = $2)
@@ -232,8 +232,9 @@ exports.allPortfolioValues = async (req, res) => {
 
     let allPortfolioValuesQuery =
         `
-    SELECT Portfolios.portfolio_name,  ROUND((SUM(transactions.quantity) * SUM(transactions.price))/SUM(transactions.quantity),3)
-    AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity
+    SELECT Portfolios.portfolio_name,  ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
+    AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity,
+    SUM(transactions.quantity) + SUM(transactions.sell_quantity) AS totalQuant
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
     WHERE (user_id = $1)
@@ -274,8 +275,8 @@ exports.allPortfolioValues = async (req, res) => {
             let latestPrice = previosDayStockPrices[row.stock_name].previous.close;
             let updatedRow = {
                 portfolio_name: row.portfolio_name,
-                latestValue: row.quantity * latestPrice,
-                quantity: row.quantity
+                latestValue: row.totalQuant * latestPrice,
+                quantity: row.totalQuant
             }
             return updatedRow;
         })

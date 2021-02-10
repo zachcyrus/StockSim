@@ -7,6 +7,7 @@ const PortfolioSummary = ({allPortfoliosData}) => {
     let totalValue = allPortfoliosData.reduce((acc,portfolio) => {
         return acc + portfolio.latestValue;
     },0)
+    totalValue = Math.round(totalValue*100)/100
 
     return (
         <div className={styles.portfolioSummary}>
