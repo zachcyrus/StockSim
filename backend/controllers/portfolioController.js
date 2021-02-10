@@ -78,11 +78,15 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
     //on the frontend api call to determine percent increase or decrease
     //only problem is that as portfolio grows the number of api calls will increase
     let stockWeightedAvgQuery = `
-    SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
-    AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity, MIN(transactions.date_of_sale) AS firstPurchase
+    SELECT Portfolios.portfolio_name, 
+    ROUND((SUM(transactions.quantity) * SUM(transactions.price))/SUM(transactions.quantity),3)
+    AS weightedAvg, 
+    transactions.stock_name, 
+    SUM(transactions.quantity) 
+    AS quantity, MIN(transactions.date_of_sale) AS firstPurchase
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
-    WHERE (user_id = $1 AND portfolio_name = $2)
+    WHERE(user_id = $1 AND portfolio_name = $2 )
     GROUP BY transactions.stock_name, Portfolios.portfolio_name
     `
 
@@ -95,13 +99,13 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
             }
         })
 
-        if(weightedAvg.rows.length === 0){
+        if (weightedAvg.rows.length === 0) {
             return res.json({
                 error: 'No portfolio with name exists for user'
             })
         }
 
-        
+
 
 
         //this api currently returning the previous day value of selected stocks
@@ -117,11 +121,11 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
         previousDayStockPrices = previousDayStockPrices.data;
 
 
-       let currWeightedAvgValues = weightedAvg.rows.map(row => {
+        let currWeightedAvgValues = weightedAvg.rows.map(row => {
             let latestValue = previousDayStockPrices[row.stock_name].previous.close * row.quantity;
             latestValue = latestValue.toFixed(2);
-            let weightedCost = (row.weightedavg*row.quantity);
-            let percentIncOrDec = ((latestValue-weightedCost)/weightedCost)*100
+            let weightedCost = (row.weightedavg * row.quantity);
+            let percentIncOrDec = ((latestValue - weightedCost) / weightedCost) * 100
             //console.log(percentIncOrDec)
             return {
                 ...row,
@@ -149,7 +153,7 @@ exports.getPortfolioStocks = async (req, res) => {
     console.log(portfolioName)
     let getPortAndStocksQuery =
         `
-    SELECT Portfolios.portfolio_name, transactions.stock_name, SUM(transactions.quantity) AS totalAmount, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
+    SELECT Portfolios.portfolio_name, transactions.stock_name, SUM(transactions.quantity) AS totalAmount, ROUND((SUM(transactions.quantity) * SUM(transactions.price))/SUM(transactions.quantity),3)
     AS weightedAvg, MIN(transactions.date_of_sale) AS firstPurchase
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
@@ -180,6 +184,7 @@ exports.getPortfolioStocks = async (req, res) => {
     }
 }
 
+//This function isn't used at the moment, plan to use this date for line graph in future
 exports.graphPortfolioStocks = async (req, res) => {
     let userId = req.user.Id;
     console.log('running graph')
@@ -226,8 +231,8 @@ exports.allPortfolioValues = async (req, res) => {
     let userId = req.user.Id;
 
     let allPortfolioValuesQuery =
-    `
-    SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
+        `
+    SELECT Portfolios.portfolio_name,  ROUND((SUM(transactions.quantity) * SUM(transactions.price))/SUM(transactions.quantity),3)
     AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
@@ -237,7 +242,7 @@ exports.allPortfolioValues = async (req, res) => {
     try {
         let foundPortfolios = await pool.query(allPortfolioValuesQuery, [userId])
         foundPortfolios = foundPortfolios.rows;
-        if(foundPortfolios.length === 0){
+        if (foundPortfolios.length === 0) {
             return res.json(undefined)
         }
 
@@ -306,8 +311,8 @@ exports.findStockInAllPortfolios = async (req, res) => {
 
 
     let findAllStocksQuery =
-     `
-    SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
+        `
+    SELECT Portfolios.portfolio_name,  ROUND((SUM(transactions.quantity) * SUM(transactions.price))/SUM(transactions.quantity),3)
     AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity, MIN(CAST(transactions.date_of_sale AS DATE)) AS firstPurchase
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
@@ -324,7 +329,7 @@ exports.findStockInAllPortfolios = async (req, res) => {
                 token: process.env.IEX_TOKEN
             }
         })
-        
+
         //now to find the latest price of the stock using iex
         previousDayStockPrices = previousDayStockPrices.data;
         let portWithLatestPrices = foundPorts.map(row => {
