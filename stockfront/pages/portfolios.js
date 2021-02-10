@@ -105,7 +105,7 @@ export async function getServerSideProps(context) {
   }
 
 
-  let userData = await axios.get('http://localhost:8000/protected/user', {
+  let userData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/protected/user`, {
     headers: {
       Cookie: cookies
     }

@@ -91,7 +91,7 @@ export async function getServerSideProps(context) {
   }
 
   //if a user is found based on cookies
-  let userData = await axios.get('http://localhost:8000/protected/user', {
+  let userData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/protected/user`, {
     headers: {
       Cookie: cookies
     }
