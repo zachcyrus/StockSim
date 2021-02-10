@@ -20,6 +20,10 @@ const LoginCard = () => {
                     <FacebookLoginButton onClick={() => router.push('http://localhost:8000/auth/facebook')}/>
                     
                     <GoogleLoginButton onClick={() => router.push('http://localhost:8000/auth/google')}/>
+
+                    <button className={styles.guestLogin}>
+                        <h2>Login as guest here</h2>
+                    </button>
                 </div>
 
             </div>

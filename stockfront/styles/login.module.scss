@@ -24,6 +24,25 @@
         flex-direction: column;
         justify-content: space-between;
     }
+    .guestLogin{
+        cursor: pointer;
+        text-align: center;
+        padding: 10px 5px 10px 5px;
+        width: calc(100% - 10px);
+        border: none;
+        outline: none;
+        font: inherit;
+        color: inherit;
+        background-color: orange;
+        border-radius: 5px;
+        margin: 0 auto;
+        h2{
+            margin: 0
+        }
+        &:hover{
+            background-color: #CB7119;
+        }
+    }
     //media query for tablets and small laptops;
     @media only screen and (min-width: $md) {
         width: 80%;
