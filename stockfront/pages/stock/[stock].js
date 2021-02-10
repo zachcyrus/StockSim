@@ -136,7 +136,6 @@ export async function getServerSideProps(context) {
 
 
   let userStockStats = getUserStockData.data;
-  console.log(userStockStats)
 
   return {
     props: {
