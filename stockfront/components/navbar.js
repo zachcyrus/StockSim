@@ -6,6 +6,7 @@ import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Popper from '@material-ui/core/Popper';
 import TextField from '@material-ui/core/TextField';
+import {useCookies} from 'react-cookie';
 
 import Link from 'next/link';
 import { makeStyles } from '@material-ui/core/styles';
@@ -37,6 +38,14 @@ const useStyles = makeStyles({
     },
     focused: {
         color: 'white'
+    },
+    popper:{
+        marginTop: '10px',
+        padding: '10px 10px 10px 10px',
+        textAlign: 'center',
+        backgroundColor: '#222222',
+        color:'white'
+
     }
 });
 
@@ -84,6 +93,14 @@ const NavBar = ({ username }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [signedIn, setSignIn] = useState(false);
     const [search, setSearch] = useState('');
+    const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
+
+    const handleLogOut = () => {
+        if(confirm('Would you like to logout')){
+            removeCookie('jwt')
+            window.location.reload()
+        }
+    }
 
     const toggleDisplay = () => {
         if (display) {
@@ -179,10 +196,10 @@ const NavBar = ({ username }) => {
                 <li> <PersonRoundedIcon onClick={handlePopper} fontSize="large" /> </li>
             </ul>
 
-            <Popper id={id} open={open} anchorEl={anchorEl}>
-                <div style={{ marginTop: '10px', padding: '10px', textAlign: 'center', backgroundColor: 'red' }}>
-                    {username ? username : <Link href='/login'>Click to signin</Link>} 
-                    {username ? <p style={{marginBottom: '0'}}>Click to logout</p> : ''}
+            <Popper className={classes.popper} id={id} open={open} anchorEl={anchorEl}>
+                <div>
+                    {username ? <p style={{marginTop:'0px'}}>{username}</p> : <Link href='/login'>Click to signin</Link>} 
+                    {username ? <button style={{marginBottom: '0'}} onClick={handleLogOut}>Click to logout</button> : ''}
                 </div>
             </Popper>
         </div>
