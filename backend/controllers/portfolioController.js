@@ -121,7 +121,7 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
 
 
         let currWeightedAvgValues = weightedAvg.rows.map(row => {
-            let latestValue = previousDayStockPrices[row.stock_name].previous.close * row.totalQuantity;
+            let latestValue = previousDayStockPrices[row.stock_name].previous.close * row.totalquantity;
             latestValue = latestValue.toFixed(2);
             let weightedCost = (row.weightedavg * row.quantity);
             let percentIncOrDec = ((latestValue - weightedCost) / weightedCost) * 100
@@ -275,8 +275,8 @@ exports.allPortfolioValues = async (req, res) => {
             let latestPrice = previosDayStockPrices[row.stock_name].previous.close;
             let updatedRow = {
                 portfolio_name: row.portfolio_name,
-                latestValue: row.totalQuant * latestPrice,
-                quantity: row.totalQuant
+                latestValue: row.totalquant * latestPrice,
+                quantity: row.totalquant
             }
             return updatedRow;
         })
@@ -305,6 +305,8 @@ exports.allPortfolioValues = async (req, res) => {
 }
 
 //function to retrieve a specific stock from all portfolios and see their values
+//Potential error with this function and query is that when you sell all shares of a specific stock
+//It will still show up in the stock page;
 exports.findStockInAllPortfolios = async (req, res) => {
     let userId = req.user.Id;
 
@@ -313,8 +315,10 @@ exports.findStockInAllPortfolios = async (req, res) => {
 
     let findAllStocksQuery =
         `
-    SELECT Portfolios.portfolio_name,  ROUND((SUM(transactions.quantity) * SUM(transactions.price))/SUM(transactions.quantity),3)
-    AS weightedAvg, transactions.stock_name, SUM(transactions.quantity) AS quantity, MIN(CAST(transactions.date_of_sale AS DATE)) AS firstPurchase
+    SELECT Portfolios.portfolio_name, 
+    ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3) AS weightedAvg, 
+    transactions.stock_name, SUM(transactions.quantity) + SUM(transactions.sell_quantity) AS quantity, 
+    MIN(CAST(transactions.date_of_sale AS DATE)) AS firstPurchase
     FROM  portfolios
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
     WHERE (user_id = $1 AND stock_name = $2)

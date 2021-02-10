@@ -59,7 +59,7 @@ const StockCardData = ({ stockInfo }) => {
             <div className={styles.purchaseInfo}>
                 <a>Initial Purchase: {new Date(stockInfo.firstpurchase).toLocaleString()}</a> <br />
                 <a className={styles.cost}>Weighted Cost: ${stockInfo.weightedCost.toFixed(2)}</a>
-                <div className={styles.shareAmount}>Total shares: {stockInfo.quantity}</div>
+                <div className={styles.shareAmount}>Total shares: {stockInfo.totalquantity}</div>
             </div>
 
         </div>
