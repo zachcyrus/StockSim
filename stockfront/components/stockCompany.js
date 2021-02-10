@@ -96,7 +96,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
 
     const handleSell = (e) => {
         e.preventDefault()
-        console.log('Just bought a share')
+        console.log('Just sold a share')
     }
 
     const handleTimeTravel = (e) => {
