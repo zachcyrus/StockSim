@@ -18,7 +18,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
     //const token = jwt.sign({})
     let currUser = req.user;
     // 1 hour from now
-    const expiration = 60 * 60000;
+    const expiration = process.env.NODE_ENV==='production' ? 1440 * 60000 : 60 * 60000;
 
     const token = jwt.sign({ user: currUser }, process.env.JWT_SECRET)
     res.cookie('jwt', token, {
@@ -42,7 +42,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
     //const token = jwt.sign({})
     let currUser = req.user;
     // 1 hour from now
-    const expiration = 60 * 60000;
+    const expiration = process.env.NODE_ENV==='production' ? 1440 * 60000 : 60 * 60000;
 
     const token = jwt.sign({ user: currUser }, process.env.JWT_SECRET, { expiresIn: '7d' })
     res.cookie('jwt', token, {
