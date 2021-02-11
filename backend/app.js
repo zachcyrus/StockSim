@@ -3,7 +3,8 @@ const express = require('express')
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-
+const helmet = require("helmet");
+const cors = require('cors')
 const app = express();
 const port = 8000;
 const pool = require('./db/index');
@@ -18,7 +19,7 @@ const corsConfig ={
   credentials: true
 }
 
-var cors = require('cors')
+app.use(helmet());
 app.use(bodyParser.json()); 
 app.use(cookieParser())
 app.use(express.json()); 

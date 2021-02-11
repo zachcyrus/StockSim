@@ -23,7 +23,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
     const token = jwt.sign({ user: currUser }, process.env.JWT_SECRET)
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
-        secure: false,
+        secure: process.env.NODE_ENV==='production',
 
         httpOnly: true
     })
@@ -47,9 +47,9 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
     const token = jwt.sign({ user: currUser }, process.env.JWT_SECRET, { expiresIn: '7d' })
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
-        secure: false,
+        secure: process.env.NODE_ENV==='production',
 
-        httpOnly: false
+        httpOnly: true
     })
     res.redirect('http://localhost:3000')
 
@@ -78,11 +78,10 @@ router.get('/guest/', async (req, res) => {
         const token = jwt.sign({ user: foundGuest.rows[0] }, process.env.JWT_SECRET, { expiresIn: '30m' })
         res.cookie('jwt', token, {
             expires: new Date(Date.now() + expiration),
-            secure: false,
+            secure: process.env.NODE_ENV==='production',
 
-            httpOnly: false
+            httpOnly: true
         })
-        //res.redirect('http://localhost:3000')
         return res.json({
             message:'Guest logged in'
         })
