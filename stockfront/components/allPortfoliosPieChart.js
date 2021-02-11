@@ -14,11 +14,10 @@ const colorArray = ['#1DA1F2', '#800080', '#7f7f7f', '#FFFF99', '#00B3E6',
 
 
 const AllPortfoliosPieChart = ({allPortfoliosData}) => {
-    console.log(allPortfoliosData)
 
     const data = allPortfoliosData.map(portfolios => {
         let name = portfolios.portfolio_name;
-        let value = portfolios.latestValue
+        let value = Math.round(portfolios.latestValue*100)/100
         return {
             Portfolio: name,
             CurrentValue: value

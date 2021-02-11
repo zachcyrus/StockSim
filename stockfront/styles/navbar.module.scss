@@ -24,6 +24,9 @@ $xl: 1920px;
     padding: 7px 7px 7px 7px;
     height:70px;
     z-index: 1;
+    .menuIcon{
+        color:white;
+    }
     
     .logo{
         width:156px;
@@ -58,9 +61,20 @@ $xl: 1920px;
         display:none;
         width:100%;
         background-color: #222222;
-        z-index: 9999;
+        z-index: 2;
         li:hover{
             color:blue;
+        }
+        .mobileProfile{
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            justify-content: center;
+            padding-bottom: 5px;
+            padding-top: 5px;
+            button{
+                padding:0;
+            }
         }
         
     }

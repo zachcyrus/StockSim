@@ -6,7 +6,7 @@ import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Popper from '@material-ui/core/Popper';
 import TextField from '@material-ui/core/TextField';
-import {useCookies} from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 import Link from 'next/link';
 import { makeStyles } from '@material-ui/core/styles';
@@ -39,12 +39,14 @@ const useStyles = makeStyles({
     focused: {
         color: 'white'
     },
-    popper:{
+    popper: {
         marginTop: '10px',
-        padding: '10px 10px 10px 10px',
+        padding: '10px 0px 10px 0px',
         textAlign: 'center',
         backgroundColor: '#222222',
-        color:'white'
+        color: 'white',
+        width:'300px',
+        fontSize:'24px'
 
     }
 });
@@ -75,10 +77,10 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(
                     containerStyle={{
                         width: "100%",
                         maxWidth: "100%"
-                      }}
+                    }}
                     style={{
                         width: "100%"
-                      }}
+                    }}
                     role={role}
                 />
             </div>
@@ -96,7 +98,7 @@ const NavBar = ({ username }) => {
     const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
 
     const handleLogOut = () => {
-        if(confirm('Would you like to logout')){
+        if (confirm('Would you like to logout')) {
             removeCookie('jwt')
             window.location.reload()
         }
@@ -188,7 +190,10 @@ const NavBar = ({ username }) => {
             <ul className={`${styles.subMenu} ${display ? styles.active : ''}`}>
                 <li> <Link href='/'><HomeRoundedIcon fontSize="small" /></Link>Home </li>
                 <li> <WorkRoundedIcon fontSize="small" /> Portfolios</li>
-                <li> <PersonRoundedIcon fontSize="small" /> Profile</li>
+                <li className={styles.mobileProfile}> <PersonRoundedIcon fontSize="small" />
+                    {username ? <a style={{ marginTop: '0px', fontSize:'20px' }}>{username} 
+                    <button onClick={handleLogOut}>Click to logout</button></a> : <Link href='/login'>Click to signin</Link>}
+                </li>
             </ul>
             <ul className={styles.menuTablet}>
                 <li> <Link href='/'><HomeRoundedIcon fontSize="large" /></Link> </li>
@@ -197,9 +202,9 @@ const NavBar = ({ username }) => {
             </ul>
 
             <Popper className={classes.popper} id={id} open={open} anchorEl={anchorEl}>
-                <div>
-                    {username ? <p style={{marginTop:'0px'}}>{username}</p> : <Link href='/login'>Click to signin</Link>} 
-                    {username ? <button style={{marginBottom: '0'}} onClick={handleLogOut}>Click to logout</button> : ''}
+                <div style={{ zIndex: '999' }}>
+                    {username ? <p style={{ marginTop: '0px' }}>{username}</p> : <Link href='/login'>Click to signin</Link>}
+                    {username ? <button style={{ marginBottom: '0' }} onClick={handleLogOut}>Click to logout</button> : ''}
                 </div>
             </Popper>
         </div>
