@@ -30,11 +30,15 @@
       flex-direction: column;
       align-content: flex-start;
       text-align: left;
+      cursor: pointer;
   
       h3{
         margin: 0 0 0 0;
         padding: 0 0 0 0;
         
+      }
+      &:hover{
+        color:blue;
       }
   
     }

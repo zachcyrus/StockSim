@@ -35,6 +35,7 @@ function Portfolios({ username, allPortfolios }) {
     e.preventDefault();
     try {
       let response = await axios.post(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/add`, { portfolioName }, { withCredentials: true })
+      alert(`${portfolioName} was created!`)
       Router.reload();
 
     } catch (error) {

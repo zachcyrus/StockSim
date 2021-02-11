@@ -69,7 +69,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
 
     const handleBuy = async (e) => {
         e.preventDefault()
-        if(!Number.isInteger(+shareAmount)){
+        if (!Number.isInteger(+shareAmount)) {
             setError('Please only use integers for share amount')
             setTimeout(() => {
                 setError('')
@@ -78,25 +78,46 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
         }
         try {
             let addStockToPortfolio = await axios
-            .post(`${process.env.NEXT_PUBLIC_APIURL}/stocks/buy`,
-                {
-                    portfolioName: portfolioName,
-                    quantity: shareAmount,
-                    price: (Math.round(todaysPrice * 100) / 100),
-                    stockName: stockTicker
-                }, { withCredentials: true })
+                .post(`${process.env.NEXT_PUBLIC_APIURL}/stocks/buy`,
+                    {
+                        portfolioName: portfolioName,
+                        quantity: shareAmount,
+                        price: (Math.round(todaysPrice * 100) / 100),
+                        stockName: stockTicker
+                    }, { withCredentials: true })
             console.log(`Just bought a share: ${shareAmount}`)
             window.location.reload();
-            
+
         } catch (err) {
             console.log(err)
         }
-        
+
     }
 
-    const handleSell = (e) => {
+    const handleSell = async (e) => {
         e.preventDefault()
-        console.log('Just sold a share')
+        if (!Number.isInteger(+shareAmount)) {
+            setError('Please only use integers for share amount')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+        }
+        try {
+            let removeStockFromPortfolio = await axios
+                .post(`${process.env.NEXT_PUBLIC_APIURL}/stocks/sell`,
+                    {
+                        portfolioName: portfolioName,
+                        quantity: shareAmount,
+                        price: (Math.round(todaysPrice * 100) / 100),
+                        stockName: stockTicker
+                    }, { withCredentials: true })
+            console.log(`Just sold a share: ${shareAmount}`)
+            window.location.reload();
+
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     const handleTimeTravel = (e) => {
@@ -121,14 +142,14 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
             </div>
 
             <div className={styles.yourStats}>
-                {statData == undefined ? <h2>Login to view stats</h2> : 
-                <div>
-                    <h3>Your Stats</h3>
-                    {statData.length > 0 ? <StockStats portfolioData={statData} /> : <h2>Stock not found in any portfolios</h2>}
-                </div>
-                
+                {statData == undefined ? <h2>Login to view stats</h2> :
+                    <div>
+                        <h3>Your Stats</h3>
+                        {statData.length > 0 ? <StockStats portfolioData={statData} /> : <h2>Stock not found in any portfolios</h2>}
+                    </div>
+
                 }
-                
+
 
             </div>
 
@@ -164,7 +185,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
                         <a>Amount(integers only):</a> <a>x <input onChange={handleShareChange} type='number' value={shareAmount}></input></a>
                     </div>
 
-                    <div style={{color:'red'}}>{error}</div>
+                    <div style={{ color: 'red' }}>{error}</div>
 
                     <div className={styles.row}>
                         <a>Select Portfolio</a> <select onChange={handleSelect} name="portfolios">

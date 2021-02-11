@@ -19,10 +19,11 @@ function UserPortfolio({ username, pieData }) {
     console.log(pieData)
 
     let portfolioValue = pieData.reduce((acc,curr) => {
-        acc = curr.latestValue + acc;
+        acc = parseFloat(curr.latestValue) + acc;
         return acc;
 
     },0)
+    console.log(portfolioValue)
     return (
         
 

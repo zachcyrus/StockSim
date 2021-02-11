@@ -88,7 +88,7 @@ exports.sellStock = async (req, res) => {
 
             let addStockQuery = `
             INSERT INTO transactions(buy_sell, portfolio_id, quantity, price, stock_name, date_of_sale, sell_price, sell_quantity)
-            VALUES($1, $2, $3, $4, $5, $6)
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *
             `
 
