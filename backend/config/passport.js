@@ -5,9 +5,11 @@ const Strategy = require('passport-facebook').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+const LocalStrategy = require('passport-local').Strategy;
 
-let findJwtFromCookie = (req) =>{
-  if(req && req.cookies){
+
+let findJwtFromCookie = (req) => {
+  if (req && req.cookies) {
     let token = req.cookies['jwt']
     return token
   }
@@ -36,7 +38,6 @@ passport.use(
       callbackURL: process.env.FACEBOOK_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, cb) => {
-      console.log(profile)
       /* 
         First we retrieve  the user information from FB;
         Second if this user's FB isn't saved to our database, we save them to the database
@@ -113,7 +114,7 @@ passport.use(new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
         FROM stock_users
         WHERE("Username" = $1)
       `
-  const {user} = jwt_payload;
+  const { user } = jwt_payload;
   const userToFind = [user.Username]
 
   let foundUser = await pool.query(findUserQuery, userToFind)

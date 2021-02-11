@@ -1,12 +1,23 @@
 import styles from '../styles/login.module.scss'
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 import Link from 'next/link';
-import { useRouter } from 'next/router'
-
+import { useRouter } from 'next/router';
+import axios from 'axios'
+axios.defaults.withCredentials;
 import Image from 'next/image'
 
 const LoginCard = () => {
     const router = useRouter()
+    const guestLogin = async() => {
+        let guestLoggedIn = await axios
+            .get(`${process.env.NEXT_PUBLIC_APIURL}/auth/guest`,
+            { withCredentials: true })
+        if(guestLoggedIn.data.message){
+            router.push('/')
+        }
+
+        
+    }
     return (
         <div className={styles.loginForm}>
             <div className={styles.drawing}>
@@ -17,11 +28,11 @@ const LoginCard = () => {
                 <h1>Login Here</h1>
 
                 <div className={styles.loginOptions}>
-                    <FacebookLoginButton onClick={() => router.push('http://localhost:8000/auth/facebook')}/>
-                    
-                    <GoogleLoginButton onClick={() => router.push('http://localhost:8000/auth/google')}/>
+                    <FacebookLoginButton onClick={() => router.push('http://localhost:8000/auth/facebook')} />
 
-                    <button className={styles.guestLogin}>
+                    <GoogleLoginButton onClick={() => router.push('http://localhost:8000/auth/google')} />
+
+                    <button onClick={guestLogin} className={styles.guestLogin}>
                         <h2>Login as guest here</h2>
                     </button>
                 </div>
