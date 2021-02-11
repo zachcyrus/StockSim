@@ -24,7 +24,6 @@ const AllPortfoliosPieChart = ({allPortfoliosData}) => {
         }
     })
 
-    console.log(data)
 
     return (
         <div className='chartData'>

@@ -25,7 +25,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
         expires: new Date(Date.now() + expiration),
         secure: false,
 
-        httpOnly: false
+        httpOnly: true
     })
     res.redirect('http://localhost:3000')
     //res.json({token})
@@ -96,6 +96,12 @@ router.get('/guest/', async (req, res) => {
 
 })
 
+router.get('/logout/', passport.authenticate('jwt', {session:false}), (req, res) =>{
+    res.clearCookie('jwt')
+    return res.json({
+        message:'Logged Out'
+    })
+})
 
 
 

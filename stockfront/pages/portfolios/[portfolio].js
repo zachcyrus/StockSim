@@ -16,14 +16,12 @@ axios.defaults.withCredentials = true;
 function UserPortfolio({ username, pieData }) {
     let sortedData = pieData.sort((a, b) => b.percentIncOrDec - a.percentIncOrDec)
     sortedData = sortedData.slice(0, 3)
-    console.log(pieData)
 
     let portfolioValue = pieData.reduce((acc,curr) => {
         acc = parseFloat(curr.latestValue) + acc;
         return acc;
 
     },0)
-    console.log(portfolioValue)
     return (
         
 
@@ -49,7 +47,7 @@ function UserPortfolio({ username, pieData }) {
                 </div>
 
                 <div className="stockContainer">
-                    {pieData.map(stock => <StockCardData stockInfo={stock} />)}
+                    {pieData.map(stock => <StockCardData key={stock.stock_name} stockInfo={stock} />)}
 
                 </div>
 

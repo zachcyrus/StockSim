@@ -105,11 +105,9 @@ $xl: 1920px;
 
     }
     .popper{
-        margin-top: 10px;
-        padding-top: 10px;
-        text-align: center;
-        background-color: red;
-        color:white;
+        &:hover{
+            color:blue;
+        }
     }
     
     //media query for tablets and small laptops;
