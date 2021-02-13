@@ -35,7 +35,8 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+      callbackURL: process.env.NODE_ENV=='production' ? `${process.env.HOST_URL}/auth/facebook/callback` :
+      process.env.FACEBOOK_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, cb) => {
       /* 
@@ -136,7 +137,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      callbackURL: process.env.NODE_ENV=='production' ? `${process.env.HOST_URL}/auth/google/callback` :
+      process.env.GOOGLE_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, cb) => {
       /* 
