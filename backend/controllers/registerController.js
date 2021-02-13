@@ -12,7 +12,6 @@ exports.registerUser = async (req, res) => {
     try {
       const foundUser = await pool.query(findUserQuery,findValue)
       const {count} = foundUser.rows[0]
-      console.log(foundUser.rows[0])
       if(foundUser.rows[0].count > 0){
         console.log(foundUser.rows[0])
         res.json({
@@ -21,7 +20,6 @@ exports.registerUser = async (req, res) => {
       }
       else{
         const newUser = await pool.query(registerQuery,registerValues)
-        console.log(newUser.rows[0])
         res.json(newUser.rows[0])
         
       }

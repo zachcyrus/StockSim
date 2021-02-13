@@ -74,7 +74,6 @@ exports.sellStock = async (req, res) => {
         let foundPortfolio = await pool.query(findPortIdQuery, findPortIdValues)
         //if portfolio is not found
         if (foundPortfolio.rows.length === 0) {
-            console.log(`${portfolioName} was not found`)
             return res.json({
                 message: `${portfolioName} was not found for user`
             })
@@ -125,7 +124,6 @@ exports.getFirstPurchaseDate = async (req, res) => {
     `
     console.log(stockTicker)
     try {
-        console.log(stockTicker)
         let foundPurchaseDate = await pool.query(firstPurchaseDateQuery, [userId, stockTicker])
         if (foundPurchaseDate.rows.length === 0) {
             console.log(`Stock not found`)

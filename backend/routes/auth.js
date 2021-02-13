@@ -17,18 +17,17 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
     //Generate JWT after successful callback
     //const token = jwt.sign({})
     let currUser = req.user;
-    // 1 hour from now
-    const expiration = process.env.NODE_ENV==='production' ? 1440 * 60000 : 60 * 60000;
+    // If in production mode cookie and jwt expires in 7 days, else one hour
+    const expiration = process.env.NODE_ENV === 'production' ? 1440 * 60000 : 60 * 60000;
 
-    const token = jwt.sign({ user: currUser }, process.env.JWT_SECRET)
+    const token = jwt.sign({ user: currUser }, process.env.JWT_SECRET, { expiresIn: '7d' })
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
-        secure: process.env.NODE_ENV==='production',
+        secure: process.env.NODE_ENV === 'production',
 
         httpOnly: true
     })
     res.redirect('http://localhost:3000')
-    //res.json({token})
 
 })
 
@@ -41,13 +40,13 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
     //Generate JWT after successful callback
     //const token = jwt.sign({})
     let currUser = req.user;
-    // 1 hour from now
-    const expiration = process.env.NODE_ENV==='production' ? 1440 * 60000 : 60 * 60000;
+    // If in production mode cookie and jwt expires in 7 days, else one hour
+    const expiration = process.env.NODE_ENV === 'production' ? 1440 * 60000 : 60 * 60000;
 
     const token = jwt.sign({ user: currUser }, process.env.JWT_SECRET, { expiresIn: '7d' })
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
-        secure: process.env.NODE_ENV==='production',
+        secure: process.env.NODE_ENV === 'production',
 
         httpOnly: true
     })
@@ -63,9 +62,9 @@ router.get('/guest/', async (req, res) => {
             error: 'Already signed in'
         })
     }
-    // 30 minutes from now
+
     let findGuestQuery =
-        `
+    `
     SELECT "Username", "Id"
     FROM stock_users
     WHERE("Id" = 16)
@@ -73,17 +72,18 @@ router.get('/guest/', async (req, res) => {
 
     try {
         let foundGuest = await pool.query(findGuestQuery)
+        //expires in 30 minutes
         const expiration = 30 * 60000;
 
         const token = jwt.sign({ user: foundGuest.rows[0] }, process.env.JWT_SECRET, { expiresIn: '30m' })
         res.cookie('jwt', token, {
             expires: new Date(Date.now() + expiration),
-            secure: process.env.NODE_ENV==='production',
+            secure: process.env.NODE_ENV === 'production',
 
             httpOnly: true
         })
         return res.json({
-            message:'Guest logged in'
+            message: 'Guest logged in'
         })
 
     } catch (err) {
@@ -95,10 +95,10 @@ router.get('/guest/', async (req, res) => {
 
 })
 
-router.get('/logout/', passport.authenticate('jwt', {session:false}), (req, res) =>{
+router.get('/logout/', passport.authenticate('jwt', { session: false }), (req, res) => {
     res.clearCookie('jwt')
     return res.json({
-        message:'Logged Out'
+        message: 'Logged Out'
     })
 })
 

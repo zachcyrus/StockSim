@@ -30,7 +30,6 @@ exports.addPortfolio = async (req, res) => {
 
         try {
             let addNewPortfolio = await pool.query(addPortQuery, addPortVals)
-            console.log('adding portfolio')
             return res.json(addNewPortfolio.rows[0])
 
         } catch (err) {
@@ -42,7 +41,6 @@ exports.addPortfolio = async (req, res) => {
 
     //Else return that portfolio was already added
     else {
-        console.log('Theres a portfolio with the name already')
         return res.json({
             message: `${portfolioName} was already found in the database`
         })
@@ -60,7 +58,6 @@ exports.getPortfolios = async (req, res) => {
     `
     try {
         let foundPortfolios = await pool.query(findAllPortfolios, [currUserId])
-        console.log('finding portfolios')
         return res.json(foundPortfolios.rows)
 
     } catch (err) {
@@ -146,9 +143,7 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
 //function to retrieve allStocks and their amounts from a specific portfolio
 exports.getPortfolioStocks = async (req, res) => {
     let userId = req.user.Id;
-    console.log('running')
     let { portfolioName } = req.params
-    console.log(portfolioName)
     let getPortAndStocksQuery =
         `
     SELECT Portfolios.portfolio_name, transactions.stock_name, 
@@ -167,13 +162,11 @@ exports.getPortfolioStocks = async (req, res) => {
     try {
         let findPortfolioStocks = await pool.query(getPortAndStocksQuery, values)
         if (findPortfolioStocks.rows.length === 0) {
-            console.log('portfolio not found or no stocks in portfolio')
             return res.json({
                 error: "No stock in portfolio or portfolio doesn't exist"
             })
         }
         else {
-            console.log('Portfolio found and is being returned')
             return res.json(findPortfolioStocks.rows)
         }
 
@@ -187,9 +180,7 @@ exports.getPortfolioStocks = async (req, res) => {
 //This function isn't used at the moment, plan to use this date for line graph in future
 exports.graphPortfolioStocks = async (req, res) => {
     let userId = req.user.Id;
-    console.log('running graph')
     let { portfolioName } = req.params
-    console.log(portfolioName)
     let getPortAndStocksQuery =
         `
     SELECT Portfolios.portfolio_name, ROUND(SUM(transactions.quantity * transactions.price)/SUM(transactions.quantity),3)
