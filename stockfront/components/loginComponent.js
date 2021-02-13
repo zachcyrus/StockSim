@@ -28,9 +28,9 @@ const LoginCard = () => {
                 <h1>Login Here</h1>
 
                 <div className={styles.loginOptions}>
-                    <FacebookLoginButton onClick={() => router.push('http://localhost:8000/auth/facebook')} />
+                    <FacebookLoginButton onClick={() => router.push(`${process.env.NEXT_PUBLIC_APIURL}/auth/facebook`)} />
 
-                    <GoogleLoginButton onClick={() => router.push('http://localhost:8000/auth/google')} />
+                    <GoogleLoginButton onClick={() => router.push(`${process.env.NEXT_PUBLIC_APIURL}/auth/google`)} />
 
                     <button onClick={guestLogin} className={styles.guestLogin}>
                         <h2>Login as guest here</h2>

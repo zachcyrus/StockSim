@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const helmet = require("helmet");
 const cors = require('cors')
 const app = express();
-const port = 8000;
+const port = process.env.PORT || 8000;
 const pool = require('./db/index');
 //Routers
 const authRouter = require('./routes/auth')
@@ -38,6 +38,6 @@ app.use('/portfolios', portfolioRouter)
 app.use('/stocks', stockRouter)
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}!`)
+  console.log(`StockSIM DB app listening on port ${port}!`)
 
 });
