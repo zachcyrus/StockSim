@@ -28,17 +28,20 @@ const PortfolioCard = ({ data }) => {
                 {/*
                 <p className="percentage">$3000(+8.28%)</p>
                 */}
-                <div className="plus">
+                {/* Following code block is meant to show a quick preview of the data of the users current portfolio value*/}
+                {/* <div className="plus">
                     <p className="value">{data.latestValue.toFixed(2)}</p>
                     <div className={`toggleButton ${open ? 'active' : ''}`} onClick={toggleAccordion} >
                         <RemoveIcon className="secondIcon" fontSize="small" />
                         <ControlPointIcon className="targetIcon" fontSize="small" />
                     </div>
-                    {/*open
+                    {open
                         ? <RemoveIcon onClick={toggleAccordion} className="secondIcon" fontSize="small" />
                         : <ControlPointIcon onClick={toggleAccordion} className="targetIcon" fontSize="small" />
-                    */}
-                </div>
+
+                    }
+                    
+                </div> */}
             </div>
 
             <div style={{ display: open ? 'block' : 'none' }} className="chartInfo">
