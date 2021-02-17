@@ -9,7 +9,7 @@ Users will be able to search for stocks, buy and sell stocks, add those stocks t
 
 2. Users will be able to create portfolios where they can add stocks. 
 
-3. Users will be able to search for stocks using the searchbar located in the header.
+3. Users will be able to search for stocks using the search bar located in the header.
 
 4. Users will be able to purchase and sell searchable stocks. Users will be able to see the last year worth of prices for a stock.
 
@@ -25,7 +25,10 @@ Users will be able to search for stocks, buy and sell stocks, add those stocks t
 - Express Node
 - NextJS
 - Material UI
-- Recharts(For graphs
+- Recharts (For graphs)
 - Passport
 
-## Roadmap
+## Road map
+
+ - Implement backend testing with Jest. 
+ - Visualize user portfolio with a line chart, which will show the value of their portfolio on different days. 
