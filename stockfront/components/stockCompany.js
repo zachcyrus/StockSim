@@ -72,11 +72,19 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
     const handleBuy = async (e) => {
         e.preventDefault()
         if (!Number.isInteger(+shareAmount)) {
-            setError('Please only use integers for share amount')
+            setError('Please only use positive integers for share amount')
             setTimeout(() => {
                 setError('')
             }, 10000);
             return;
+        }
+        else if(Math.sign(shareAmount) == -1){
+            setError('Please only use positive integers for share amount')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+
         }
         try {
             let addStockToPortfolio = await axios
@@ -98,11 +106,19 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
     const handleSell = async (e) => {
         e.preventDefault()
         if (!Number.isInteger(+shareAmount)) {
-            setError('Please only use integers for share amount')
+            setError('Please only use positive integers for share amount')
             setTimeout(() => {
                 setError('')
             }, 10000);
             return;
+        }
+        else if(Math.sign(shareAmount) == -1){
+            setError('Please only use positive integers for share amount')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+
         }
         try {
             let removeStockFromPortfolio = await axios
@@ -123,11 +139,19 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
     const handleTimeTravel = async (e) => {
         e.preventDefault()
         if (!Number.isInteger(+shareAmount)) {
-            setError('Please only use integers for share amount')
+            setError('Please only use positive integers for share amount')
             setTimeout(() => {
                 setError('')
             }, 10000);
             return;
+        }
+        else if(Math.sign(shareAmount) == -1){
+            setError('Please only use positive integers for share amount')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+
         }
         try {
             let addStockToPortfolio = await axios
@@ -202,7 +226,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
             <div style={{ textAlign: 'center' }} className={styles.news}>
                 <h3>Latest News</h3>
                 <p>
-                    Dow Jones futures will open Sunday evening, along with S&P 500 futures and Nasdaq futures. The stock market rally fell last week as buzz from the Biden stimulus plan began to wane. But it was a constructive pullback.
+                    News feature will be added shortly.
                 </p>
             </div>
 
@@ -262,6 +286,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                         <a>Amount:</a> <a>x <input onChange={handleShareChange} type='number'></input></a>
                     </div>
 
+                    <div style={{ color: 'red' }}>{error}</div>
+
+
                     <div className={styles.row}>
                         <a>Select Portfolio</a> <select name="portfolios">
                             {allPortfolios ?
@@ -298,6 +325,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                     <div className={styles.row}>
                         <a>Amount:</a> <a>x <input onChange={handleShareChange} type='number'></input></a>
                     </div>
+
+                    <div style={{ color: 'red' }}>{error}</div>
+
 
                     <div className={styles.row}>
                         <a>Select Portfolio</a>
