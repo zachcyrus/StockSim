@@ -163,8 +163,3 @@ export const gatherPortfolioData = () => {
 
 
 }
-
-//following function will gather portfolio data and turn into a pie chart;
-export const portfolioDataPieChart = () => {
-    
-}

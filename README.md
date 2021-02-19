@@ -32,3 +32,5 @@ Users will be able to search for stocks, buy and sell stocks, add those stocks t
 
  - Implement backend testing with Jest. 
  - Visualize user portfolio with a line chart, which will show the value of their portfolio on different days. 
+ - Perhaps utilize Sequelize to improve pg sql queries. 
+ - Intuitive variable naming

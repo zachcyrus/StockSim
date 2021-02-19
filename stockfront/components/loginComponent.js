@@ -8,9 +8,11 @@ import Image from 'next/image'
 
 const LoginCard = () => {
     const router = useRouter()
+    let apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : process.env.NEXT_PUBLIC_APIURL
+
     const guestLogin = async() => {
         let guestLoggedIn = await axios
-            .get(`${process.env.NEXT_PUBLIC_APIURL}/auth/guest`,
+            .get(`${apiUrl}/auth/guest`,
             { withCredentials: true })
         if(guestLoggedIn.data.message){
             router.push('/')
@@ -28,9 +30,9 @@ const LoginCard = () => {
                 <h1>Login Here</h1>
 
                 <div className={styles.loginOptions}>
-                    <FacebookLoginButton onClick={() => router.push(`${process.env.NEXT_PUBLIC_APIURL}/auth/facebook`)} />
+                    <FacebookLoginButton onClick={() => router.push(`${apiUrl}/auth/facebook`)} />
 
-                    <GoogleLoginButton onClick={() => router.push(`${process.env.NEXT_PUBLIC_APIURL}/auth/google`)} />
+                    <GoogleLoginButton onClick={() => router.push(`${apiUrl}/auth/google`)} />
 
                     <button onClick={guestLogin} className={styles.guestLogin}>
                         <h2>Login as guest here</h2>

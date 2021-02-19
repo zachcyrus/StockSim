@@ -11,7 +11,11 @@ const appleData = require('../../public/sampleAAPL52.json')
 
 function Stocks({ username, companyInfo, allPortfolios, userStockStats }) {
   const router = useRouter()
+
   const { stock } = router.query
+
+  let apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : process.env.NEXT_PUBLIC_APIURL
+
   return (
     <Layout username={username}>
       <Head>
@@ -19,7 +23,7 @@ function Stocks({ username, companyInfo, allPortfolios, userStockStats }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container maxWidth='lg'>
-        <StockCompany allPortfolios={allPortfolios} statData={userStockStats} companyInfo={companyInfo} />
+        <StockCompany apiUrl={apiUrl} allPortfolios={allPortfolios} statData={userStockStats} companyInfo={companyInfo} />
       </Container>
     </Layout>
 
@@ -41,6 +45,8 @@ Your Stats Component
 
 export async function getServerSideProps(context) {
   const cookies = context.req.headers.cookie;
+  let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
+
 
   let stockToFindSymbol = context.query.stock.toUpperCase();
 
@@ -91,7 +97,7 @@ export async function getServerSideProps(context) {
   }
 
   //if a user is found based on cookies
-  let userData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/protected/user`, {
+  let userData = await axios.get(`${apiUrl}/protected/user`, {
     headers: {
       Cookie: cookies
     }
@@ -99,7 +105,7 @@ export async function getServerSideProps(context) {
   let username = userData.data.user
 
   //get portfolio list
-  let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios`, {
+  let portfolioData = await axios.get(`${apiUrl}/portfolios`, {
     headers: {
       Cookie: cookies
     }
@@ -112,7 +118,7 @@ export async function getServerSideProps(context) {
 
   let getPurchaseDate = await axios({
     method: 'get',
-    url: `${process.env.NEXT_PUBLIC_APIURL}/stocks/purchasedate/${stockToFindSymbol}`,
+    url: `${apiUrl}/stocks/purchasedate/${stockToFindSymbol}`,
     headers: {
       Cookie: cookies
     }
@@ -128,7 +134,7 @@ export async function getServerSideProps(context) {
 
   let getUserStockData = await axios({
     method: 'get',
-    url: `${process.env.NEXT_PUBLIC_APIURL}/portfolios/allportfolios/${stockToFindSymbol}`,
+    url: `${apiUrl}/portfolios/allportfolios/${stockToFindSymbol}`,
     headers: {
       Cookie: cookies
     }
@@ -142,7 +148,7 @@ export async function getServerSideProps(context) {
       username,
       companyInfo,
       allPortfolios,
-      userStockStats
+      userStockStats,
     }
   }
 }

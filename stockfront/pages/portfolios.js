@@ -96,6 +96,8 @@ function Portfolios({ username, allPortfolios }) {
 export async function getServerSideProps(context) {
   //Add a util function to check for authentication, to keep everything concise
   const cookies = context.req.headers.cookie;
+  let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
+
   if (cookies == undefined) {
     return {
       props: {
@@ -106,7 +108,7 @@ export async function getServerSideProps(context) {
   }
 
 
-  let userData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/protected/user`, {
+  let userData = await axios.get(`${apiUrl}/protected/user`, {
     headers: {
       Cookie: cookies
     }
@@ -121,7 +123,7 @@ export async function getServerSideProps(context) {
   }
 
   //retrieve list of portfolios and their values
-  let portfolioData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/allportfoliovalues`, {
+  let portfolioData = await axios.get(`${apiUrl}/portfolios/allportfoliovalues`, {
     headers: {
       Cookie: cookies
     }

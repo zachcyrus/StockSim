@@ -8,14 +8,16 @@ import StockStats from './stockStats'
 
 //Might need to make a custom chart component for Portfolios
 
-const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
+const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
     const [open, setDisplay] = useState(false);
     const [buy, setBuy] = useState(false);
     const [sell, setSell] = useState(false);
     const [timeTravel, setTimeTrav] = useState(false);
     const [portfolioName, setportfolioName] = useState(allPortfolios ? allPortfolios[0].portfolio_name : 'Tech')
     const [shareAmount, setShareAmount] = useState(0);
-    const [error, setError] = useState('')
+    const [error, setError] = useState('');
+    const [selectedDate, setDate] = useState('');
+    const [timeTravelPrice, setTimeTravelPrice] = useState('Pick a date')
 
     const stockTicker = companyInfo.ticker;
     const todaysPrice = companyInfo.todaysPrice;
@@ -78,14 +80,13 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
         }
         try {
             let addStockToPortfolio = await axios
-                .post(`${process.env.NEXT_PUBLIC_APIURL}/stocks/buy`,
+                .post(`${apiUrl}/stocks/buy`,
                     {
                         portfolioName: portfolioName,
                         quantity: shareAmount,
                         price: (Math.round(todaysPrice * 100) / 100),
                         stockName: stockTicker
                     }, { withCredentials: true })
-            console.log(`Just bought a share: ${shareAmount}`)
             window.location.reload();
 
         } catch (err) {
@@ -105,14 +106,13 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
         }
         try {
             let removeStockFromPortfolio = await axios
-                .post(`${process.env.NEXT_PUBLIC_APIURL}/stocks/sell`,
+                .post(`${apiUrl}/stocks/sell`,
                     {
                         portfolioName: portfolioName,
                         quantity: shareAmount,
                         price: (Math.round(todaysPrice * 100) / 100),
                         stockName: stockTicker
                     }, { withCredentials: true })
-            console.log(`Just sold a share: ${shareAmount}`)
             window.location.reload();
 
         } catch (err) {
@@ -120,9 +120,49 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
         }
     }
 
-    const handleTimeTravel = (e) => {
+    const handleTimeTravel = async (e) => {
         e.preventDefault()
-        console.log('Just bought a share')
+        if (!Number.isInteger(+shareAmount)) {
+            setError('Please only use integers for share amount')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+        }
+        try {
+            let addStockToPortfolio = await axios
+                .post(`${apiUrl}/stocks/buy/timetravel`,
+                    {
+                        portfolioName: portfolioName,
+                        quantity: shareAmount,
+                        date: selectedDate,
+                        price: (Math.round(timeTravelPrice * 100) / 100),
+                        stockName: stockTicker
+                    }, { withCredentials: true })
+            window.location.reload();
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handleDateChange = async (e) => {
+        e.preventDefault();
+        let currDate = e.target.value;
+        setDate(e.target.value)
+        let formatDate = currDate.split('-').join('');
+        try {
+            let newPrice = await axios
+                .get(`${apiUrl}/stocks/timetravelquote/${stockTicker}/${formatDate}`,
+                   { withCredentials: true })
+
+            setTimeTravelPrice(newPrice.data.price)
+            console.log(selectedDate)
+        } catch (err) {
+            console.log(err)
+
+        }
+
     }
 
     //Maybe consider turning the modal into a seperate component
@@ -249,10 +289,10 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
                 <div style={{ display: timeTravel ? 'block' : 'none' }} className={styles.modalContent}>
                     <h1>Time Travel Purchase</h1>
                     <div className={styles.row}>
-                        <a>Date of Purchase</a> <a> <input type="date" /> </a>
+                        <a>Date of Purchase</a> <a> <input onChange={handleDateChange} type="date" /> </a>
                     </div>
                     <div className={styles.row}>
-                        <a>Value:</a> <a>$158.87</a>
+                        <a>Value:</a> <a>{timeTravelPrice}</a>
                     </div>
 
                     <div className={styles.row}>
@@ -275,7 +315,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData }) => {
                     </div>
 
                     <div className={styles.row}>
-                        <a>Total Cost:</a> <a>{shareAmount * todaysPrice}</a>
+                        <a>Total Cost:</a> <a>{shareAmount * timeTravelPrice}</a>
                     </div>
 
                     <div className={styles.buttonGroup}>

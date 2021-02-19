@@ -13,7 +13,7 @@ import PortfolioSummary from '../components/portfolioSummaries'
 axios.defaults.withCredentials = true;
 
 
-function Home({ username, portfolioSummaryData }) {
+function Home({ username, portfolioSummaryData, apiUrl }) {
 
   return (
     <Layout username={username}>
@@ -23,7 +23,7 @@ function Home({ username, portfolioSummaryData }) {
       </Head>
 
       <Container style={{ color: 'white', textAlign: 'center', zIndex: 1, paddingTop: '29px' }} maxWidth='lg'>
-        {username == null ? <LoginCard /> :
+        {username == null ? <LoginCard/> :
           <div>
             <h1>Feel free to browse stocks using the searchbar above</h1>
             <h2>Create portfolios by pressing the briefcase in the header</h2>
@@ -43,6 +43,7 @@ function Home({ username, portfolioSummaryData }) {
 export async function getServerSideProps(context) {
   //Add a util function to check for authentication, to keep everything concise
   const cookies = context.req.headers.cookie;
+  let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
   if (cookies == undefined) {
     return {
       props: {
@@ -51,7 +52,7 @@ export async function getServerSideProps(context) {
     }
 
   }
-  let userData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/protected/user`, {
+  let userData = await axios.get(`${apiUrl}/protected/user`, {
     headers: {
       Cookie: cookies
     }
@@ -65,7 +66,7 @@ export async function getServerSideProps(context) {
     }
   }
 
-  let portfolioSummaryData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/allportfoliovalues`, {
+  let portfolioSummaryData = await axios.get(`${apiUrl}/portfolios/allportfoliovalues`, {
     headers: {
       Cookie: cookies
     }
@@ -77,7 +78,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       username,
-      portfolioSummaryData
+      portfolioSummaryData,
     }, // will be passed to the page component as props
   }
 }

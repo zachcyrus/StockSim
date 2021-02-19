@@ -126,6 +126,7 @@ passport.use(new JwtStrategy(jwtOptions, async (jwt_payload, done) => {
   }
   //else return user
   else {
+
     return done(null, foundUser.rows[0])
   }
 

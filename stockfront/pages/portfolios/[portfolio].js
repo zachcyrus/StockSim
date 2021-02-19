@@ -59,6 +59,8 @@ function UserPortfolio({ username, pieData }) {
 
 export async function getServerSideProps(context) {
     const portfolioName = context.query.portfolio;
+    let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
+
     const cookies = context.req.headers.cookie;
     if (!cookies) {
         return {
@@ -70,7 +72,7 @@ export async function getServerSideProps(context) {
 
     }
 
-    let userData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/protected/user`, {
+    let userData = await axios.get(`${apiUrl}/protected/user`, {
         headers: {
             Cookie: cookies
         }
@@ -80,7 +82,7 @@ export async function getServerSideProps(context) {
     let username = userData.data.user
 
     //find weighted avg of each stock
-    let pieData = await axios.get(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/${portfolioName}/piechart`, {
+    let pieData = await axios.get(`${apiUrl}/portfolios/${portfolioName}/piechart`, {
         headers: {
             Cookie: cookies
         }
