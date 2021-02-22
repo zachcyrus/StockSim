@@ -6,13 +6,13 @@ const bodyParser = require('body-parser')
 const helmet = require("helmet");
 const cors = require('cors')
 const app = express();
-const port = process.env.PORT || 8000;
 const pool = require('./db/index');
 //Routers
 const authRouter = require('./routes/auth')
 const protectedRouter = require('./routes/protected')
 const portfolioRouter = require('./routes/portfolios')
 const stockRouter = require('./routes/stocks')
+const indexRouter = require('./routes/index')
 
 const corsConfig ={
   origin: true,
@@ -30,14 +30,11 @@ app.use(passport.initialize())
 
 
 //Routes 
-
+app.use('/', indexRouter)
 app.use('/auth', authRouter)
 app.use('/protected', protectedRouter)
 app.use('/portfolios', portfolioRouter)
 //Need to include route to add stocks to a selected portfolio
 app.use('/stocks', stockRouter)
 
-app.listen(port, () => {
-  console.log(`StockSIM DB app listening on port ${port}!`)
-
-});
+module.exports = app;

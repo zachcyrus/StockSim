@@ -3,6 +3,9 @@
 Stock Simulator is a full stack project of mine, meant to introduce users to the stock market.
 Users will be able to search for stocks, buy and sell stocks, add those stocks to their own portfolios, and able to see visualizations of their portfolios.
 
+One important note is that the prices of stocks are not accurate due to IEX cloud API being used currently
+is meant for testing, and not production use. Sometime in the future I will change it to production use, then values will be accurate 
+
 ## Features
 
 1. Users will be able to login with Google, Facebook, or guest login. (More login strategies will be introduced in the future)
@@ -27,6 +30,7 @@ Users will be able to search for stocks, buy and sell stocks, add those stocks t
 - Material UI
 - Recharts (For graphs)
 - Passport
+- Sass
 
 ## Road map
 
@@ -34,3 +38,5 @@ Users will be able to search for stocks, buy and sell stocks, add those stocks t
  - Visualize user portfolio with a line chart, which will show the value of their portfolio on different days. 
  - Perhaps utilize Sequelize to improve pg sql queries. 
  - Intuitive variable naming
+ - Remove all uses of Yahoo Finance API. 
+ - Some tickers are not up to date

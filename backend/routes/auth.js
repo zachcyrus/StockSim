@@ -54,7 +54,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
 
 })
 
-//Rotue for guest user authentication 
+//Route for guest user authentication 
 
 router.get('/guest/', async (req, res) => {
     if (req.cookies['jwt']) {

@@ -50,7 +50,6 @@ exports.addPortfolio = async (req, res) => {
 
 exports.getPortfolios = async (req, res) => {
     let currUserId = req.user.Id;
-
     let findAllPortfolios = `
     SELECT portfolio_name
     FROM  portfolios
