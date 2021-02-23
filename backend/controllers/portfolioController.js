@@ -265,7 +265,7 @@ exports.allPortfolioValues = async (req, res) => {
             let latestPrice = previosDayStockPrices[row.stock_name].previous.close;
             let updatedRow = {
                 portfolio_name: row.portfolio_name,
-                latestValue: row.totalquant * latestPrice,
+                latestValue: (row.totalquant * latestPrice),
                 quantity: row.totalquant
             }
             return updatedRow;
@@ -339,7 +339,3 @@ exports.findStockInAllPortfolios = async (req, res) => {
 
 }
 
-//840 / 6 = 140 
-//445.8 + 260.9 = 706.7 avg price is 117.783
-//avg % increase is 18.846
-//weighted share price = ( (first prise * shares) + (second price * shares) )/total number of shares
