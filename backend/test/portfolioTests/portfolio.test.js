@@ -50,5 +50,17 @@ describe('Portfolio Controller Functions', () => {
         done()
     })
 
+    test('GET /portfolios/allportfolios/AAPL should return all portfolios that contain AAPL from test user', async (done) => {
+        let response = await request(app)
+            .get('/portfolios/allportfolios/AAPL')
+            .set('Cookie', [jwtCookie])
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveLength(5)
+        response.body.forEach((row) => {
+            expect(row.portfolio_name).not.toBe(undefined)
+        })
+        done()
+    })
+
 })
 
