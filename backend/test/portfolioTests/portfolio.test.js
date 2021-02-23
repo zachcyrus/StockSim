@@ -2,7 +2,6 @@
 const request = require("supertest");
 const jwt = require('jsonwebtoken')
 const app = require('../../app');
-const { expectCt } = require("helmet");
 const pool = require('../../db/index')
 const testUser = {
     Username: process.env.TEST_USER,
@@ -114,7 +113,5 @@ describe('Authenticated Portfolio Routes', () => {
         expect(response.body.portfolio_name).toBe('SUPERTEST')
         done()
     })
-
-
 })
 
