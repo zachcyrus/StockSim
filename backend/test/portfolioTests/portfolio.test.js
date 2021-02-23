@@ -11,22 +11,37 @@ const testUser = {
 const token = jwt.sign({ user: testUser }, process.env.JWT_SECRET, { expiresIn: '1m' })
 const jwtCookie = `jwt=${token};`
 
-afterAll(() => { 
+afterAll(() => {
     return pool.end();
-  })
-
-
-describe('Am I using Jest Correctly', () => {
-    test('Testing Index', async (done) => {
-        let response = await request(app).get('/test')
-        expect(response.status).toBe(200)
-        expect(response.body.message).toBe('Test should work')
-        done()
-    })
 })
 
+describe('Authenticated Portfolio Routes', () => {
+    afterEach(() => {
+        let removeTestPortfolio = async () => {
+            let findPortQuery = `
+            SELECT portfolio_name
+            FROM  portfolios
+            WHERE (user_id = $1 AND portfolio_name = $2)
+            `
 
-describe('Portfolio Controller Functions', () => {
+            let findPortVals = [testUser.Id, 'SUPERTEST']
+
+            let findPortfolio = await pool.query(findPortQuery, findPortVals)
+            if (findPortfolio.rows.length === 0) {
+                return;
+            }
+
+            else {
+                let deleteTestQuery = `
+                DELETE FROM portfolios WHERE portfolio_name='SUPERTEST'
+                `
+                let deleteTestPortfolio = await pool.query(deleteTestQuery)
+                return;
+            }
+        }
+
+        return removeTestPortfolio()
+    })
 
     test('GET /portfolios should return all portfolios from User', async (done) => {
         let response = await request(app)
@@ -55,12 +70,51 @@ describe('Portfolio Controller Functions', () => {
             .get('/portfolios/allportfolios/AAPL')
             .set('Cookie', [jwtCookie])
         expect(response.status).toBe(200)
-        expect(response.body).toHaveLength(5)
         response.body.forEach((row) => {
             expect(row.portfolio_name).not.toBe(undefined)
+            expect(row.currentValue).not.toBe(undefined)
+            expect(row.stock_name).toBe('AAPL')
         })
         done()
     })
+
+    test('GET /portfolios/Megaman/piechart should return weighted stock values from portfolio', async (done) => {
+        let response = await request(app)
+            .get('/portfolios/Megaman/piechart')
+            .set('Cookie', [jwtCookie])
+        expect(response.status).toBe(200)
+        response.body.forEach((row) => {
+            expect(row.portfolio_name).not.toBe(undefined)
+            expect(row.weightedCost).not.toBe(undefined)
+            expect(row.percentIncOrDec).not.toBe(undefined)
+        })
+        done()
+    })
+
+    test('GET /portfolios/userportfolio/Megaman should return stock values from portfolio', async (done) => {
+        let response = await request(app)
+            .get('/portfolios/userportfolio/Megaman')
+            .set('Cookie', [jwtCookie])
+        expect(response.status).toBe(200)
+        response.body.forEach((row) => {
+            expect(row.portfolio_name).not.toBe(undefined)
+            expect(row.totalamount).not.toBe(undefined)
+            expect(row.weightedavg).not.toBe(undefined)
+            expect(row.firstpurchase).not.toBe(undefined)
+        })
+        done()
+    })
+
+    test('POST /portfolios/add should add new portfolio', async (done) => {
+        let response = await request(app)
+            .post('/portfolios/add/')
+            .send({ portfolioName: 'SUPERTEST' })
+            .set('Cookie', [jwtCookie])
+        expect(response.status).toBe(200)
+        expect(response.body.portfolio_name).toBe('SUPERTEST')
+        done()
+    })
+
 
 })
 
