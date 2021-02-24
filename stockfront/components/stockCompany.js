@@ -18,15 +18,15 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
     const [error, setError] = useState('');
     const [selectedDate, setDate] = useState('');
     const [timeTravelPrice, setTimeTravelPrice] = useState('Pick a date')
-
+    const [sharesOwned, setSharesOwned] = useState(statData ? statData.find(port => port.portfolio_name == portfolioName) ? statData.find(port => port.portfolio_name == portfolioName).quantity : 0 : '')
     const stockTicker = companyInfo.ticker;
     const todaysPrice = companyInfo.todaysPrice;
 
 
+
     const handleSelect = (e) => {
         setportfolioName(e.target.value)
-        console.log(e.target.value)
-
+        setSharesOwned(statData.find(port => port.portfolio_name == e.target.value) ? statData.find(port => port.portfolio_name == e.target.value).quantity : 0)
     }
 
     const toggleBuy = () => {
@@ -78,7 +78,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
             }, 10000);
             return;
         }
-        else if(Math.sign(shareAmount) == -1){
+        else if (Math.sign(shareAmount) == -1) {
             setError('Please only use positive integers for share amount')
             setTimeout(() => {
                 setError('')
@@ -112,8 +112,17 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
             }, 10000);
             return;
         }
-        else if(Math.sign(shareAmount) == -1){
+        else if (Math.sign(shareAmount) == -1) {
             setError('Please only use positive integers for share amount')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+
+        }
+
+        if (shareAmount > sharesOwned) {
+            setError("Can't sell more shares than you own")
             setTimeout(() => {
                 setError('')
             }, 10000);
@@ -145,13 +154,22 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
             }, 10000);
             return;
         }
-        else if(Math.sign(shareAmount) == -1){
+        else if (Math.sign(shareAmount) == -1) {
             setError('Please only use positive integers for share amount')
             setTimeout(() => {
                 setError('')
             }, 10000);
             return;
+        }
 
+        //checks if it's the weekend
+        let origDate = new Date(selectedDate.replace(/-/g, '\/'))
+        if (origDate.getDay() == 6 || origDate.getDay() == 0) {
+            setError('Stock Market is closed on weekends')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
         }
         try {
             let addStockToPortfolio = await axios
@@ -178,10 +196,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
         try {
             let newPrice = await axios
                 .get(`${apiUrl}/stocks/timetravelquote/${stockTicker}/${formatDate}`,
-                   { withCredentials: true })
+                    { withCredentials: true })
 
             setTimeTravelPrice(newPrice.data.price)
-            console.log(selectedDate)
         } catch (err) {
             console.log(err)
 
@@ -206,6 +223,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
             </div>
 
             <div className={styles.yourStats}>
+
                 {statData == undefined ? <h2>Login to view stats</h2> :
                     <div>
                         <h3>Your Stats</h3>
@@ -213,7 +231,6 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                     </div>
 
                 }
-
 
             </div>
 
@@ -247,6 +264,10 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
                     <div className={styles.row}>
                         <a>Amount(integers only):</a> <a>x <input onChange={handleShareChange} type='number' value={shareAmount}></input></a>
+                    </div>
+
+                    <div className={styles.row}>
+                        <a>Amount In Portfolio:</a> <a>{sharesOwned ? `${sharesOwned}` : 'None in portfolio'}</a>
                     </div>
 
                     <div style={{ color: 'red' }}>{error}</div>
@@ -290,9 +311,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
 
                     <div className={styles.row}>
-                        <a>Select Portfolio</a> <select name="portfolios">
-                            {allPortfolios ?
-                                allPortfolios.map((row) => {
+                        <a>Select Portfolio</a> <select onChange={handleSelect} name="portfolios">
+                            {statData ?
+                                statData.map((row) => {
                                     return (
                                         <option key={row.portfolio_name} value={row.portfolio_name}> {row.portfolio_name} </option>
                                     )
@@ -301,6 +322,10 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
                             }
                         </select>
+                    </div>
+
+                    <div className={styles.row}>
+                        <a>Amount In Portfolio:</a> <a>{sharesOwned ? `${sharesOwned}` : 'None in portfolio'}</a>
                     </div>
 
                     <div className={styles.row}>
@@ -345,7 +370,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                     </div>
 
                     <div className={styles.row}>
-                        <a>Total Cost:</a> <a>{shareAmount * timeTravelPrice}</a>
+                        <a>Total Cost:</a> <a>{isNaN(timeTravelPrice) ? timeTravelPrice : shareAmount * timeTravelPrice}</a>
                     </div>
 
                     <div className={styles.buttonGroup}>

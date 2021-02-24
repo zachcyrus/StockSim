@@ -89,6 +89,9 @@ a {
   }
   h3{
     cursor: pointer;
+    &:hover{
+      color:blue;
+    }
   }
   //CSS to animate the toggle for plus
   .toggleButton{

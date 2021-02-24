@@ -40,3 +40,4 @@ is meant for testing, and not production use. Sometime in the future I will chan
  - Intuitive variable naming
  - Remove all uses of Yahoo Finance API. 
  - Some tickers are not up to date
+ - Handle 

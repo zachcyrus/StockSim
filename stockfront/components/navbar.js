@@ -123,11 +123,9 @@ const NavBar = ({ username }) => {
     const toggleDisplay = () => {
         if (display) {
             setDisplay(false)
-            console.log(display)
         }
         else {
             setDisplay(true)
-            console.log(display)
         }
     }
 
@@ -139,10 +137,8 @@ const NavBar = ({ username }) => {
         e.preventDefault()
         location.href = `/stock/${search.split(' ')[0]}`
         if (!search) {
-            console.log('Search is empty')
         }
         else {
-            console.log(`Fired submit: ${search.split(' ')[0]}`)
 
         }
 
