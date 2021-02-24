@@ -24,6 +24,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
         secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none',
 
         httpOnly: true
     })
@@ -47,6 +48,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
         secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none',
 
         httpOnly: true
     })

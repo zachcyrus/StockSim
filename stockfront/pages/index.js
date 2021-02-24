@@ -43,6 +43,7 @@ function Home({ username, portfolioSummaryData, apiUrl }) {
 export async function getServerSideProps(context) {
   //Add a util function to check for authentication, to keep everything concise
   const cookies = context.req.headers.cookie;
+  
   let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
   if (cookies == undefined) {
     return {

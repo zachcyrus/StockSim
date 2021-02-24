@@ -9,7 +9,6 @@ import Image from 'next/image'
 const LoginCard = () => {
     const router = useRouter()
     let apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : process.env.NEXT_PUBLIC_APIURL
-
     const guestLogin = async() => {
         let guestLoggedIn = await axios
             .get(`${apiUrl}/auth/guest`,
