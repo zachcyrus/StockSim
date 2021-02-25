@@ -116,7 +116,10 @@ $xl: 1920px;
         justify-content: space-between;
         background-color: #222222;
         .logo{
-            display:inline-block
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            color:snow;
         }
         .menuIcon{
             display: none;

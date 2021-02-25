@@ -155,7 +155,7 @@ const NavBar = ({ username }) => {
         <div className={styles.nav}>
             <MenuIcon className={styles.menuIcon} onClick={toggleDisplay} />
             <Link href='/'>
-                <div className={styles.logo}></div>
+                <div className={styles.logo}>Logo</div>
             </Link>
             
 

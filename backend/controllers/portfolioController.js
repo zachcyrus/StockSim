@@ -65,7 +65,7 @@ exports.getPortfolios = async (req, res) => {
         return res.json(err)
     }
 }
-
+//Used to generate piechart portfolio summary page
 exports.getPortfoliosWeightedVal = async (req, res) => {
     let currUserId = req.user.Id;
     let currPortfolioName = req.params.portfolioName
@@ -83,6 +83,7 @@ exports.getPortfoliosWeightedVal = async (req, res) => {
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
     WHERE (user_id = $1 AND portfolio_name = $2)
     GROUP BY transactions.stock_name, Portfolios.portfolio_name
+    HAVING SUM(transactions.quantity) + SUM(transactions.sell_quantity) > 0
     `
 
     try {
@@ -153,6 +154,7 @@ exports.getPortfolioStocks = async (req, res) => {
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
     WHERE (user_id = $1 AND portfolio_name = $2)
 	GROUP BY Portfolios.portfolio_name, transactions.stock_name
+    HAVING SUM(transactions.quantity) + SUM(transactions.sell_quantity) > 0
 
     `
 
@@ -176,7 +178,7 @@ exports.getPortfolioStocks = async (req, res) => {
     }
 }
 
-//This function isn't used at the moment, plan to use this date for line graph in future
+//This function isn't used at the moment, plan to use this data for line graph in future
 exports.graphPortfolioStocks = async (req, res) => {
     let userId = req.user.Id;
     let { portfolioName } = req.params
@@ -217,6 +219,7 @@ exports.graphPortfolioStocks = async (req, res) => {
 
 }
 
+//supplies data for the list of portfolios page
 exports.allPortfolioValues = async (req, res) => {
     let userId = req.user.Id;
 
@@ -229,6 +232,7 @@ exports.allPortfolioValues = async (req, res) => {
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
     WHERE (user_id = $1)
     GROUP BY portfolios.portfolio_name, transactions.stock_name, Portfolios.portfolio_name
+    HAVING SUM(transactions.quantity) + SUM(transactions.sell_quantity) > 0
     `
     try {
         let foundPortfolios = await pool.query(allPortfolioValuesQuery, [userId])
@@ -313,6 +317,8 @@ exports.findStockInAllPortfolios = async (req, res) => {
     INNER JOIN Transactions ON Portfolios.portfolio_id=Transactions.portfolio_id
     WHERE (user_id = $1 AND stock_name = $2)
     GROUP BY portfolios.portfolio_name, transactions.stock_name, Portfolios.portfolio_name
+    HAVING SUM(transactions.quantity) + SUM(transactions.sell_quantity) > 0
+
     `
 
     try {
