@@ -215,8 +215,8 @@ const NavBar = ({ username }) => {
 
             
             <ul className={`${styles.subMenu} ${display ? styles.active : ''}`}>
-                <li> <Link href='/'><HomeRoundedIcon fontSize="small" /></Link>Home </li>
-                <li> <WorkRoundedIcon fontSize="small" /> Portfolios</li>
+                <Link href="/"><li><HomeRoundedIcon fontSize="small" />Home</li></Link>
+                <Link href='/portfolios'><li><WorkRoundedIcon fontSize="small" />Portfolios</li></Link>
                 <li className={styles.mobileProfile}> <PersonRoundedIcon fontSize="small" />
                     {username ? <a style={{ marginTop: '0px', fontSize: '20px' }}>{username}
                         <button onClick={handleLogOut}>Click to logout</button></a> : <Link href='/login'>Click to signin</Link>}
