@@ -134,7 +134,8 @@ const NavBar = ({ username }) => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e ? e.preventDefault(): ''
+        console.log(search)
         location.href = `/stock/${search.split(' ')[0]}`
         if (!search) {
         }
@@ -153,7 +154,10 @@ const NavBar = ({ username }) => {
     return (
         <div className={styles.nav}>
             <MenuIcon className={styles.menuIcon} onClick={toggleDisplay} />
-            <div className={styles.logo}></div>
+            <Link href='/'>
+                <div className={styles.logo}></div>
+            </Link>
+            
 
 
             <div className={styles.searchBar}>
@@ -163,11 +167,22 @@ const NavBar = ({ username }) => {
                         className={classes.textInput}
                         style={{ width: '100%' }}
                         ListboxComponent={ListboxComponent}
-                        options={tickerData.map((ticker) => {
-                            return ticker.ticker + ' ' + ticker.name
-                        })
-                        }
-                        onChange={(event, value) => setSearch(value)}
+                        options={tickerData} 
+                        getOptionLabel={(option) => option.ticker}
+                        onChange={(event, value) => setSearch(value ? value.ticker : '')}
+                        clearOnEscape={true}
+                        renderOption={(option) => (
+                            <React.Fragment>
+                              <span
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  window.location.href = `/stock/${option.ticker}`;
+                                }}
+                              >
+                                {option.ticker + ' ' + option.name}
+                              </span>
+                            </React.Fragment>
+                          )}
                         renderInput={(params) => (
 
                             <TextField

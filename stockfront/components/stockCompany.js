@@ -224,7 +224,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
             <div className={styles.yourStats}>
 
-                {statData == undefined ? <h2>Login to view stats</h2> :
+                {statData == undefined ? <a href='/login'><h2>Login to view stats</h2></a> :
                     <div>
                         <h3>Your Stats</h3>
                         {statData.length > 0 ? <StockStats portfolioData={statData} /> : <h2>Stock not found in any portfolios</h2>}
@@ -250,7 +250,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
             <div className={styles.buttonGroup}>
                 <button onClick={toggleBuy} className={styles.buyBtn}>BUY</button>
                 <button onClick={toggleSell} className={styles.sellBtn}>SELL</button>
-                <button onClick={toggleTimeTrav}>Time Travel</button>
+                <button onClick={toggleTimeTrav} className={styles.ttBtn}>Time Travel</button>
             </div>
 
 

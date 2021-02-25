@@ -23,6 +23,11 @@
 
     .yourStats{
         display: none;
+        a{
+          &:hover{
+            color:blue;
+          }
+        }
     }
     //CSS for tablet/deskTop view
     @media screen and (min-width:$md){
@@ -110,6 +115,9 @@
     }
     .sellBtn:hover{
       background-color: #8b0000 ;
+    }
+    .ttBtn:hover{
+      background-color: blue ;
     }
   }
   
