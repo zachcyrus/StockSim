@@ -213,7 +213,7 @@ const NavBar = ({ username }) => {
                 </form>
             </div>
 
-
+            
             <ul className={`${styles.subMenu} ${display ? styles.active : ''}`}>
                 <li> <Link href='/'><HomeRoundedIcon fontSize="small" /></Link>Home </li>
                 <li> <WorkRoundedIcon fontSize="small" /> Portfolios</li>

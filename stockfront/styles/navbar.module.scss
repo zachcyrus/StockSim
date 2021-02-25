@@ -21,17 +21,20 @@ $xl: 1920px;
     align-items: center;
     flex-wrap:wrap;
     background-color: #222222;
-    padding: 7px 7px 7px 7px;
+    padding-top: 7px;
+    padding-bottom: 7px;
     height:70px;
     z-index: 1;
     .menuIcon{
         color:white;
+        margin-left: 7px;
     }
     
     .logo{
         width:156px;
         height:80%;
         display:none;
+        margin-left: 7px;
         background-color: blue;
         cursor: pointer;
     }
