@@ -71,24 +71,30 @@ export async function getServerSideProps(context) {
   }
 
   let queryStockPrices = stockData.prices
-  let percentChange;
+  
 
 
 
   let company = findCompany(stockToFindSymbol)
   let finalData = formatData(queryStockPrices)
+  let percentChange = ((finalData.lastDay[1].value - finalData.lastDay[0].value)/finalData.lastDay[0].value)*100
+  let valueChange = (finalData.lastDay[1].value - finalData.lastDay[0].value)
 
+  percentChange=percentChange.toFixed(2);
+  valueChange = valueChange.toFixed(2);
+  
   let companyInfo = {
     'ticker': company.ticker,
     'name': company.name,
     'last2Days': finalData.lastDay,
     //we will find todays price from API
     'todaysPrice': finalData.today.value,
+    percentChange,
+    valueChange,
     //now to retrieve all price ranges
     'YearData': finalData
   }
 
-  console.log(companyInfo.last2Days)
 
   //If no user is found
   if (cookies == undefined) {

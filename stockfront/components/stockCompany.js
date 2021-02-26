@@ -216,8 +216,11 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                 <h3 style={{ textAlign: 'left' }}>{companyInfo.ticker}</h3>
                 <h3>{companyInfo.name}</h3>
                 <div className={styles.value}>
-                    <a>{companyInfo.todaysPrice}</a>
-                    <a> <ArrowDropUpIcon className={styles.arrow}/> 10.14 (+8.56%)</a>
+                    <a>${companyInfo.todaysPrice}</a>
+                    <a> {Math.sign(companyInfo.percentChange) == 1 ?
+                        <ArrowDropUpIcon className={styles.arrow} />
+                        : <ArrowDropDownIcon className={styles.arrow}/>} {companyInfo.valueChange} ({companyInfo.percentChange}%)
+                    </a>
                 </div>
 
 
