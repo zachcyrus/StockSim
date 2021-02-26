@@ -23,6 +23,7 @@ router.post('/sell', passport.authenticate('jwt', {session:false}), stockControl
 
 router.get('/purchasedate/:stockTicker', passport.authenticate('jwt', {session:false}), stockController.getFirstPurchaseDate)
 
+//Route to obtain a quote on a stock on a certain day
 router.get('/timetravelquote/:stockTicker/:date', passport.authenticate('jwt', {session:false}), stockController.timeTravelQuote)
 
 module.exports = router

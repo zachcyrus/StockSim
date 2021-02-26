@@ -217,13 +217,14 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                 <h3>{companyInfo.name}</h3>
                 <div className={styles.value}>
                     <a>{companyInfo.todaysPrice}</a>
-                    <a> <ArrowDropUpIcon fontSize='large' /> 10.14 (+8.56%)</a>
+                    <a> <ArrowDropUpIcon className={styles.arrow}/> 10.14 (+8.56%)</a>
                 </div>
+
+
 
             </div>
 
             <div className={styles.yourStats}>
-
                 {statData == undefined ? <a href='/login'><h2>Login to view stats</h2></a> :
                     <div>
                         <h3>Your Stats</h3>
@@ -231,7 +232,6 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                     </div>
 
                 }
-
             </div>
 
 
@@ -341,7 +341,8 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                 <div style={{ display: timeTravel ? 'block' : 'none' }} className={styles.modalContent}>
                     <h1>Time Travel Purchase</h1>
                     <div className={styles.row}>
-                        <a>Date of Purchase</a> <a> <input onChange={handleDateChange} type="date" /> </a>
+                        <a>Date of Purchase</a> <a> <input onChange={handleDateChange} type="date" max={new Date().toISOString()
+                            .split("T")[0]} /> </a>
                     </div>
                     <div className={styles.row}>
                         <a>Value:</a> <a>{timeTravelPrice}</a>
