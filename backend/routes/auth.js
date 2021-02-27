@@ -26,7 +26,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true
     })
-    res.redirect('http://localhost:3000')
+    process.env.NODE_ENV === 'production' ? res.redirect(process.env.FRONTEND_URL) : res.redirect('http://localhost:3000');
 
 })
 
@@ -48,7 +48,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true
     })
-    res.redirect('http://localhost:3000')
+    process.env.NODE_ENV === 'production' ? res.redirect(process.env.FRONTEND_URL) : res.redirect('http://localhost:3000');
 
 })
 

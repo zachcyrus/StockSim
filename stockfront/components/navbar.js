@@ -106,7 +106,9 @@ const NavBar = ({ username }) => {
         if (confirm('Would you like to logout')) {
             try {
                 let logOutUser = await axios
-                    .get(`${process.env.NEXT_PUBLIC_APIURL}/auth/logout`,
+                    .get(process.env.NODE_ENV === 'production' ? 
+                    `${process.env.NEXT_PUBLIC_APIURL}/auth/logout` 
+                    : `http://localhost:8000/auth/logout` ,
                         { withCredentials: true })
                 if (logOutUser.data.message) {
                     window.location.reload()
