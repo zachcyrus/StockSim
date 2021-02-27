@@ -35,7 +35,6 @@ yarn-error.log*
 .vercel
 
 #fakedata
-/public/sampleAAPL52.json
 /public/fakeBatchData.json
 /public/fakeUserData.json
 
