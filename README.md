@@ -43,3 +43,4 @@ is meant for testing, and not production use. Sometime in the future I will chan
  - Add custom error page.
  - Change placeholders for company logos from a white box to actual logo. 
  - Reset guest on a set interval.
+ - Create a logo for the site.
