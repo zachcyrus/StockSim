@@ -1,5 +1,5 @@
-let tickerData = require('../assets/allTickers/allTickers.json')
-let batchData = require('../public/fakeBatchData.json')
+/* let tickerData = require('../assets/allTickers/allTickers.json')
+let batchData = require('../public/fakeBatchData.json') */
 
 export const formatData = (data) => {
     //first filter all the data to get rid of dividend days
