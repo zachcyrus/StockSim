@@ -37,5 +37,4 @@ yarn-error.log*
 #fakedata
 /public/fakeBatchData.json
 /public/fakeUserData.json
-
 /util/test.js
