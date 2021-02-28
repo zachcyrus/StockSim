@@ -24,6 +24,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
         secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV !== 'production',
         httpOnly: true
     })
     process.env.NODE_ENV === 'production' ? res.redirect(process.env.FRONTEND_URL) : res.redirect('http://localhost:3000');
@@ -46,6 +47,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
         secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV !== 'production',
         httpOnly: true
     })
     process.env.NODE_ENV === 'production' ? res.redirect(process.env.FRONTEND_URL) : res.redirect('http://localhost:3000');
@@ -77,6 +79,7 @@ router.get('/guest/', async (req, res) => {
         res.cookie('jwt', token, {
             expires: new Date(Date.now() + expiration),
             secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV !== 'production',
             httpOnly: true
         })
         return res.json({

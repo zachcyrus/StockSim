@@ -16,7 +16,8 @@ const indexRouter = require('./routes/index')
 
 const corsConfig ={
   origin: true,
-  credentials: true
+  credentials: true,
+  sameSite
 }
 
 app.use(helmet());
