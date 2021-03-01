@@ -31,7 +31,6 @@ export async function getServerSideProps(context) {
         const cookies = new Cookies(context.req, context.res)
         cookies.set('jwt', jwt, {
             expires: new Date(Date.now() + expiration),
-            secure: process.env.NODE_ENV === 'production',
             httpOnly: true
         })
 
