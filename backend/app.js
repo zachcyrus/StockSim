@@ -15,7 +15,7 @@ const stockRouter = require('./routes/stocks')
 const indexRouter = require('./routes/index')
 
 const corsConfig ={
-  origin: ['http://localhost:3000', 'https://stock-sim.vercel.app'],
+  origin: ['http://localhost:3000', 'https://stock-sim.vercel.app' , 'https://stockvisim.digital'],
   credentials: true,
 }
 app.use(cors(corsConfig))
