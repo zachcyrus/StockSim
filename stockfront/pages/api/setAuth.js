@@ -1,7 +1,8 @@
 import axios from 'axios';
-import Cookies from 'cookies';
+import cookie from 'cookie';
+
+
 export default async (req, res) => {
-  let cookies = new Cookies(req, res)
   let apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : process.env.NEXT_PUBLIC_APIURL
   try {
     // If in production mode cookie and jwt expires in 7 days, else one hour
@@ -12,7 +13,7 @@ export default async (req, res) => {
       httpOnly: true
     }) */
     let tokenVal = req.query.jwt
-    let cookieObj = {
+    /* let cookieObj = {
       expires: new Date(Date.now() + expiration),
       secure: process.env.NODE_ENV === 'production',
       path: '/',
@@ -21,6 +22,14 @@ export default async (req, res) => {
     }
     cookies.set('jwt', tokenVal, cookieObj )
 
+    return res.redirect('/') */
+
+    res.setHeader("Set-Cookie", cookie.serialize('jwt', tokenVal, {
+      expires: new Date(Date.now() + expiration),
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      httpOnly: true,
+    }))
     return res.redirect('/')
 
   } catch (error) {
