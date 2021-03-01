@@ -14,6 +14,7 @@ import Router from "next/router"
 
 
 function Portfolios({ username, allPortfolios }) {
+  let apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : process.env.NEXT_PUBLIC_APIURL
   const [open, setOpen] = useState(false)
   const [portfolioName, setPortfolioName] = useState('')
 
@@ -34,7 +35,7 @@ function Portfolios({ username, allPortfolios }) {
   const submitPortfolio = async (e) => {
     e.preventDefault();
     try {
-      let response = await axios.post(`${process.env.NEXT_PUBLIC_APIURL}/portfolios/add`, { portfolioName }, { withCredentials: true })
+      let response = await axios.post(`${apiUrl}/portfolios/add`, { portfolioName }, { withCredentials: true })
       alert(`${portfolioName} was created!`)
       Router.reload();
 

@@ -30,6 +30,7 @@ exports.addPortfolio = async (req, res) => {
 
         try {
             let addNewPortfolio = await pool.query(addPortQuery, addPortVals)
+            console.log('added portfolio')
             return res.json(addNewPortfolio.rows[0])
 
         } catch (err) {
