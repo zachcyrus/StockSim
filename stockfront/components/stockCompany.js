@@ -13,7 +13,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
     const [buy, setBuy] = useState(false);
     const [sell, setSell] = useState(false);
     const [timeTravel, setTimeTrav] = useState(false);
-    const [portfolioName, setportfolioName] = useState(allPortfolios ? allPortfolios[0].portfolio_name : 'Tech')
+    const [portfolioName, setportfolioName] = useState(allPortfolios.length>0 ? allPortfolios[0].portfolio_name : '')
     const [shareAmount, setShareAmount] = useState(0);
     const [error, setError] = useState('');
     const [selectedDate, setDate] = useState('');
@@ -71,6 +71,13 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
     const handleBuy = async (e) => {
         e.preventDefault()
+        if(portfolioName === ''){
+            setError('Make a portfolio first')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+        }
         if (!Number.isInteger(+shareAmount)) {
             setError('Please only use positive integers for share amount')
             setTimeout(() => {
@@ -84,7 +91,6 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                 setError('')
             }, 10000);
             return;
-
         }
         try {
             let addStockToPortfolio = await axios
@@ -105,6 +111,13 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
     const handleSell = async (e) => {
         e.preventDefault()
+        if(portfolioName === ''){
+            setError('Make a portfolio first')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+        }
         if (!Number.isInteger(+shareAmount)) {
             setError('Please only use positive integers for share amount')
             setTimeout(() => {
@@ -147,6 +160,13 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
     const handleTimeTravel = async (e) => {
         e.preventDefault()
+        if(portfolioName === ''){
+            setError('Make a portfolio first')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+        }
         if (!Number.isInteger(+shareAmount)) {
             setError('Please only use positive integers for share amount')
             setTimeout(() => {
