@@ -15,17 +15,14 @@ const stockRouter = require('./routes/stocks')
 const indexRouter = require('./routes/index')
 
 const corsConfig ={
-  origin: true,
+  origin: 'http://localhost:3000',
   credentials: true,
-  sameSite
 }
-
+app.use(cors(corsConfig))
 app.use(helmet());
 app.use(bodyParser.json()); 
 app.use(cookieParser())
 app.use(express.json()); 
-app.use(cors(corsConfig))
-app.options('*', cors(corsConfig))
 app.use(passport.initialize())
 
 

@@ -17,6 +17,7 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
     //Generate JWT after successful callback
     //const token = jwt.sign({})
     let currUser = req.user;
+    console.log(currUser)
     // If in production mode cookie and jwt expires in 7 days, else one hour
     const expiration = process.env.NODE_ENV === 'production' ? 1440 * 60000 : 60 * 60000;
 
@@ -24,11 +25,10 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
         secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV !== 'production',
         httpOnly: true
-    })
-    process.env.NODE_ENV === 'production' ? res.redirect(process.env.FRONTEND_URL) : res.redirect('http://localhost:3000');
-
+    }) 
+    process.env.NODE_ENV === 'production' ? res.redirect(`${process.env.FRONTEND_URL}/api/setAuth`) : res.redirect('http://localhost:3000/api/setAuth');
+    
 })
 
 //Route for authentication with google login
@@ -47,7 +47,7 @@ router.get('/google/callback', passport.authenticate('google', { session: false 
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
         secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV !== 'production',
+        /* sameSite: process.env.NODE_ENV !== 'production', */
         httpOnly: true
     })
     process.env.NODE_ENV === 'production' ? res.redirect(process.env.FRONTEND_URL) : res.redirect('http://localhost:3000');
@@ -79,7 +79,7 @@ router.get('/guest/', async (req, res) => {
         res.cookie('jwt', token, {
             expires: new Date(Date.now() + expiration),
             secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV !== 'production',
+            /* sameSite: process.env.NODE_ENV !== 'production', */
             httpOnly: true
         })
         return res.json({
