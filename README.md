@@ -39,7 +39,7 @@ is meant for testing, and not production use. Sometime in the future I will chan
  - Perhaps utilize Sequelize to improve pg sql queries. 
  - Intuitive variable naming
  - Remove all uses of Yahoo Finance API. 
- - Some tickers are not up to date.
+ - Remove tickers that are not up to date.
  - Add custom error page.
  - Change placeholders for company logos from a white box to actual logo. 
  - Reset guest on a set interval.
