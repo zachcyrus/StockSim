@@ -22,12 +22,11 @@ router.get("/facebook/callback", passport.authenticate("facebook", { session: fa
     const expiration = process.env.NODE_ENV === 'production' ? 1440 * 60000 : 60 * 60000;
 
     const token = jwt.sign({ user: currUser }, process.env.JWT_SECRET, { expiresIn: '7d' })
-    res.cookie('auth', token, {
+    /* res.cookie('auth', token, {
         expires: new Date(Date.now() + expiration),
         secure: process.env.NODE_ENV === 'production',
-        httpOnly: true
-    }) 
-    process.env.NODE_ENV === 'production' ? res.redirect(`${process.env.FRONTEND_URL}/api/setAuth`) : res.redirect('http://localhost:3000/api/setAuth');
+    })  */
+    process.env.NODE_ENV === 'production' ? res.redirect(`${process.env.FRONTEND_URL}/api/setAuth?jwt=${token}`) : res.redirect(`http://localhost:3000/api/setAuth/?jwt=${token}`);
     
 })
 
