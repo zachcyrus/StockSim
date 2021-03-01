@@ -65,7 +65,7 @@ export async function getServerSideProps(context) {
 
     let cookies = new Cookies(context.req, context.res)
     let token = cookies.get('jwt')
-    if (!cookies) {
+    if (!token) {
         return {
             redirect: {
                 destination: '/',

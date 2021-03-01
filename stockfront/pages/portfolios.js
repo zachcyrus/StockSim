@@ -100,7 +100,7 @@ export async function getServerSideProps({req,res}) {
   let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
   let cookies = new Cookies(req, res)
   let token = cookies.get('jwt')
-  if (cookies == undefined) {
+  if (token == undefined) {
     return {
       props: {
         'username': null

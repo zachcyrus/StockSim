@@ -98,7 +98,7 @@ export async function getServerSideProps({req,res}) {
 
 
   //If no user is found
-  if (cookies == undefined) {
+  if (token == undefined) {
     return {
       props: {
         'username': null,
