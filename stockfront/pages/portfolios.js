@@ -14,7 +14,7 @@ import Cookies from 'cookies'
 
 
 
-function Portfolios({ username, allPortfolios }) {
+function Portfolios({ username, allPortfolios, token }) {
   let apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : process.env.NEXT_PUBLIC_APIURL
   const [open, setOpen] = useState(false)
   const [portfolioName, setPortfolioName] = useState('')
@@ -36,7 +36,11 @@ function Portfolios({ username, allPortfolios }) {
   const submitPortfolio = async (e) => {
     e.preventDefault();
     try {
-      let response = await axios.post(`${apiUrl}/portfolios/add`, { portfolioName }, { withCredentials: true })
+      let response = await axios.post(`${apiUrl}/portfolios/add`, { portfolioName }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       alert(`${portfolioName} was created!`)
       Router.reload();
 
@@ -95,7 +99,7 @@ function Portfolios({ username, allPortfolios }) {
   )
 }
 
-export async function getServerSideProps({req,res}) {
+export async function getServerSideProps({ req, res }) {
   //Add a util function to check for authentication, to keep everything concise
   let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
   let cookies = new Cookies(req, res)
@@ -116,7 +120,7 @@ export async function getServerSideProps({req,res}) {
     }
   })
 
-  if(userData.status !== 200){
+  if (userData.status !== 200) {
     return {
       props: {
         'username': null
@@ -137,7 +141,8 @@ export async function getServerSideProps({req,res}) {
   return {
     props: {
       username,
-      allPortfolios
+      allPortfolios,
+      token
     }, // will be passed to the page component as props
   }
 }

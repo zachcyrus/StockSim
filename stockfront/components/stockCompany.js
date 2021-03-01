@@ -8,12 +8,12 @@ import StockStats from './stockStats'
 
 //Might need to make a custom chart component for Portfolios
 
-const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
+const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) => {
     const [open, setDisplay] = useState(false);
     const [buy, setBuy] = useState(false);
     const [sell, setSell] = useState(false);
     const [timeTravel, setTimeTrav] = useState(false);
-    const [portfolioName, setportfolioName] = useState(allPortfolios.length>0 ? allPortfolios[0].portfolio_name : '')
+    const [portfolioName, setportfolioName] = useState(allPortfolios.length > 0 ? allPortfolios[0].portfolio_name : '')
     const [shareAmount, setShareAmount] = useState(0);
     const [error, setError] = useState('');
     const [selectedDate, setDate] = useState('');
@@ -71,7 +71,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
     const handleBuy = async (e) => {
         e.preventDefault()
-        if(portfolioName === ''){
+        if (portfolioName === '') {
             setError('Make a portfolio first')
             setTimeout(() => {
                 setError('')
@@ -100,7 +100,11 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                         quantity: shareAmount,
                         price: (Math.round(todaysPrice * 100) / 100),
                         stockName: stockTicker
-                    }, { withCredentials: true })
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                })
             window.location.reload();
 
         } catch (err) {
@@ -111,7 +115,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
     const handleSell = async (e) => {
         e.preventDefault()
-        if(portfolioName === ''){
+        if (portfolioName === '') {
             setError('Make a portfolio first')
             setTimeout(() => {
                 setError('')
@@ -150,7 +154,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                         quantity: shareAmount,
                         price: (Math.round(todaysPrice * 100) / 100),
                         stockName: stockTicker
-                    }, { withCredentials: true })
+                    }, { headers: {
+                        Authorization: `Bearer ${token}`
+                      } })
             window.location.reload();
 
         } catch (err) {
@@ -160,7 +166,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
 
     const handleTimeTravel = async (e) => {
         e.preventDefault()
-        if(portfolioName === ''){
+        if (portfolioName === '') {
             setError('Make a portfolio first')
             setTimeout(() => {
                 setError('')
@@ -200,7 +206,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                         date: selectedDate,
                         price: (Math.round(timeTravelPrice * 100) / 100),
                         stockName: stockTicker
-                    }, { withCredentials: true })
+                    }, { headers: {
+                        Authorization: `Bearer ${token}`
+                      } })
             window.location.reload();
 
         } catch (err) {
@@ -216,7 +224,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
         try {
             let newPrice = await axios
                 .get(`${apiUrl}/stocks/timetravelquote/${stockTicker}/${formatDate}`,
-                    { withCredentials: true })
+                    { headers: {
+                        Authorization: `Bearer ${token}`
+                      } })
 
             setTimeTravelPrice(newPrice.data.price)
         } catch (err) {
@@ -239,7 +249,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl }) => {
                     <a>${companyInfo.todaysPrice}</a>
                     <a> {Math.sign(companyInfo.percentChange) == 1 ?
                         <ArrowDropUpIcon className={styles.arrow} />
-                        : <ArrowDropDownIcon className={styles.arrow}/>} {companyInfo.valueChange} ({companyInfo.percentChange}%)
+                        : <ArrowDropDownIcon className={styles.arrow} />} {companyInfo.valueChange} ({companyInfo.percentChange}%)
                     </a>
                 </div>
 

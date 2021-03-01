@@ -10,7 +10,7 @@ import Cookies from 'cookies'
 
 
 
-function Stocks({ username, companyInfo, allPortfolios, userStockStats }) {
+function Stocks({ username, companyInfo, allPortfolios, userStockStats, token }) {
   const router = useRouter()
 
   const { stock } = router.query
@@ -24,7 +24,7 @@ function Stocks({ username, companyInfo, allPortfolios, userStockStats }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container maxWidth='lg'>
-        <StockCompany apiUrl={apiUrl} allPortfolios={allPortfolios} statData={userStockStats} companyInfo={companyInfo} />
+        <StockCompany apiUrl={apiUrl} token={token} allPortfolios={allPortfolios} statData={userStockStats} companyInfo={companyInfo} />
       </Container>
     </Layout>
 
@@ -44,9 +44,9 @@ Your Stats Component
 
 */
 
-export async function getServerSideProps({req,res}) {
+export async function getServerSideProps(context) {
   let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
-  let cookies = new Cookies(req, res)
+  let cookies = new Cookies(context.req, context.res)
   let token = cookies.get('jwt')
 
   let stockToFindSymbol = context.query.stock.toUpperCase();
@@ -161,6 +161,7 @@ export async function getServerSideProps({req,res}) {
       companyInfo,
       allPortfolios,
       userStockStats,
+      token
     }
   }
 }
