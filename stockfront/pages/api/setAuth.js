@@ -19,9 +19,9 @@ export default async (req, res) => {
       httpOnly: true,
       
     }
-    cookies.set('jwt', tokenVal, cookieObj )
+    //cookies.set('jwt', tokenVal, cookieObj )
 
-    return res.redirect('/')
+    return res.redirect(`/auth/?jwt=${tokenVal}`)
 
   } catch (error) {
     console.log(error)
