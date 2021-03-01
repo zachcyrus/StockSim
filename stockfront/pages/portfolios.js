@@ -9,6 +9,7 @@ import Link from 'next/link';
 import Router from "next/router"
 //Need a delete button for portfolios
 //need an alert component for errors
+import Cookies from 'cookies'
 
 
 
@@ -94,11 +95,11 @@ function Portfolios({ username, allPortfolios }) {
   )
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({req,res}) {
   //Add a util function to check for authentication, to keep everything concise
-  const cookies = context.req.headers.cookie;
   let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
-
+  let cookies = new Cookies(req, res)
+  let token = cookies.get('jwt')
   if (cookies == undefined) {
     return {
       props: {
@@ -111,7 +112,7 @@ export async function getServerSideProps(context) {
 
   let userData = await axios.get(`${apiUrl}/protected/user`, {
     headers: {
-      Cookie: cookies
+      Authorization: `Bearer ${token}`
     }
   })
 
@@ -126,7 +127,7 @@ export async function getServerSideProps(context) {
   //retrieve list of portfolios and their values
   let portfolioData = await axios.get(`${apiUrl}/portfolios/allportfoliovalues`, {
     headers: {
-      Cookie: cookies
+      Authorization: `Bearer ${token}`
     }
   })
 

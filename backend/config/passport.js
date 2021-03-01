@@ -17,7 +17,8 @@ let findJwtFromCookie = (req) => {
 
 const jwtOptions = {
   //jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), this was used for when we weren't using cookies
-  jwtFromRequest: findJwtFromCookie,
+  //jwtFromRequest: findJwtFromCookie,
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET
 }
 

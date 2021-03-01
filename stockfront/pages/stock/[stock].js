@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import axios from 'axios';
 import { findCompany, formatData } from '../../util/helper'
 const appleData = require('../../public/sampleAAPL52.json')
+import Cookies from 'cookies'
 
 
 
@@ -43,10 +44,10 @@ Your Stats Component
 
 */
 
-export async function getServerSideProps(context) {
-  const cookies = context.req.headers.cookie;
+export async function getServerSideProps({req,res}) {
   let apiUrl = process.env.NODE_ENV === 'development' ? process.env.LOCAL_APIURL : process.env.NEXT_PUBLIC_APIURL
-
+  let cookies = new Cookies(req, res)
+  let token = cookies.get('jwt')
 
   let stockToFindSymbol = context.query.stock.toUpperCase();
 
@@ -110,7 +111,7 @@ export async function getServerSideProps(context) {
   //if a user is found based on cookies
   let userData = await axios.get(`${apiUrl}/protected/user`, {
     headers: {
-      Cookie: cookies
+      Authorization: `Bearer ${token}`
     }
   })
   let username = userData.data.user
@@ -118,7 +119,7 @@ export async function getServerSideProps(context) {
   //get portfolio list
   let portfolioData = await axios.get(`${apiUrl}/portfolios`, {
     headers: {
-      Cookie: cookies
+      Authorization: `Bearer ${token}`
     }
   })
 
@@ -131,7 +132,7 @@ export async function getServerSideProps(context) {
     method: 'get',
     url: `${apiUrl}/stocks/purchasedate/${stockToFindSymbol}`,
     headers: {
-      Cookie: cookies
+      Authorization: `Bearer ${token}`
     }
   })
 
@@ -147,7 +148,7 @@ export async function getServerSideProps(context) {
     method: 'get',
     url: `${apiUrl}/portfolios/allportfolios/${stockToFindSymbol}`,
     headers: {
-      Cookie: cookies
+      Authorization: `Bearer ${token}`
     }
   })
 
