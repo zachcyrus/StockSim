@@ -11,7 +11,6 @@ export default async (req, res) => {
     let tokenVal = req.query.jwt
      let cookieObj = {
       expires: new Date(Date.now() + expiration),
-      secure: process.env.NODE_ENV === 'production',
       httpOnly: true
     }
     //cookies.set('jwt', tokenVal, cookieObj )
