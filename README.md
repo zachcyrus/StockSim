@@ -4,7 +4,7 @@ Stock Simulator is a full stack project of mine, meant to introduce users to the
 Users will be able to search for stocks, buy and sell stocks, add those stocks to their own portfolios, and able to see visualizations of their portfolios.
 
 One important note is that the prices of stocks are not accurate due to IEX cloud API being used currently
-is meant for testing, and not production use. Sometime in the future I will change it to production use, then values will be accurate 
+is meant for testing, and not production use. Sometime in the future I will change it to production use, then values will be accurate.
 
 ## Features
 
