@@ -13,20 +13,26 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
     const [buy, setBuy] = useState(false);
     const [sell, setSell] = useState(false);
     const [timeTravel, setTimeTrav] = useState(false);
-    const [portfolioName, setportfolioName] = useState(allPortfolios.length > 0 ? allPortfolios[0].portfolio_name : '')
+    const [portfolioName, setportfolioName] = useState(allPortfolios ? allPortfolios.length > 0 ? allPortfolios[0].portfolio_name : '' : '')
     const [shareAmount, setShareAmount] = useState(0);
     const [error, setError] = useState('');
     const [selectedDate, setDate] = useState('');
     const [timeTravelPrice, setTimeTravelPrice] = useState('Pick a date')
-    const [sharesOwned, setSharesOwned] = useState(statData ? statData.find(port => port.portfolio_name == portfolioName) ? statData.find(port => port.portfolio_name == portfolioName).quantity : 0 : '')
+    const [sharesOwned, setSharesOwned] = useState(statData 
+        ? statData.find(port => port.portfolio_name == portfolioName) 
+        ? statData.find(port => port.portfolio_name == portfolioName).quantity : 0 : '')
+    const [sellSharesOwned, setSellSharesOwned] = useState(statData 
+        ? statData.find(port => port.quantity !== undefined) 
+        ? statData.find(port => port.quantity !== undefined).quantity : 0 : '')
+
     const stockTicker = companyInfo.ticker;
     const todaysPrice = companyInfo.todaysPrice;
-
 
 
     const handleSelect = (e) => {
         setportfolioName(e.target.value)
         setSharesOwned(statData.find(port => port.portfolio_name == e.target.value) ? statData.find(port => port.portfolio_name == e.target.value).quantity : 0)
+        setSellSharesOwned(statData.find(port => port.portfolio_name == e.target.value) ? statData.find(port => port.portfolio_name == e.target.value).quantity : 0)
     }
 
     const toggleBuy = () => {
@@ -358,7 +364,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
                     </div>
 
                     <div className={styles.row}>
-                        <a>Amount In Portfolio:</a> <a>{sharesOwned ? `${sharesOwned}` : 'None in portfolio'}</a>
+                        <a>Amount In Portfolio:</a> <a>{sellSharesOwned ? `${sellSharesOwned}` : 'None in portfolio'}</a>
                     </div>
 
                     <div className={styles.row}>
