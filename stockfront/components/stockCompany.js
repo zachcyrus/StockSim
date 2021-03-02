@@ -77,7 +77,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
     const handleBuy = async (e) => {
         e.preventDefault()
         if (portfolioName === '') {
-            setError('Make a portfolio first')
+            setError('Make a portfolio or select first')
             setTimeout(() => {
                 setError('')
             }, 10000);
@@ -193,8 +193,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
 
     const handleTimeTravel = async (e) => {
         e.preventDefault()
+        console.log(portfolioName)
         if (portfolioName === '') {
-            setError('Make a portfolio first')
+            setError('Make or select a portfolio first')
             setTimeout(() => {
                 setError('')
             }, 10000);
@@ -418,9 +419,10 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
 
                     <div className={styles.row}>
                         <a>Select Portfolio</a>
-                        <select name="portfolios">
+                        <select onChange={handleSelect} name="portfolios">
                             {allPortfolios ?
                                 allPortfolios.map((row) => {
+                                    <option value='Select Your Portfolio'>Select Your Portfolio</option>
                                     return (
                                         <option key={row.portfolio_name} value={row.portfolio_name}> {row.portfolio_name} </option>
                                     )
