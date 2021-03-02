@@ -142,7 +142,7 @@ passport.use(
       callbackURL: process.env.NODE_ENV=='production' ? `${process.env.HOST_URL}/auth/google/callback` :
       process.env.GOOGLE_CALLBACK_URL,
     },
-    async (accessToken, refreshToken, profile, cb) => {
+    async (accessToken, refreshToken, profile, done) => {
       /* 
         First we retrieve  the user information from FB;
         Second if this user's FB isn't saved to our database, we save them to the database
@@ -157,7 +157,15 @@ passport.use(
         WHERE(google_id = $1)
       `
       const userToFindId = [profile.id]
-      let foundUser = await pool.query(findGoogleUserQuery, userToFindId)
+
+      let foundUser
+
+      try {
+        foundUser = await pool.query(findGoogleUserQuery, userToFindId)
+      } catch (err) {
+        console.error(err)
+      }
+      
 
 
       //if no one was found we have to register them to to google table and user table
@@ -192,7 +200,7 @@ passport.use(
         }
 
         //If all goes well user has been successfully registered now to return the user
-        return cb(null, newUser.rows[0])
+        return done(null, newUser.rows[0])
 
 
 
@@ -200,7 +208,7 @@ passport.use(
       //user is found
       else {
         console.log('Google User was found and is being returned')
-        return cb(null, foundUser.rows[0])
+        return done(null, foundUser.rows[0])
       }
 
     }
