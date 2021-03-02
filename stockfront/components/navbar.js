@@ -10,6 +10,7 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios'
 import Link from 'next/link';
 import { makeStyles } from '@material-ui/core/styles';
+import { useRouter } from 'next/router';
 
 
 //for tomorrow work on navigating to a different page with search;
@@ -101,19 +102,12 @@ const NavBar = ({ username }) => {
     const [signedIn, setSignIn] = useState(false);
     const [search, setSearch] = useState('');
     const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
+    const router = useRouter()
 
     const handleLogOut = async () => {
         if (confirm('Would you like to logout')) {
             try {
-                let logOutUser = await axios
-                    .get(process.env.NODE_ENV === 'production' ? 
-                    `${process.env.NEXT_PUBLIC_APIURL}/auth/logout` 
-                    : `http://localhost:8000/auth/logout` ,
-                        { withCredentials: true })
-                if (logOutUser.data.message) {
-                    window.location.reload()
-                }
-
+                router.push('/api/logout')
             } catch (err) {
                 console.log(err)
 
