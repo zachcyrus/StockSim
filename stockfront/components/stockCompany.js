@@ -13,7 +13,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
     const [buy, setBuy] = useState(false);
     const [sell, setSell] = useState(false);
     const [timeTravel, setTimeTrav] = useState(false);
-    const [portfolioName, setportfolioName] = useState(allPortfolios ? allPortfolios.length > 0 ? allPortfolios[0].portfolio_name : '' : '')
+    const [portfolioName, setportfolioName] = useState('')
     const [shareAmount, setShareAmount] = useState(0);
     const [error, setError] = useState('');
     const [selectedDate, setDate] = useState('');
@@ -27,7 +27,6 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
 
     const stockTicker = companyInfo.ticker;
     const todaysPrice = companyInfo.todaysPrice;
-
 
     const handleSelect = (e) => {
         setportfolioName(e.target.value)
@@ -84,6 +83,13 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
             }, 10000);
             return;
         }
+        if(portfolioName === 'Select Your Portfolio'){
+            setError('Select a portfolio')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+        }
         if (!Number.isInteger(+shareAmount)) {
             setError('Please only use positive integers for share amount')
             setTimeout(() => {
@@ -122,7 +128,21 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
     const handleSell = async (e) => {
         e.preventDefault()
         if (portfolioName === '') {
-            setError('Make a portfolio first')
+            setError('Make or select portfolio first')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+        }
+        if(portfolioName === 'Select Your Portfolio'){
+            setError('Select a portfolio')
+            setTimeout(() => {
+                setError('')
+            }, 10000);
+            return;
+        }
+        if(shareAmount == 0){
+            setError('Share amount must be greater than 0')
             setTimeout(() => {
                 setError('')
             }, 10000);
@@ -153,6 +173,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
 
         }
         try {
+            console.log(portfolioName)
             let removeStockFromPortfolio = await axios
                 .post(`${apiUrl}/stocks/sell`,
                     {
@@ -351,6 +372,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
 
                     <div className={styles.row}>
                         <a>Select Portfolio</a> <select onChange={handleSelect} name="portfolios">
+                            <option value='Select Your Portfolio'>Select Your Portfolio</option>
                             {statData ?
                                 statData.map((row) => {
                                     return (
