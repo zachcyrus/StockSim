@@ -144,7 +144,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
 
         }
 
-        if (shareAmount > sharesOwned) {
+        if (shareAmount > sellSharesOwned) {
             setError("Can't sell more shares than you own")
             setTimeout(() => {
                 setError('')
