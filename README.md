@@ -44,3 +44,4 @@ is meant for testing, and not production use. Sometime in the future I will chan
  - Change placeholders for company logos from a white box to actual logo. 
  - Reset guest on a set interval.
  - Create a logo for the site.
+ - Verify application on Google and FaceBook for sign in.
