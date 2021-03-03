@@ -335,7 +335,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
 
                     <div className={styles.row}>
                         <a>Select Portfolio</a> <select onChange={handleSelect} name="portfolios">
+                            <option value='Select Your Portfolio'>Select Your Portfolio</option>
                             {allPortfolios ?
+                                
                                 allPortfolios.map((row) => {
                                     return (
                                         <option key={row.portfolio_name} value={row.portfolio_name}> {row.portfolio_name} </option>
@@ -420,9 +422,9 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
                     <div className={styles.row}>
                         <a>Select Portfolio</a>
                         <select onChange={handleSelect} name="portfolios">
+                        <option value='Select Your Portfolio'>Select Your Portfolio</option>
                             {allPortfolios ?
                                 allPortfolios.map((row) => {
-                                    <option value='Select Your Portfolio'>Select Your Portfolio</option>
                                     return (
                                         <option key={row.portfolio_name} value={row.portfolio_name}> {row.portfolio_name} </option>
                                     )
