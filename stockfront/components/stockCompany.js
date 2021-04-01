@@ -286,7 +286,7 @@ const StockCompany = ({ companyInfo, allPortfolios, statData, apiUrl, token }) =
             </div>
 
             <div className={styles.yourStats}>
-                {statData == undefined ? <a href='/login'><h2>Login to view stats</h2></a> :
+                {statData == undefined ? <a className={styles.loginLink} href='/login'><h2>Login to view stats</h2></a> :
                     <div>
                         <h3>Your Stats</h3>
                         {statData.length > 0 ? <StockStats portfolioData={statData} /> : <h2>Stock not found in any portfolios</h2>}

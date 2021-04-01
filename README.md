@@ -45,3 +45,4 @@ is meant for testing, and not production use. Sometime in the future I will chan
  - Reset guest on a set interval.
  - Create a logo for the site.
  - Verify application on Google and FaceBook for sign in.
+ - Fix error where selling share affects percentage
