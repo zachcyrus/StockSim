@@ -7,7 +7,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Popper from '@material-ui/core/Popper';
 import TextField from '@material-ui/core/TextField';
 import { useCookies } from 'react-cookie';
-import axios from 'axios'
 import Link from 'next/link';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
@@ -225,7 +224,7 @@ const NavBar = ({ username }) => {
             </ul>
 
             <Popper className={classes.popper} id={id} open={open} anchorEl={anchorEl}>
-                <div className={classes.loginLink}>
+                <div>
                     {username ? <p style={{ marginTop: '0px'  }}>{username}</p> : <Link   href='/login'>Click to signin</Link>}
                     {username ? <button style={{ marginBottom: '0' }} onClick={handleLogOut}>Click to logout</button> : ''}
                 </div>
