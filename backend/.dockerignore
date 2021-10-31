@@ -5,3 +5,5 @@ test
 testRequests
 
 .env
+
+.env.docker
