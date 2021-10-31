@@ -105,6 +105,67 @@ is meant for testing, and not production use. Sometime in the future I will chan
     docker network connect stock_sim_network stocksim_database_container
     ```
 
+#### Node Server API set up
+
+1. Build the node api server image based off the Dockerfile in the backend folder.
+
+    ```
+    docker build -t stock_sim_api -f ./Dockerfile .
+    ```
+
+2. The backend of this application uses a lot of environment variables. Therefore we shall create .env.docker file to put all our   secrets in and apply during run time. The application will not work without an IEX cloud token!!!!
+
+    ```
+    PGUSER=stockAdmin
+    PGHOST=localhost
+    PGPASSWORD={password_used_earlier}
+    PGDATABASE=stocksim_database
+    PGPORT=5432
+
+    FACEBOOK_CLIENT_ID={obtained from facebook}
+    FACEBOOK_CLIENT_SECRET={obtained from facebook}
+    FACEBOOK_CALLBACK_URL=http://localhost:8000/auth/facebook/callback
+
+
+    GOOGLE_CLIENT_ID={obtained from google}
+    GOOGLE_CLIENT_SECRET={obtained from google}
+    GOOGLE_CALLBACK_URL=http://localhost:8000/auth/google/callback
+
+
+    JWT_SECRET={use a random set of characters or something more secure}
+    IEX_TOKEN={this is the token of the api I used from IEX cloud}
+
+    DATABASE_URL={this will be the database url of our docker container}
+
+    ```
+
+##### The following instructions are for experimenting with the node application locally so we will map the port to our machine's localhost. For a production environment skip this, and follow the instructions not in this section. 
+
+3. Start a container based on the image that we just built
+
+
+    ``` 
+    docker run --name stock_api_container --network=stock_sim_network -dp 8080:8000 --env-file .env.docker stock_sim_api
+    ```
+
+4. Enter localhost:8080/test in your browser (Make sure nothing else is take up port 8080 on your system) to see if you get a response.
+
+5. Congrats the backend is correctly configured.
+
+##### Instructions without port mapping
+
+3. Run the container without port mapping
+
+    ``` 
+    docker run --name stock_api_container --network=stock_sim_network -d --env-file .env.docker stock_sim_api
+    ```
+
+4. Exec into the container to see if it is running.
+
+    ```
+    docker exec -it stock_sim_api_container bash
+    ```
+
 
 ## Road map
 
