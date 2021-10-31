@@ -32,6 +32,67 @@ is meant for testing, and not production use. Sometime in the future I will chan
 - Passport
 - Sass
 
+
+## Running App with Docker
+
+### Backend Installation
+
+#### Setting up postgres database with schema
+
+1. Change directory to the backend of this repo.
+    ```
+    cd backend
+    ```
+2. Run docker build of the database image with the Dockerfile.database file
+
+    ```
+    docker build -t stocksim_db -f ./Dockerfile.database .
+    ```
+
+3. Once the image is built use docker run in order to run a container based on the image that was just built.
+
+    ```
+    docker run --name stocksim_database_container -e POSTGRES_PASSWORD={your_password} \
+    -e POSTGRES_USER=stockAdmin -d  stocksim_db
+
+    # the --name flag names our container 
+    # -e sets our environment variables required to make a user and password for our database
+    # -d flag allows us to run our container in the background
+    ```
+
+4. Now that the container is running, we have to access our container through the command line.
+
+    ```
+    docker exec -it stocksim_database_container bash
+    ```
+
+
+5. Once in the shell of your database container run the following command to login to your database.
+
+    ```
+    psql --username=stockAdmin --dbname=stocksim_database
+    ```
+
+6. While in the psql shell use the \dt command to list our tables and verify that they are correct. 
+
+    ```
+    \dt
+    ```
+7. Should see this 
+
+    ```
+    stocksim_database=# \dt
+             List of relations
+    Schema |     Name     | Type  |   Owner
+    --------+--------------+-------+------------
+    public | fb_users     | table | stockAdmin
+    public | google_users | table | stockAdmin
+    public | portfolios   | table | stockAdmin
+    public | stock_users  | table | stockAdmin
+    public | transactions | table | stockAdmin
+    (5 rows)
+    ```
+
 ## Road map
 
  - Implement backend testing with Jest. 
