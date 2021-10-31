@@ -1,0 +1,13 @@
+# this is a dockerfile to configure our postgres database 
+
+FROM postgres:alpine3.14
+
+ENV POSTGRES_DB stocksim_database
+
+COPY *.sql /docker-entrypoint-initdb.d/
+
+
+# Remember when running this Dockerfile after building the image, 
+# To have the containers running on the same Docker network. 
+# Also when running this image add the environment variables of the following:
+# POSTGRES_PASSWORD, POSTGRES_USER, 
