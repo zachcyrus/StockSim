@@ -39,6 +39,12 @@ is meant for testing, and not production use. Sometime in the future I will chan
 
 #### Setting up postgres database with schema
 
+0. Create a docker network, this network will be the network our applications run on.
+
+    ```
+    docker network create stock_sim_network
+    ```
+
 1. Change directory to the backend of this repo.
     ```
     cd backend
