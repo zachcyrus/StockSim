@@ -99,6 +99,13 @@ is meant for testing, and not production use. Sometime in the future I will chan
     (5 rows)
     ```
 
+8. Lastly connect our running container to the docker network we made. At step 0.
+
+    ```
+    docker network connect stock_sim_network stocksim_database_container
+    ```
+
+
 ## Road map
 
  - Implement backend testing with Jest. 
